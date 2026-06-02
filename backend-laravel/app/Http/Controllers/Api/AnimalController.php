@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AnimalPhoto;
 use App\Models\Animal;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -30,9 +32,28 @@ class AnimalController extends Controller
             'health_status' => ['nullable', 'string'],
             'is_sterilized' => ['sometimes', 'boolean'],
             'lifecycle_status' => ['required', 'in:cuarentena,tratamiento,apto,adoptado'],
+            'photos' => ['nullable', 'array', 'max:3'],
+            'photos.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
-        $animal = Animal::create($validated);
+        $animal = DB::transaction(function () use ($request, $validated) {
+            $animalData = collect($validated)->except('photos')->all();
+            $animal = Animal::create($animalData);
+
+            if ($request->hasFile('photos')) {
+                foreach (array_slice($request->file('photos'), 0, 3) as $index => $photo) {
+                    $path = $photo->store('animals', 'public');
+
+                    AnimalPhoto::create([
+                        'animal_id' => $animal->id,
+                        'photo_path' => $path,
+                        'display_order' => $index + 1,
+                    ]);
+                }
+            }
+
+            return $animal;
+        });
 
         return response()->json($animal->load('photos'), 201);
     }
