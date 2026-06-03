@@ -16,7 +16,9 @@ class AnimalController extends Controller
         $query = Animal::with('photos');
 
         if ($request->filled('status')) {
-            $query->where('lifecycle_status', $request->string('status'));
+            $status = $this->normalizeLifecycleStatus($request->string('status')->toString());
+
+            $query->where('lifecycle_status', $status);
         }
 
         return response()->json($query->latest()->get());
@@ -31,13 +33,16 @@ class AnimalController extends Controller
             'estimated_age' => ['nullable', 'integer', 'min:0'],
             'health_status' => ['nullable', 'string'],
             'is_sterilized' => ['sometimes', 'boolean'],
-            'lifecycle_status' => ['required', 'in:cuarentena,tratamiento,apto,adoptado'],
+            'lifecycle_status' => ['required', 'in:cuarentena,tratamiento,apto,apto_adopcion,adoptado'],
             'photos' => ['nullable', 'array', 'max:3'],
             'photos.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
 
         $animal = DB::transaction(function () use ($request, $validated) {
             $animalData = collect($validated)->except('photos')->all();
+            $animalData['lifecycle_status'] = $this->normalizeLifecycleStatus(
+                $animalData['lifecycle_status']
+            );
             $animal = Animal::create($animalData);
 
             if ($request->hasFile('photos')) {
@@ -72,8 +77,14 @@ class AnimalController extends Controller
             'estimated_age' => ['nullable', 'integer', 'min:0'],
             'health_status' => ['nullable', 'string'],
             'is_sterilized' => ['sometimes', 'boolean'],
-            'lifecycle_status' => ['sometimes', 'in:cuarentena,tratamiento,apto,adoptado'],
+            'lifecycle_status' => ['sometimes', 'in:cuarentena,tratamiento,apto,apto_adopcion,adoptado'],
         ]);
+
+        if (array_key_exists('lifecycle_status', $validated)) {
+            $validated['lifecycle_status'] = $this->normalizeLifecycleStatus(
+                $validated['lifecycle_status']
+            );
+        }
 
         $animal->update($validated);
 
@@ -85,5 +96,10 @@ class AnimalController extends Controller
         $animal->delete();
 
         return response()->json(null, 204);
+    }
+
+    private function normalizeLifecycleStatus(string $status): string
+    {
+        return $status === 'apto_adopcion' ? 'apto' : $status;
     }
 }
