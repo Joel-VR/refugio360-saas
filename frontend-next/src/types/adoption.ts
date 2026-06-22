@@ -1,2 +1,34 @@
-NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1 
-NEXT_PUBLIC_APP_NAME=Refugio360 SaaS
+import type { Animal } from "./animal";
+
+export type AdoptionStatus =
+  | "pendiente"
+  | "evaluacion"
+  | "aprobado"
+  | "rechazado"
+  | "adoptado";
+
+export type Adoption = {
+  id: number;
+  shelter_id: number;
+  animal_id: number;
+  applicant_name: string;
+  dni: string;
+  phone: string;
+  address: string;
+  status: AdoptionStatus;
+  pdf_path: string | null;
+  notes: string | null;
+  created_at?: string;
+  updated_at?: string;
+  animal?: Animal;
+};
+
+export type CreateAdoptionPayload = {
+  shelter_id: number;
+  animal_id: number;
+  applicant_name: string;
+  dni: string;
+  phone: string;
+  address: string;
+  notes?: string;
+};
