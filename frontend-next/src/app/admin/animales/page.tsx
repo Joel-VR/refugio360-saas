@@ -72,7 +72,7 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
             return (
               <Link
                 key={animal.id}
-                href={`/adoptar/${animal.id}`}
+                href={`/admin/animales/${animal.id}`}   // ← este es el cambio
                 className="group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-950/70 shadow-lg transition hover:border-white/20 hover:shadow-xl"
               >
                 {/* foto */}

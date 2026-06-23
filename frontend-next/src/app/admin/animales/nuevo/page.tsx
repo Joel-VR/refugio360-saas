@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -8,12 +8,40 @@ const API_BASE_URL = (
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1"
 ).replace(/\/$/, "");
 
-const SHELTER_ID = 3; // el shelter que creamos
+type Shelter = {
+  id: number;
+  name: string;
+  // otros campos si los hay
+};
 
 export default function NewAnimalPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [shelters, setShelters] = useState<Shelter[]>([]);
+  const [loadingShelters, setLoadingShelters] = useState(true);
+  const [selectedShelter, setSelectedShelter] = useState<string>("");
+
+  useEffect(() => {
+    const fetchShelters = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/shelters`, {
+          headers: { Accept: "application/json" },
+        });
+        if (!res.ok) throw new Error("Error al cargar shelters");
+        const data = await res.json();
+        setShelters(data);
+        if (data.length > 0) {
+          setSelectedShelter(String(data[0].id)); // seleccionar el primero por defecto
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error al cargar shelters");
+      } finally {
+        setLoadingShelters(false);
+      }
+    };
+    fetchShelters();
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -23,7 +51,13 @@ export default function NewAnimalPage() {
     const form = e.currentTarget;
     const data = new FormData();
 
-    data.append("shelter_id", String(SHELTER_ID));
+    const shelterId = (form.elements.namedItem("shelter_id") as HTMLSelectElement).value;
+    if (!shelterId) {
+      setError("Debes seleccionar un albergue");
+      setLoading(false);
+      return;
+    }
+    data.append("shelter_id", shelterId);
     data.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
     data.append("species", (form.elements.namedItem("species") as HTMLSelectElement).value);
     data.append("lifecycle_status", (form.elements.namedItem("lifecycle_status") as HTMLSelectElement).value);
@@ -74,6 +108,31 @@ export default function NewAnimalPage() {
 
         <form onSubmit={handleSubmit} className="grid gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
           <div className="grid gap-5 md:grid-cols-2">
+            {/* Selector de albergue */}
+            <label className="grid gap-2">
+              <span className="text-sm text-slate-300">Albergue *</span>
+              <select
+                name="shelter_id"
+                required
+                value={selectedShelter}
+                onChange={(e) => setSelectedShelter(e.target.value)}
+                className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition focus:border-cyan-400 disabled:opacity-50"
+                disabled={loadingShelters}
+              >
+                {loadingShelters ? (
+                  <option value="">Cargando albergues…</option>
+                ) : shelters.length === 0 ? (
+                  <option value="">No hay albergues disponibles</option>
+                ) : (
+                  shelters.map((shelter) => (
+                    <option key={shelter.id} value={shelter.id}>
+                      {shelter.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </label>
+
             <label className="grid gap-2">
               <span className="text-sm text-slate-300">Nombre *</span>
               <input name="name" required className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition placeholder:text-slate-500 focus:border-cyan-400" placeholder="Firulais" />
@@ -124,7 +183,11 @@ export default function NewAnimalPage() {
             <Link href="/admin/animales" className="rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-slate-200 transition hover:bg-white/10">
               Cancelar
             </Link>
-            <button type="submit" disabled={loading} className="rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50">
+            <button
+              type="submit"
+              disabled={loading || loadingShelters || shelters.length === 0}
+              className="rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
+            >
               {loading ? "Guardando…" : "Guardar animal"}
             </button>
           </div>
