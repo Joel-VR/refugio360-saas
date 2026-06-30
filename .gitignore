@@ -30,3 +30,7 @@ dist/
 # IDE
 .vscode/
 .idea/
+
+# Otros
+AGENTS.md
+IMPLEMENTACION.md

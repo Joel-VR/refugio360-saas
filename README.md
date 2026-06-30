@@ -25,6 +25,51 @@ Plataforma web SaaS multi-albergue para la gestión de animales rescatados, adop
 - Donaciones con voucher
 - Dashboard de transparencia
 
+## Requisitos y versiones recomendadas
+
+Para evitar errores de compatibilidad, se recomienda usar:
+
+- PHP: 8.5.7 o superior (este proyecto se probó con PHP 8.5.7)
+- Laravel: 13.x
+- Node.js: 20.x o superior
+- Composer: 2.x
+- npm: 10.x o superior
+
+Si tu entorno usa una versión anterior de PHP, Laravel puede fallar al iniciar porque requiere una versión compatible con las dependencias del proyecto.
+
+## Ejecutar el proyecto
+
+Si ya ejecutaste `composer install` en la carpeta incorrecta, ten en cuenta que ese comando corresponde al backend, no al frontend.
+
+### 1) Backend (Laravel)
+
+Abre una terminal y ejecuta:
+
+```bash
+cd backend-laravel
+composer install
+copy .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
+```
+
+El backend quedará disponible en `http://127.0.0.1:8000`.
+
+### 2) Frontend (Next.js)
+
+Abre otra terminal y ejecuta:
+
+```bash
+cd frontend-next
+copy .env.local.example .env.local
+npm install
+npm run dev
+```
+
+El frontend quedará disponible en `http://localhost:3000`.
+
+El archivo `.env.local` configura la URL del backend para que el frontend pueda consumir la API en `http://127.0.0.1:8000/api/v1`.
 
 # Funcionamiento del Sistema
 
@@ -73,6 +118,6 @@ Frontend (Next.js)
 
 ## Consideraciones
 
-* Los albergues y adopciones utilizan **Soft Deletes**, por lo que los registros eliminados pueden recuperarse desde la base de datos.
-* Los albergues poseen un **slug único** para identificación y acceso.
-* Actualmente el proyecto no cuenta con autenticación habilitada; para producción se recomienda proteger las rutas mediante Laravel Sanctum.
+- Los albergues y adopciones utilizan **Soft Deletes**, por lo que los registros eliminados pueden recuperarse desde la base de datos.
+- Los albergues poseen un **slug único** para identificación y acceso.
+- Actualmente el proyecto no cuenta con autenticación habilitada; para producción se recomienda proteger las rutas mediante Laravel Sanctum.
