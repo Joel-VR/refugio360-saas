@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Models;
-use App\Models\Expense;
 
+use App\Models\Expense;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,18 +19,19 @@ class Shelter extends Model
         'phone',
         'logo_path',
         'is_active',
+        'yape_phone',
+        'yape_owner',
+        'yape_qr_path',
+        'plin_phone',
+        'plin_owner',
+        'plin_qr_path',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relaciones
-    |--------------------------------------------------------------------------
-    */
-
+    // Relaciones
     public function users()
     {
         return $this->hasMany(User::class);
@@ -54,5 +55,14 @@ class Shelter extends Model
     public function expenses()
     {
         return $this->hasMany(Expense::class);
+    }
+
+    // Método para obtener QR de Yape o Plin
+    public function getQrUrl(string $method): ?string
+    {
+        $field = $method . '_qr_path';
+        return $this->$field
+            ? asset('storage/' . $this->$field)
+            : null;
     }
 }
