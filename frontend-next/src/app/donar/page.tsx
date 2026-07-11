@@ -17,7 +17,7 @@ export default function DonarPage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/v1/shelters')
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/shelters`)
       .then(r => r.json())
       .then(data => { setShelters(data); setLoading(false); })
       .catch(() => setLoading(false));
@@ -47,7 +47,7 @@ export default function DonarPage() {
               >
                 {shelter.logo_path ? (
                   <img
-                    src={`http://127.0.0.1:8000/storage/${shelter.logo_path}`}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${shelter.logo_path}`}
                     alt={shelter.name}
                     className="w-14 h-14 rounded-full object-cover"
                   />

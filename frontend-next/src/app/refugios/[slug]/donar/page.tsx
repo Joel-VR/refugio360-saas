@@ -26,7 +26,7 @@ export default function ShelterDonarPage() {
   const [error, setError]     = useState('');
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/v1/shelters`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/shelters`)
       .then(r => r.json())
       .then((data: Shelter[]) => {
         const found = data.find(s => s.slug === slug);
@@ -49,7 +49,7 @@ export default function ShelterDonarPage() {
         <div className="bg-white rounded-2xl shadow p-6 mb-6 text-center">
           {shelter.logo_path ? (
             <img
-              src={`http://127.0.0.1:8000/storage/${shelter.logo_path}`}
+              src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${shelter.logo_path}`}
               alt={shelter.name}
               className="w-20 h-20 rounded-full object-cover mx-auto mb-3"
             />

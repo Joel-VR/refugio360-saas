@@ -35,7 +35,7 @@ export default function DonationForm({ shelter }: Props) {
   const [errors, setErrors]             = useState<Record<string, string>>({});
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/v1/animals`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/animals`)
       .then(r => r.json())
       .then(data => setAnimals(data.filter((a: any) => a.shelter_id === shelter.id && a.lifecycle_status === 'apto')))
       .catch(() => {});
@@ -43,9 +43,9 @@ export default function DonationForm({ shelter }: Props) {
 
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!isAnonymous && !donorName.trim()) e.donorName = 'El nombre es requerido si no donas como anónimo.';
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = 'El email no es válido.';
-    if (donationType === 'specific' && !animalId) e.animalId = 'Selecciona un animal para apadrinar.';
+    if (!isAnonymous && !donorName.trim()) e.donorName = 'el nombre es requerido si no donas como anonimo';
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) e.email = 'el email no es valido';
+    if (donationType === 'specific' && !animalId) e.animalId = 'selecciona un animal para apadrinar';
     return e;
   };
 
@@ -53,14 +53,14 @@ export default function DonationForm({ shelter }: Props) {
     const e = validate();
     if (Object.keys(e).length > 0) { setErrors(e); return; }
     setErrors({});
-    alert('✅ Paso 1 completado. En la siguiente entrega se agrega el comprobante y el envío.');
+    alert('paso 1 completado - en la siguiente entrega se agrega el comprobante y el envio');
   };
 
   return (
     <div className="bg-white rounded-2xl shadow p-6 space-y-6">
-      <h2 className="text-xl font-bold text-gray-800">Formulario de donación</h2>
+      <h2 className="text-xl font-bold text-gray-800">formulario de donacion</h2>
 
-      {/* Datos del donante */}
+      {/* datos del donante */}
       <div className="space-y-3">
         <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
           <input
@@ -69,39 +69,39 @@ export default function DonationForm({ shelter }: Props) {
             onChange={e => { setIsAnonymous(e.target.checked); if (e.target.checked) setDonorName(''); }}
             className="w-4 h-4 accent-orange-500"
           />
-          Donar como anónimo
+          donar como anonimo
         </label>
 
         {!isAnonymous && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre completo</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">nombre completo</label>
             <input
               type="text"
               value={donorName}
               onChange={e => setDonorName(e.target.value)}
-              placeholder="Ej. Juan Pérez"
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+              placeholder="ej. juan perez"
+              className="w-full border rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
             {errors.donorName && <p className="text-red-500 text-xs mt-1">{errors.donorName}</p>}
           </div>
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email (opcional)</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">email (opcional)</label>
           <input
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
             placeholder="correo@ejemplo.com"
-            className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400"
+            className="w-full border rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
           {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
         </div>
       </div>
 
-      {/* Tipo de donación */}
+      {/* tipo de donacion */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Tipo de donación</label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">tipo de donacion</label>
         <div className="flex gap-3">
           {(['general', 'specific'] as const).map(type => (
             <button
@@ -113,18 +113,18 @@ export default function DonationForm({ shelter }: Props) {
                   : 'border-gray-200 text-gray-500 hover:border-orange-300'
               }`}
             >
-              {type === 'general' ? '🌍 Donación General' : '🐾 Apadrinar Animal'}
+              {type === 'general' ? '🌍 donacion general' : '🐾 apadrinar animal'}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Selector dinámico de animales */}
+      {/* selector dinamico de animales */}
       {donationType === 'specific' && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Selecciona un animal</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">selecciona un animal</label>
           {animals.length === 0 ? (
-            <p className="text-sm text-gray-400">No hay animales disponibles para apadrinar.</p>
+            <p className="text-sm text-gray-400">no hay animales disponibles para apadrinar</p>
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {animals.map(animal => (
@@ -139,7 +139,7 @@ export default function DonationForm({ shelter }: Props) {
                 >
                   {animal.photos?.[0] ? (
                     <img
-                      src={`http://127.0.0.1:8000/storage/${animal.photos[0].photo_path}`}
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${animal.photos[0].photo_path}`}
                       alt={animal.name}
                       className="w-full h-20 object-cover rounded-lg mb-2"
                     />
@@ -158,7 +158,7 @@ export default function DonationForm({ shelter }: Props) {
         </div>
       )}
 
-      {/* Donación recurrente */}
+      {/* donacion recurrente */}
       <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
         <input
           type="checkbox"
@@ -166,15 +166,15 @@ export default function DonationForm({ shelter }: Props) {
           onChange={e => setIsRecurring(e.target.checked)}
           className="w-4 h-4 accent-orange-500"
         />
-        ¿Deseas que sea un padrinazgo mensual?
+        deseas que sea un padrinazgo mensual
       </label>
 
-      {/* Botón continuar */}
+      {/* boton continuar */}
       <button
         onClick={handleSubmit}
         className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded-xl transition"
       >
-        Continuar →
+        continuar →
       </button>
     </div>
   );
