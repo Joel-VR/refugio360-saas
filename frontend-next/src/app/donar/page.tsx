@@ -172,9 +172,7 @@ export default function DonarPage() {
         <section className="relative px-6 pt-32 pb-24 overflow-hidden">
           <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <br></br>
               <p className="text-sm uppercase tracking-[0.3em] text-cyan-300 mb-4">Refugio360 — Apoyo</p>
-               <br></br>
               <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
                 Tu donación<br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-blue-400">cambia vidas</span>
@@ -182,7 +180,6 @@ export default function DonarPage() {
               <p className="text-lg text-slate-400 leading-relaxed max-w-md">
   Cada aporte que realizas se destina directamente a la alimentación, atención veterinaria y bienestar de los animales bajo nuestro cuidado.
 </p>
-<br></br>
 
 {/* CONTENEDOR CON ESPACIO ARRIBA */}
 <div className="mt-10">
@@ -249,8 +246,7 @@ export default function DonarPage() {
             </svg>
             Volver
           </button>
-         <br></br>
-             <br></br>
+
         <h2 className="text-4xl font-bold tracking-tight text-slate-100 mb-8">¿Cómo deseas donar?</h2>
         
         <div className="grid sm:grid-cols-2 gap-6">
@@ -315,14 +311,11 @@ export default function DonarPage() {
               Volver
             </button>
         <div>
-          <br></br>
           <p className="text-sm uppercase tracking-widest text-cyan-300 mb-1">
             {donationType === 'animal' ? 'Donación enfocada' : 'Donación general'}
           </p>
-              <br></br>
           <h2 className="text-4xl font-bold tracking-tight text-slate-100">Registra tu aporte</h2>
         </div>
-    <br></br>
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
           {/* Selector de Animales Estilo Card List — Corrección Anti-Desaparición */}

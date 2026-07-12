@@ -1,12 +1,11 @@
 <?php
- 
+
 namespace App\Http\Controllers\Api;
- 
+
 use App\Http\Controllers\Controller;
 use App\Models\Donation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
- 
+
 class DonationController extends Controller
 {
     /**
@@ -16,6 +15,7 @@ class DonationController extends Controller
     {
         $data = $request->validate([
             'shelter_id'          => 'required|integer|exists:shelters,id',
+            'animal_id'           => 'nullable|integer|exists:animals,id',
             'payment_method'      => 'required|in:yape,plin,paypal,efectivo',
             'donor_name'          => 'nullable|string|max:255',
             'donor_email'         => 'nullable|email|max:255',
@@ -24,46 +24,55 @@ class DonationController extends Controller
             'notes'               => 'nullable|string|max:500',
             'voucher'             => 'required|file|mimes:jpg,jpeg,png,gif|max:5120',
         ]);
- 
-        // Guardar comprobante en storage/app/public/vouchers
+
         $path = $request->file('voucher')->store('vouchers', 'public');
- 
+
         $donation = Donation::create([
             'shelter_id'          => $data['shelter_id'],
+            'animal_id'           => $data['animal_id'] ?? null,
+            'donation_type'       => !empty($data['animal_id']) ? 'specific' : 'general',
             'payment_method'      => $data['payment_method'],
-            'donor_name'          => $data['donor_name']          ?? null,
-            'donor_email'         => $data['donor_email']         ?? null,
-            'amount'              => $data['amount']              ?? null,
+            'donor_name'          => $data['donor_name'] ?? null,
+            'donor_email'         => $data['donor_email'] ?? null,
+            'amount'              => $data['amount'] ?? null,
             'operation_reference' => $data['operation_reference'] ?? null,
-            'notes'               => $data['notes']               ?? null,
+            'notes'               => $data['notes'] ?? null,
             'voucher_path'        => $path,
             'status'              => 'pending',
         ]);
- 
+
         return response()->json($donation, 201);
     }
- 
+
     /**
      * GET /api/v1/donations
+     * Filtros: shelter_id, status, search, date_from, date_to, per_page
      */
     public function index(Request $request)
     {
-        $donations = Donation::with('shelter')
-            ->when($request->shelter_id, fn($q, $id) => $q->where('shelter_id', $id))
+        $donations = Donation::with(['shelter', 'animal'])
+            ->when($request->shelter_id, fn ($q, $id) => $q->where('shelter_id', $id))
+            ->when($request->status, fn ($q, $status) => $q->where('status', $status))
+            ->when($request->date_from, fn ($q, $d) => $q->whereDate('created_at', '>=', $d))
+            ->when($request->date_to, fn ($q, $d) => $q->whereDate('created_at', '<=', $d))
+            ->when($request->search, function ($q, $search) {
+                $q->where(function ($q2) use ($search) {
+                    $q2->where('donor_name', 'ilike', "%{$search}%")
+                       ->orWhere('operation_reference', 'ilike', "%{$search}%")
+                       ->orWhere('amount', 'ilike', "%{$search}%");
+                });
+            })
             ->latest()
-            ->paginate(20);
- 
+            ->paginate($request->integer('per_page', 20));
+
         return response()->json($donations);
     }
- 
-    /**
-     * GET /api/v1/donations/{donation}
-     */
+
     public function show(Donation $donation)
     {
-        return response()->json($donation->load('shelter'));
+        return response()->json($donation->load(['shelter', 'animal']));
     }
- 
+
     /**
      * PATCH /api/v1/donations/{donation}/status
      */
@@ -73,9 +82,9 @@ class DonationController extends Controller
             'status'      => 'required|in:pending,approved,rejected',
             'admin_notes' => 'nullable|string',
         ]);
- 
+
         $donation->update($data);
- 
-        return response()->json($donation);
+
+        return response()->json($donation->fresh()->load(['shelter', 'animal']));
     }
 }
