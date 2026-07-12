@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AdoptionController;
 use App\Http\Controllers\Api\AnimalController;
 use App\Http\Controllers\Api\ShelterController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\DonationController;
 use Illuminate\Support\Facades\Route;
 
 // ── Animales ────────────────────────────────────────────────────────────────
@@ -31,4 +32,12 @@ Route::prefix('v1')->group(function () {
 // ── Dashboard / Estadísticas ─────────────────────────────────────────────────
 Route::prefix('v1')->group(function () {
     Route::get('dashboard/stats',                 [DashboardController::class, 'stats']);
+});
+
+// ── Donaciones ────────────────────────────────────────────────────────────────
+Route::prefix('v1')->group(function () {
+    Route::get('donations',                     [DonationController::class, 'index']);
+    Route::post('donations',                    [DonationController::class, 'store']);
+    Route::get('donations/{donation}',          [DonationController::class, 'show']);
+    Route::patch('donations/{donation}/status', [DonationController::class, 'updateStatus']);
 });
