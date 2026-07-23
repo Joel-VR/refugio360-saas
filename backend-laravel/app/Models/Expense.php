@@ -15,6 +15,8 @@ class Expense extends Model
         'shelter_id',
         'description',
         'amount',
+        'category',
+        'status',
         'document_path',
         'expense_date',
     ];
