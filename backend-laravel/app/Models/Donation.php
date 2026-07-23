@@ -24,12 +24,14 @@ class Donation extends Model
         'status',
         'donation_type',
         'is_recurring',
+        'is_anonymous',
         'admin_notes',
     ];
 
     protected $casts = [
         'amount'       => 'decimal:2',
         'is_recurring' => 'boolean',
+        'is_anonymous' => 'boolean',
     ];
 
     public function shelter()
