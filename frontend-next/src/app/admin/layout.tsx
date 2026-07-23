@@ -23,6 +23,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     { href: "/admin/albergues",  label: "Albergues",    icon: "🏠" },
     { href: "/admin/adopciones", label: "Adopciones",   icon: "📋" },
     { href: "/admin/donaciones", label: "Donaciones",   icon: "💰", badge: pendingCount },
+    { href: "/admin/documentacion", label: "Guías",      icon: "📘" },
     { href: "/adoptar",          label: "Vista pública",icon: "🌐" },
   ];
 

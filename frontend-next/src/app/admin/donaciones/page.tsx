@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { Donation, DonationStatus, PaginatedDonations } from "@/types/donation";
+import { adminFetch } from "@/lib/adminAuth";
 
 const API     = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
 const STORAGE = (process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage");
@@ -45,9 +46,18 @@ export default function DonacionesPage() {
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<Donation | null>(null);
 
+  function buildParams(includePagination = true) {
+    const params = new URLSearchParams({ status });
+    if (includePagination) params.set("per_page", "50");
+    if (search.trim()) params.set("search", search.trim());
+    if (dateFrom) params.set("date_from", dateFrom);
+    if (dateTo) params.set("date_to", dateTo);
+    return params;
+  }
+
   async function loadCounts() {
     const results = await Promise.all(
-      TABS.map((t) => fetch(`${API}/donations?status=${t.key}&per_page=1`).then((r) => r.json()).catch(() => ({ total: 0 })))
+      TABS.map((t) => adminFetch(`${API}/admin/donations?status=${t.key}&per_page=1`).then((r) => r.json()).catch(() => ({ total: 0 })))
     );
     setCounts({
       pending: results[0]?.total ?? 0,
@@ -58,12 +68,9 @@ export default function DonacionesPage() {
 
   async function loadDonations() {
     setLoading(true);
-    const params = new URLSearchParams({ status, per_page: "50" });
-    if (search.trim()) params.set("search", search.trim());
-    if (dateFrom) params.set("date_from", dateFrom);
-    if (dateTo) params.set("date_to", dateTo);
+    const params = buildParams();
     try {
-      const res = await fetch(`${API}/donations?${params.toString()}`, { cache: "no-store" });
+      const res = await adminFetch(`${API}/admin/donations?${params.toString()}`, { cache: "no-store" });
       const body: PaginatedDonations = await res.json();
       setDonations(body.data ?? []);
     } catch {
@@ -73,7 +80,9 @@ export default function DonacionesPage() {
     }
   }
 
-  useEffect(() => { loadCounts(); }, []);
+  useEffect(() => {
+    void Promise.resolve().then(loadCounts);
+  }, []);
   useEffect(() => {
     const t = setTimeout(loadDonations, 300); // debounce búsqueda
     return () => clearTimeout(t);
@@ -92,13 +101,31 @@ export default function DonacionesPage() {
   }
 
   async function handleStatusUpdate(id: number, newStatus: DonationStatus, adminNotes?: string) {
-    await fetch(`${API}/donations/${id}/status`, {
+    const res = await adminFetch(`${API}/admin/donations/${id}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus, admin_notes: adminNotes ?? null }),
     });
-    setSelected(null);
+    if (res.ok) {
+      const updated = await res.json();
+      setSelected(updated);
+    }
     await Promise.all([loadDonations(), loadCounts()]);
+  }
+
+  async function exportCsv() {
+    const params = buildParams(false);
+    const res = await adminFetch(`${API}/admin/donations/export.csv?${params.toString()}`);
+    if (!res.ok) return;
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "donaciones.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
   }
 
   return (
@@ -108,6 +135,9 @@ export default function DonacionesPage() {
           <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Admin</p>
           <h1 className="mt-2 text-4xl font-semibold tracking-tight">Donaciones</h1>
         </div>
+        <button onClick={exportCsv} className="w-fit rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 text-sm font-semibold text-cyan-200 hover:bg-cyan-300/20">
+          Descargar Reporte CSV
+        </button>
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-3">
@@ -262,6 +292,8 @@ function DonationModal({
             <Row label="Referencia" value={donation.operation_reference || "—"} />
             <Row label="Fecha" value={fmtDate(donation.created_at)} />
             <Row label="Tipo" value={donation.donation_type === "specific" ? "Apadrinamiento" : "Donación general"} />
+            <Row label="Recurrente" value={donation.is_recurring ? "Sí" : "No"} />
+            <Row label="Anónimo" value={donation.is_anonymous ? "Sí" : "No"} />
             {donation.donation_type === "specific" && donation.animal && (
               <Row label="Animal apadrinado" value={donation.animal.name} />
             )}

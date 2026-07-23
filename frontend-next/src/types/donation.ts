@@ -1,5 +1,5 @@
 export type DonationStatus = "pending" | "approved" | "rejected";
-export type DonationMethod = "yape" | "plin" | "paypal" | "efectivo";
+export type DonationMethod = "yape" | "plin";
 export type DonationKind = "general" | "specific";
 
 export interface DonationAnimal {
@@ -24,6 +24,7 @@ export interface Donation {
   status: DonationStatus;
   donation_type: DonationKind;
   is_recurring: boolean;
+  is_anonymous: boolean;
   admin_notes: string | null;
   created_at: string;
   updated_at: string;
