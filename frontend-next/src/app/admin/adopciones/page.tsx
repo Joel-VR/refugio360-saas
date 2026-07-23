@@ -160,7 +160,7 @@ export default async function AdoptionsPage({ searchParams }: Props) {
                   {/* Notas */}
                   {adoption.notes && (
                     <p className="text-xs text-slate-400 italic line-clamp-2">
-                      "{adoption.notes}"
+                      &ldquo;{adoption.notes}&rdquo;
                     </p>
                   )}
 

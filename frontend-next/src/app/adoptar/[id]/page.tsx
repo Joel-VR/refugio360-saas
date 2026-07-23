@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAnimal } from "@/lib/api";
 import AdoptionForm from "./AdoptionForm";
+import type { Animal, AnimalPhoto } from "@/types/animal";
 
 const SPECIES_LABEL: Record<string, string> = {
   perro: "Perro",
@@ -38,7 +39,7 @@ type Props = {
 
 export default async function AnimalDetailPage({ params }: Props) {
   const { id } = await params;
-  let animal;
+  let animal: Animal;
 
   try {
     animal = await getAnimal(id);
@@ -90,7 +91,7 @@ export default async function AnimalDetailPage({ params }: Props) {
             {/* fotos adicionales */}
             {animal.photos && animal.photos.length > 1 && (
               <div className="grid grid-cols-3 gap-3">
-                {animal.photos.slice(1).map((photo) => (
+                {animal.photos.slice(1).map((photo: AnimalPhoto) => (
                   <div
                     key={photo.id}
                     className="aspect-square overflow-hidden rounded-xl border border-white/10 bg-slate-900"

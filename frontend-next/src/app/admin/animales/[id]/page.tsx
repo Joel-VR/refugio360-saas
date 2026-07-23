@@ -1,5 +1,6 @@
 // src/app/admin/animales/[id]/page.tsx
 import { getAnimal } from "@/lib/api";
+import Link from "next/link";
 import EditAnimalForm from "./EditAnimalForm"; // lo crearemos a continuación
 
 type Props = {
@@ -18,12 +19,12 @@ export default async function AnimalDetailPage({ params }: Props) {
             <p className="text-sm uppercase tracking-[0.3em] text-amber-300">Detalle / Edición</p>
             <h1 className="mt-2 text-4xl font-semibold tracking-tight">Editar animal</h1>
           </div>
-          <a
+          <Link
             href="/admin/animales"
             className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/10"
           >
             Volver al listado
-          </a>
+          </Link>
         </div>
 
         <EditAnimalForm animal={animal} />
