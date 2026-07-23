@@ -71,6 +71,36 @@ El frontend quedará disponible en `http://localhost:3000`.
 
 El archivo `.env.local` configura la URL del backend para que el frontend pueda consumir la API en `http://127.0.0.1:8000/api/v1`.
 
+## Rutas para ver las vistas
+
+El frontend está construido con Next.js y las vistas se acceden desde `http://localhost:3000`.
+
+### Vistas públicas
+
+- `/` - página inicial del frontend
+- `/adoptar` - catálogo público de animales disponibles y en proceso
+- `/adoptar/:id` - detalle de un animal y formulario de postulación a adopción
+
+### Vistas administrativas
+
+- `/admin/dashboard` - panel principal con métricas y actividad reciente
+- `/admin/animales` - listado de animales registrados
+- `/admin/animales?status=apto_adopcion` - filtro del listado de animales por estado
+- `/admin/animales/nuevo` - formulario para registrar un animal
+- `/admin/animales/:id` - edición de un animal existente
+- `/admin/albergues` - listado de albergues
+- `/admin/albergues/nuevo` - formulario para crear un albergue
+- `/admin/albergues/:id/editar` - edición de un albergue existente
+- `/admin/adopciones` - listado de solicitudes de adopción
+- `/admin/adopciones?status=pendiente` - filtro de solicitudes por estado
+
+### Ejemplos rápidos
+
+- Ver catálogo público: `http://localhost:3000/adoptar`
+- Ver dashboard: `http://localhost:3000/admin/dashboard`
+- Ver solicitudes: `http://localhost:3000/admin/adopciones`
+- Ver formulario de nuevo animal: `http://localhost:3000/admin/animales/nuevo`
+
 # Funcionamiento del Sistema
 
 **Refugio360** es una plataforma web para la gestión de albergues de animales y procesos de adopción. El sistema está compuesto por un **backend en Laravel** que expone una API REST y un **frontend en Next.js** que consume dicha API para administrar la información.
