@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams }           from 'next/navigation';
 import dynamic from 'next/dynamic';
-const DonationForm = dynamic(() => import('./DonationForm'), { ssr: false });
+const DonationFlow = dynamic(() => import('./DonationFlow'), { ssr: false });
 
 interface Shelter {
   id: number;
@@ -26,11 +26,11 @@ export default function ShelterDonarPage() {
   const [error, setError]     = useState('');
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/v1/shelters`)
+    const API = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '');
+    fetch(`${API}/public/shelters/${slug}`)
       .then(r => r.json())
-      .then((data: Shelter[]) => {
-        const found = data.find(s => s.slug === slug);
-        if (found) setShelter(found);
+      .then((found: Shelter) => {
+        if (found?.id) setShelter(found);
         else setError('Albergue no encontrado.');
         setLoading(false);
       })
@@ -69,7 +69,7 @@ export default function ShelterDonarPage() {
         </div>
 
         {/* Formulario de donación */}
-        <DonationForm shelter={shelter} />
+        <DonationFlow shelter={shelter as never} />
       </div>
     </main>
   );

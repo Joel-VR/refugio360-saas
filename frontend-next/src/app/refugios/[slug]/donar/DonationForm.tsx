@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useRef, useState } from 'react';
+import Link from 'next/link';
 
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '');
 const STORAGE  = process.env.NEXT_PUBLIC_STORAGE_URL ?? 'http://localhost:8000/storage';
@@ -219,12 +220,12 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
         <p className="mt-4 text-sm text-slate-400 max-w-sm mx-auto">
           Tu donación será verificada por el equipo del albergue en <strong className="text-slate-300">24-48 horas</strong>. ¡Gracias por tu apoyo! 💙
         </p>
-        <a
+        <Link
           href="/"
           className="mt-8 inline-block rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
         >
           Volver al albergue
-        </a>
+        </Link>
       </div>
     );
   }
