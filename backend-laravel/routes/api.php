@@ -7,7 +7,31 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\PublicShelterController;
 use App\Http\Controllers\Api\AdminPaymentMethodController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\SuperAdminController;
 use Illuminate\Support\Facades\Route;
+
+// ── Autenticación ───────────────────────────────────────────────────────────
+Route::prefix('v1/auth')->group(function () {
+    Route::post('register/persona', [AuthController::class, 'registerPerson']);
+    Route::post('register/albergue', [AuthController::class, 'registerShelter']);
+    Route::post('login', [AuthController::class, 'login']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('me', [AuthController::class, 'me']);
+        Route::put('profile', [AuthController::class, 'updateProfile']);
+        Route::put('password', [AuthController::class, 'updatePassword']);
+        Route::post('profile/photo', [AuthController::class, 'updatePhoto']);
+        Route::post('logout', [AuthController::class, 'logout']);
+    });
+});
+
+// ── Super Admin ─────────────────────────────────────────────────────────────
+Route::prefix('v1/superadmin')->middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
+    Route::get('dashboard', [SuperAdminController::class, 'dashboard']);
+    Route::get('shelters', [SuperAdminController::class, 'shelters']);
+    Route::patch('shelters/{shelter}/status', [SuperAdminController::class, 'updateShelterStatus']);
+    Route::get('users', [SuperAdminController::class, 'users']);
+});
 
 // ── Animales ────────────────────────────────────────────────────────────────
 Route::apiResource('v1/animals', AnimalController::class);
@@ -15,7 +39,7 @@ Route::apiResource('v1/animals', AnimalController::class);
 // ── Adopciones ───────────────────────────────────────────────────────────────
 Route::prefix('v1')->group(function () {
     Route::get('adoptions',                       [AdoptionController::class, 'index']);
-    Route::post('adoptions',                      [AdoptionController::class, 'store']);
+    Route::post('adoptions',                      [AdoptionController::class, 'store'])->middleware(['auth:sanctum', 'role:natural_person']);
     Route::get('adoptions/{adoption}',            [AdoptionController::class, 'show']);
     Route::patch('adoptions/{adoption}/status',   [AdoptionController::class, 'updateStatus']);
     Route::delete('adoptions/{adoption}',         [AdoptionController::class, 'destroy']);
@@ -38,7 +62,7 @@ Route::prefix('v1')->group(function () {
 
 // ── Donaciones ────────────────────────────────────────────────────────────────
 Route::prefix('v1')->group(function () {
-    Route::post('donations',                    [DonationController::class, 'store']);
+    Route::post('donations',                    [DonationController::class, 'store'])->middleware(['auth:sanctum', 'role:natural_person']);
 
     Route::get('public/shelters',                        [PublicShelterController::class, 'index']);
     Route::get('public/shelters/{slug}',                  [PublicShelterController::class, 'show']);
