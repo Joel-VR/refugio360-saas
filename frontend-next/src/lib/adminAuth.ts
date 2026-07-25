@@ -1,5 +1,5 @@
 export function adminHeaders(extra: HeadersInit = {}): HeadersInit {
-  const token = typeof window !== "undefined" ? window.localStorage.getItem("admin_token") : null;
+  const token = typeof window !== "undefined" ? window.localStorage.getItem("auth_token") : null;
   return {
     Accept: "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
