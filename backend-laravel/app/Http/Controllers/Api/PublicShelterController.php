@@ -17,6 +17,7 @@ class PublicShelterController extends Controller
     {
         $shelters = Shelter::query()
             ->where('is_active', true)
+            ->where('approval_status', 'approved')
             ->withCount(['animals'])
             ->latest()
             ->get()
@@ -27,14 +28,14 @@ class PublicShelterController extends Controller
 
     public function show(string $slug): JsonResponse
     {
-        $shelter = Shelter::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')->firstOrFail();
 
         return response()->json($this->publicShelter($shelter));
     }
 
     public function animals(string $slug): JsonResponse
     {
-        $shelter = Shelter::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')->firstOrFail();
 
         $animals = Animal::withoutGlobalScopes()
             ->with('photos')
@@ -48,7 +49,7 @@ class PublicShelterController extends Controller
 
     public function transparency(Request $request, string $slug): JsonResponse
     {
-        $shelter = Shelter::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')->firstOrFail();
 
         $approvedDonations = Donation::withoutGlobalScopes()
             ->where('shelter_id', $shelter->id)

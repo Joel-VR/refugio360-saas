@@ -5,8 +5,18 @@ export type Shelter = {
   description: string | null;
   email: string | null;
   phone: string | null;
+  address?: string | null;
   logo_path: string | null;
   is_active: boolean;
+  approval_status?: "pending_review" | "approved" | "rejected";
+  users?: Array<{
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+    status?: boolean;
+    shelter_id: number | null;
+  }>;
   yape_phone?: string | null;
   yape_owner?: string | null;
   yape_qr_path?: string | null;
@@ -38,6 +48,7 @@ export type CreateShelterPayload = {
   description?: string;
   email?: string;
   phone?: string;
+  address?: string;
   is_active?: boolean;
   yape_phone?: string;
   yape_owner?: string;

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams }           from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { RoleGate } from '@/lib/RoleGate';
 const DonationFlow = dynamic(() => import('./DonationFlow'), { ssr: false });
 
 interface Shelter {
@@ -17,6 +18,11 @@ interface Shelter {
   plin_phone: string | null;
   plin_owner: string | null;
   plin_qr_path: string | null;
+  accepts_donations: boolean;
+  payment_methods: {
+    yape: { enabled: boolean; phone: string | null; owner: string | null; qr_path: string | null };
+    plin: { enabled: boolean; phone: string | null; owner: string | null; qr_path: string | null };
+  };
 }
 
 export default function ShelterDonarPage() {
@@ -69,7 +75,9 @@ export default function ShelterDonarPage() {
         </div>
 
         {/* Formulario de donación */}
-        <DonationFlow shelter={shelter as never} />
+        <RoleGate allow={['natural_person']}>
+          <DonationFlow shelter={shelter as never} />
+        </RoleGate>
       </div>
     </main>
   );
