@@ -17,7 +17,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo_path',
         'role',
+        'status',
     ];
 
     protected $hidden = [
@@ -28,6 +30,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'status' => 'boolean',
     ];
 
     /*
@@ -60,5 +63,10 @@ class User extends Authenticatable
     public function isVolunteer()
     {
         return $this->role === 'volunteer';
+    }
+
+    public function isNaturalPerson()
+    {
+        return $this->role === 'natural_person';
     }
 }
