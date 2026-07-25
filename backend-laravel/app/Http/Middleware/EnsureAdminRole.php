@@ -16,6 +16,14 @@ class EnsureAdminRole
             return response()->json(['message' => 'No autorizado.'], 403);
         }
 
+        if (!$user->status) {
+            return response()->json(['message' => 'Tu cuenta aún no está activa.'], 403);
+        }
+
+        if ($user->role === 'shelter_admin' && optional($user->shelter)->approval_status !== 'approved') {
+            return response()->json(['message' => 'El albergue aún no está aprobado.'], 403);
+        }
+
         return $next($request);
     }
 }
