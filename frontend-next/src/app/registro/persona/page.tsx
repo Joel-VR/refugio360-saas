@@ -56,8 +56,8 @@ export default function RegisterPersonPage() {
 
   return (
     <SimplePage title="Registro de persona natural" description="Todos los campos son obligatorios.">
-      <form onSubmit={handleSubmit} className="grid max-w-lg gap-3 rounded-lg border border-slate-200 bg-white p-5">
-        <label className="grid gap-1 text-sm font-medium text-slate-700">
+      <form onSubmit={handleSubmit} className="grid max-w-lg gap-3 rounded-lg border border-slate-custom-50 bg-cream-50 p-5">
+        <label className="grid gap-1 text-sm font-medium text-slate-custom-700">
           Nombre
           <input
             required
@@ -69,7 +69,7 @@ export default function RegisterPersonPage() {
           />
         </label>
 
-        <label className="grid gap-1 text-sm font-medium text-slate-700">
+        <label className="grid gap-1 text-sm font-medium text-slate-custom-700">
           Correo
           <input
             required
@@ -101,13 +101,13 @@ export default function RegisterPersonPage() {
           onToggle={() => setShowPasswordConfirmation((value) => !value)}
         />
 
-        <p className={`text-sm ${passwordIsValid ? "text-teal-700" : "text-slate-600"}`}>
+        <p className={`text-sm ${passwordIsValid ? "text-brand-600" : "text-slate-custom-700"}`}>
           La contraseña debe tener mínimo 8 caracteres, mayúscula, minúscula, número y símbolo.
         </p>
 
         {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 
-        <button disabled={loading} className="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70">
+        <button disabled={loading} className="rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70">
           {loading ? "Creando cuenta..." : "Crear cuenta"}
         </button>
       </form>
@@ -131,7 +131,7 @@ function PasswordField({
   onToggle: () => void;
 }) {
   return (
-    <label className="grid gap-1 text-sm font-medium text-slate-700">
+    <label className="grid gap-1 text-sm font-medium text-slate-custom-700">
       {label}
       <span className="relative">
         <input

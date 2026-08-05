@@ -25,7 +25,7 @@ export default async function EditShelterPage({ params }: Props) {
           </div>
           <Link
             href="/admin/albergues"
-            className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/10"
+            className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 transition hover:bg-cream-50/10"
           >
             Volver
           </Link>

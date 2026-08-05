@@ -25,7 +25,7 @@ export default function SuperAdminDashboardPage() {
             Gestiona solicitudes de albergues y revisa el estado general de la plataforma.
           </p>
         </div>
-        <Link href="/superadmin/albergues/pendientes" className="w-fit rounded-md bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-950">
+        <Link href="/superadmin/albergues/pendientes" className="w-fit rounded-md bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-custom-900">
           Revisar pendientes
         </Link>
       </div>
@@ -40,15 +40,15 @@ export default function SuperAdminDashboardPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <Link href="/superadmin/albergues" className="rounded-lg border border-white/10 bg-white/5 p-5 transition hover:bg-white/10">
+        <Link href="/superadmin/albergues" className="rounded-lg border border-white/10 bg-cream-50/5 p-5 transition hover:bg-cream-50/10">
           <h2 className="text-lg font-semibold">Albergues</h2>
           <p className="mt-2 text-sm text-slate-400">{data?.stats.shelters_total ?? "..."} registros totales.</p>
         </Link>
-        <Link href="/superadmin/publicaciones/perdidas" className="rounded-lg border border-white/10 bg-white/5 p-5 transition hover:bg-white/10">
+        <Link href="/superadmin/publicaciones/perdidas" className="rounded-lg border border-white/10 bg-cream-50/5 p-5 transition hover:bg-cream-50/10">
           <h2 className="text-lg font-semibold">Mascotas perdidas</h2>
           <p className="mt-2 text-sm text-slate-400">Módulo pendiente de modelo de datos. Pendientes actuales: {data?.stats.lost_posts_pending ?? 0}.</p>
         </Link>
-        <Link href="/superadmin/publicaciones/encontradas" className="rounded-lg border border-white/10 bg-white/5 p-5 transition hover:bg-white/10">
+        <Link href="/superadmin/publicaciones/encontradas" className="rounded-lg border border-white/10 bg-cream-50/5 p-5 transition hover:bg-cream-50/10">
           <h2 className="text-lg font-semibold">Mascotas encontradas</h2>
           <p className="mt-2 text-sm text-slate-400">Módulo pendiente de modelo de datos. Pendientes actuales: {data?.stats.found_posts_pending ?? 0}.</p>
         </Link>
@@ -62,7 +62,7 @@ export default function SuperAdminDashboardPage() {
         {data ? (
           <ShelterReviewList initialShelters={data.pending_shelters} emptyText="No hay albergues pendientes de revisión." />
         ) : (
-          <p className="rounded-lg border border-white/10 bg-white/5 p-5 text-sm text-slate-300">Cargando solicitudes...</p>
+          <p className="rounded-lg border border-white/10 bg-cream-50/5 p-5 text-sm text-slate-300">Cargando solicitudes...</p>
         )}
       </section>
     </section>
@@ -78,7 +78,7 @@ function Metric({ label, value, tone }: { label: string; value?: number; tone: "
   };
 
   return (
-    <div className="rounded-lg border border-white/10 bg-white/5 p-5">
+    <div className="rounded-lg border border-white/10 bg-cream-50/5 p-5">
       <p className="text-sm text-slate-400">{label}</p>
       <p className={`mt-3 text-3xl font-semibold ${colors[tone]}`}>{value ?? "..."}</p>
     </div>

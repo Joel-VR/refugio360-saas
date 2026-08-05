@@ -40,7 +40,7 @@ export default function ShelterActions({ shelter }: { shelter: Shelter }) {
     <div className="flex items-center justify-end gap-2">
       <Link
         href={`/admin/albergues/${shelter.id}/editar`}
-        className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10"
+        className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-cream-50/10"
       >
         Editar
       </Link>
@@ -48,7 +48,7 @@ export default function ShelterActions({ shelter }: { shelter: Shelter }) {
       <button
         onClick={handleToggle}
         disabled={loading}
-        className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-white/10 disabled:opacity-50"
+        className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-slate-300 transition hover:bg-cream-50/10 disabled:opacity-50"
       >
         {shelter.is_active ? "Desactivar" : "Activar"}
       </button>

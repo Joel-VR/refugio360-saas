@@ -69,7 +69,7 @@ export default async function AnimalDetailPage({ params }: Props) {
         <div className="mt-6 grid gap-10 lg:grid-cols-2">
           {/* ── galería ── */}
           <div className="flex flex-col gap-4">
-            <div className="aspect-square overflow-hidden rounded-3xl border border-white/10 bg-slate-900 flex items-center justify-center text-8xl">
+            <div className="aspect-square overflow-hidden rounded-3xl border border-white/10 bg-slate-custom-900 flex items-center justify-center text-8xl">
               {animal.photos && animal.photos.length > 0 ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -94,7 +94,7 @@ export default async function AnimalDetailPage({ params }: Props) {
                 {animal.photos.slice(1).map((photo: AnimalPhoto) => (
                   <div
                     key={photo.id}
-                    className="aspect-square overflow-hidden rounded-xl border border-white/10 bg-slate-900"
+                    className="aspect-square overflow-hidden rounded-xl border border-white/10 bg-slate-custom-900"
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -129,7 +129,7 @@ export default async function AnimalDetailPage({ params }: Props) {
             </div>
 
             {/* ficha */}
-            <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+            <div className="rounded-2xl border border-white/10 bg-slate-custom-900/60 p-6">
               <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
                 Ficha del animal
               </h2>
@@ -160,7 +160,7 @@ export default async function AnimalDetailPage({ params }: Props) {
             {isAvailable ? (
               <AdoptionForm animalId={animal.id} shelterId={animal.shelter_id} />
             ) : (
-              <div className="rounded-2xl border border-dashed border-white/10 bg-white/5 p-6 text-center text-sm text-slate-400">
+              <div className="rounded-2xl border border-dashed border-white/10 bg-cream-50/5 p-6 text-center text-sm text-slate-400">
                 {animal.lifecycle_status === "adoptado"
                   ? "Este animal ya fue adoptado. ¡Gracias por tu interés!"
                   : "Este animal aún no está disponible para adopción. Vuelve pronto."}

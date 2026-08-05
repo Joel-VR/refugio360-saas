@@ -52,7 +52,7 @@ export default async function AdoptionsPage({ searchParams }: Props) {
       <section className="mx-auto w-full max-w-6xl flex flex-col gap-8">
 
         {/* Header */}
-        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
           <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Admin</p>
@@ -76,8 +76,8 @@ export default async function AdoptionsPage({ searchParams }: Props) {
                   href={href}
                   className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                     isActive
-                      ? "bg-cyan-400 text-slate-950"
-                      : "border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10"
+                      ? "bg-cyan-400 text-slate-custom-900"
+                      : "border border-white/10 bg-cream-50/5 text-slate-200 hover:bg-cream-50/10"
                   }`}
                 >
                   {f.label}
@@ -89,7 +89,7 @@ export default async function AdoptionsPage({ searchParams }: Props) {
 
         {/* Empty state */}
         {adoptions.length === 0 && (
-          <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 p-16 text-center">
+          <div className="rounded-3xl border border-dashed border-white/15 bg-cream-50/5 p-16 text-center">
             <p className="text-3xl">📋</p>
             <p className="mt-4 text-slate-400">
               No hay solicitudes{activeStatus ? ` con estado "${activeStatus}"` : ""}.
@@ -143,7 +143,7 @@ export default async function AdoptionsPage({ searchParams }: Props) {
                   </dl>
 
                   {/* Animal y albergue */}
-                  <div className="rounded-xl border border-white/8 bg-white/5 px-3 py-2 text-xs">
+                  <div className="rounded-xl border border-white/8 bg-cream-50/5 px-3 py-2 text-xs">
                     <span className="text-slate-500">Animal: </span>
                     <span className="text-slate-200 font-medium">
                       {adoption.animal?.name

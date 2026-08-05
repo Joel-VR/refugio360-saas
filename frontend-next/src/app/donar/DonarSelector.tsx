@@ -36,40 +36,40 @@ export default function DonarSelector() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#f7f8f3] text-slate-950">
+    <main className="min-h-screen bg-cream-100 text-slate-custom-900">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-5 py-10 sm:py-14">
-        <div className="flex flex-col gap-3 border-b border-slate-200 pb-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-teal-700">Donaciones</p>
+        <div className="flex flex-col gap-3 border-b border-slate-custom-50 pb-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-600">Donaciones</p>
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
               <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">Elige el albergue que quieres apoyar</h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-custom-700">
                 Cada refugio configura sus propios datos de Yape y Plin. Tu comprobante quedará pendiente de verificación por el equipo del albergue.
               </p>
             </div>
-            <Link href="/transparencia" className="w-fit rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-white">
+            <Link href="/transparencia" className="w-fit rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-custom-700 hover:bg-cream-50">
               Ver transparencia
             </Link>
           </div>
         </div>
 
-        {loading && <p className="rounded-xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-500">Cargando albergues...</p>}
+        {loading && <p className="rounded-xl border border-slate-custom-50 bg-cream-50 px-5 py-4 text-sm text-slate-500">Cargando albergues...</p>}
         {error && <p className="rounded-xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">{error}</p>}
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {shelters.map((shelter) => (
-            <article key={shelter.id} className="flex min-h-72 flex-col justify-between rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <article key={shelter.id} className="flex min-h-72 flex-col justify-between rounded-lg border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
               <div className="flex gap-4">
-                <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
+                <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-custom-50 bg-slate-100">
                   {shelter.logo_path ? (
                     <img src={`${STORAGE}/${shelter.logo_path}`} alt={shelter.name} className="h-full w-full object-cover" />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center text-xl font-bold text-teal-700">{shelter.name.slice(0, 1)}</div>
+                    <div className="flex h-full w-full items-center justify-center text-xl font-bold text-brand-600">{shelter.name.slice(0, 1)}</div>
                   )}
                 </div>
                 <div className="min-w-0">
-                  <h2 className="text-lg font-semibold text-slate-950">{shelter.name}</h2>
-                  <p className="mt-1 line-clamp-3 text-sm leading-6 text-slate-600">{shelter.description || "Albergue registrado en Refugio360."}</p>
+                  <h2 className="text-lg font-semibold text-slate-custom-900">{shelter.name}</h2>
+                  <p className="mt-1 line-clamp-3 text-sm leading-6 text-slate-custom-700">{shelter.description || "Albergue registrado en Refugio360."}</p>
                 </div>
               </div>
 
@@ -88,12 +88,12 @@ export default function DonarSelector() {
                     href={`/refugios/${shelter.slug}/donar`}
                     aria-disabled={!shelter.accepts_donations}
                     className={`flex-1 rounded-md px-4 py-3 text-center text-sm font-semibold ${
-                      shelter.accepts_donations ? "bg-teal-700 text-white hover:bg-teal-800" : "pointer-events-none bg-slate-200 text-slate-500"
+                      shelter.accepts_donations ? "bg-brand-600 text-white hover:bg-teal-800" : "pointer-events-none bg-slate-200 text-slate-500"
                     }`}
                   >
                     Donar
                   </Link>
-                  <Link href={`/refugios/${shelter.slug}/transparencia`} className="rounded-md border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                  <Link href={`/refugios/${shelter.slug}/transparencia`} className="rounded-md border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-custom-700 hover:bg-cream-100">
                     Transparencia
                   </Link>
                 </div>
@@ -103,7 +103,7 @@ export default function DonarSelector() {
         </div>
 
         {!loading && !error && shelters.length === 0 && (
-          <p className="rounded-xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-500">Aún no hay albergues activos para recibir donaciones.</p>
+          <p className="rounded-xl border border-slate-custom-50 bg-cream-50 px-5 py-4 text-sm text-slate-500">Aún no hay albergues activos para recibir donaciones.</p>
         )}
       </section>
     </main>

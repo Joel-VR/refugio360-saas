@@ -41,14 +41,14 @@ export function RoleGate({
 
   if (!token || !role || !allow.includes(role as AppRole)) {
     return (
-      <main className="min-h-screen bg-[#f7f8f3] px-6 py-16 text-slate-950">
-        <section className="mx-auto max-w-xl rounded-lg border border-slate-200 bg-white p-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-teal-700">Acceso protegido</p>
+      <main className="min-h-screen bg-cream-100 px-6 py-16 text-slate-custom-900">
+        <section className="mx-auto max-w-xl rounded-lg border border-slate-custom-50 bg-cream-50 p-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-600">Acceso protegido</p>
           <h1 className="mt-3 text-3xl font-semibold">Inicia sesión con el rol correcto</h1>
-          <p className="mt-3 text-sm leading-6 text-slate-600">
+          <p className="mt-3 text-sm leading-6 text-slate-custom-700">
             Esta sección está reservada para: {allow.join(", ")}.
           </p>
-          <Link href="/login" className="mt-6 inline-block rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white">
+          <Link href="/login" className="mt-6 inline-block rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white">
             Ir a iniciar sesión
           </Link>
         </section>
@@ -63,20 +63,20 @@ function ShelterApprovalState({ status }: { status: string | null }) {
   const rejected = status === "rejected";
 
   return (
-    <main className="min-h-screen bg-[#f7f8f3] px-6 py-16 text-slate-950">
-      <section className="mx-auto max-w-xl rounded-lg border border-slate-200 bg-white p-8">
+    <main className="min-h-screen bg-cream-100 px-6 py-16 text-slate-custom-900">
+      <section className="mx-auto max-w-xl rounded-lg border border-slate-custom-50 bg-cream-50 p-8">
         <p className={`text-sm font-semibold uppercase tracking-[0.2em] ${rejected ? "text-rose-700" : "text-amber-700"}`}>
           {rejected ? "Solicitud rechazada" : "Solicitud en revisión"}
         </p>
         <h1 className="mt-3 text-3xl font-semibold">
           {rejected ? "Se rechazó tu solicitud" : "Espera a que acepten tu solicitud"}
         </h1>
-        <p className="mt-3 text-sm leading-6 text-slate-600">
+        <p className="mt-3 text-sm leading-6 text-slate-custom-700">
           {rejected
             ? "Tu registro de albergue fue revisado y rechazado. Más adelante recibirás más información por correo."
             : "Cuando el super admin apruebe tu albergue podrás disfrutar de todas las herramientas del panel."}
         </p>
-        <Link href="/perfil" className="mt-6 inline-block rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700">
+        <Link href="/perfil" className="mt-6 inline-block rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-custom-700">
           Ver perfil
         </Link>
       </section>

@@ -55,10 +55,10 @@ function LoginContent() {
     <PublicShell>
       <section className="mx-auto grid max-w-md gap-5 px-6 py-12">
         <h1 className="text-3xl font-semibold">Iniciar sesión</h1>
-        <p className="text-sm text-slate-600">Ingresa con tu correo y contraseña. El sistema abrirá el panel según tu rol.</p>
+        <p className="text-sm text-slate-custom-700">Ingresa con tu correo y contraseña. El sistema abrirá el panel según tu rol.</p>
 
-        <form onSubmit={handleSubmit} className="grid gap-3 rounded-lg border border-slate-200 bg-white p-5">
-          <label className="grid gap-1 text-sm font-medium text-slate-700">
+        <form onSubmit={handleSubmit} className="grid gap-3 rounded-lg border border-slate-custom-50 bg-cream-50 p-5">
+          <label className="grid gap-1 text-sm font-medium text-slate-custom-700">
             Correo
             <input
               required
@@ -72,7 +72,7 @@ function LoginContent() {
             />
           </label>
 
-          <label className="grid gap-1 text-sm font-medium text-slate-700">
+          <label className="grid gap-1 text-sm font-medium text-slate-custom-700">
             Contraseña
             <span className="relative">
               <input
@@ -101,7 +101,7 @@ function LoginContent() {
 
           {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 
-          <button disabled={loading} className="rounded-md bg-teal-700 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70">
+          <button disabled={loading} className="rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-70">
             {loading ? "Ingresando..." : "Iniciar sesión"}
           </button>
         </form>

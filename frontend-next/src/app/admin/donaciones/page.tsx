@@ -10,7 +10,7 @@ const STORAGE = (process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/s
 const TABS: { key: DonationStatus; label: string; activeClass: string; badgeClass: string }[] = [
   { key: "pending",  label: "Pendientes", activeClass: "bg-rose-500 text-white",    badgeClass: "bg-rose-500/20 text-rose-300" },
   { key: "approved", label: "Aprobadas",  activeClass: "bg-emerald-500 text-white", badgeClass: "bg-emerald-500/20 text-emerald-300" },
-  { key: "rejected", label: "Rechazadas", activeClass: "bg-slate-500 text-white",   badgeClass: "bg-slate-500/20 text-slate-300" },
+  { key: "rejected", label: "Rechazadas", activeClass: "bg-cream-1000 text-white",   badgeClass: "bg-cream-1000/20 text-slate-300" },
 ];
 
 const METHOD_LABEL: Record<string, string> = { yape: "Yape", plin: "Plin", paypal: "PayPal", efectivo: "Efectivo" };
@@ -146,7 +146,7 @@ export default function DonacionesPage() {
               key={t.key}
               onClick={() => setStatus(t.key)}
               className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${
-                status === t.key ? t.activeClass : "border border-white/10 bg-white/5 text-slate-300 hover:bg-white/10"
+                status === t.key ? t.activeClass : "border border-white/10 bg-cream-50/5 text-slate-300 hover:bg-cream-50/10"
               }`}
             >
               {t.label}
@@ -158,7 +158,7 @@ export default function DonacionesPage() {
         </div>
 
         {/* Búsqueda + filtro de fechas */}
-        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-cream-50/5 p-6 md:flex-row md:items-center md:justify-between">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -166,9 +166,9 @@ export default function DonacionesPage() {
             className="w-full max-w-sm rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-cyan-400/50"
           />
           <div className="flex flex-wrap items-center gap-2">
-            <button onClick={() => applyQuickRange("today")} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-white/10">Hoy</button>
-            <button onClick={() => applyQuickRange("week")} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-white/10">Última semana</button>
-            <button onClick={() => applyQuickRange("month")} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-white/10">Último mes</button>
+            <button onClick={() => applyQuickRange("today")} className="rounded-full border border-white/10 bg-cream-50/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-cream-50/10">Hoy</button>
+            <button onClick={() => applyQuickRange("week")} className="rounded-full border border-white/10 bg-cream-50/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-cream-50/10">Última semana</button>
+            <button onClick={() => applyQuickRange("month")} className="rounded-full border border-white/10 bg-cream-50/5 px-3 py-1.5 text-xs text-slate-300 hover:bg-cream-50/10">Último mes</button>
             <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="rounded-xl border border-white/10 bg-slate-950/70 px-3 py-1.5 text-xs text-slate-200 outline-none focus:border-cyan-400/50" />
             <span className="text-xs text-slate-500">a</span>
             <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="rounded-xl border border-white/10 bg-slate-950/70 px-3 py-1.5 text-xs text-slate-200 outline-none focus:border-cyan-400/50" />
@@ -202,7 +202,7 @@ export default function DonacionesPage() {
                 <tr
                   key={d.id}
                   onClick={() => setSelected(d)}
-                  className="cursor-pointer border-b border-white/5 transition hover:bg-white/5"
+                  className="cursor-pointer border-b border-white/5 transition hover:bg-cream-50/5"
                 >
                   <td className="px-5 py-3 font-medium text-slate-100">{d.donor_name || "Anónimo"}</td>
                   <td className="px-5 py-3 text-slate-200">S/. {Number(d.amount ?? 0).toFixed(2)}</td>
@@ -285,7 +285,7 @@ function DonationModal({
             </p>
           )}
 
-          <div className="grid gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm">
+          <div className="grid gap-3 rounded-2xl border border-white/10 bg-cream-50/5 p-5 text-sm">
             <Row label="Email" value={donation.donor_email || "—"} />
             <Row label="Monto" value={`S/. ${Number(donation.amount ?? 0).toFixed(2)}`} />
             <Row label="Método" value={METHOD_LABEL[donation.payment_method] ?? donation.payment_method} />
@@ -314,13 +314,13 @@ function DonationModal({
                 <a             
                   href={voucherUrl}
                   download
-                  className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs font-medium text-slate-200 hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs font-medium text-slate-200 hover:bg-cream-50/10"
                 >
                   Descargar imagen
                 </a>
               </div>
             ) : (
-              <p className="rounded-xl border border-dashed border-white/15 bg-white/5 px-4 py-6 text-center text-sm text-slate-400">
+              <p className="rounded-xl border border-dashed border-white/15 bg-cream-50/5 px-4 py-6 text-center text-sm text-slate-400">
                 No se pudo cargar el comprobante.
               </p>
             )}
@@ -364,7 +364,7 @@ function DonationModal({
                 />
               )}
               <div className="mt-4 flex gap-3">
-                <button onClick={() => setShowReject(false)} className="flex-1 rounded-full border border-white/15 py-2.5 text-sm text-slate-300 hover:bg-white/10">
+                <button onClick={() => setShowReject(false)} className="flex-1 rounded-full border border-white/15 py-2.5 text-sm text-slate-300 hover:bg-cream-50/10">
                   Cancelar
                 </button>
                 <button

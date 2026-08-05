@@ -28,11 +28,11 @@ export default function AdminDocumentationPage() {
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Ayuda</p>
             <h1 className="mt-2 text-4xl font-semibold tracking-tight">Documentación para administrador</h1>
           </div>
-          <Link href="/admin/dashboard" className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 hover:bg-white/10">Volver</Link>
+          <Link href="/admin/dashboard" className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 hover:bg-cream-50/10">Volver</Link>
         </div>
         <div className="grid gap-4">
           {GUIDES.map((guide) => (
-            <article key={guide.title} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <article key={guide.title} className="rounded-2xl border border-white/10 bg-cream-50/5 p-6">
               <h2 className="text-xl font-semibold">{guide.title}</h2>
               <p className="mt-3 text-sm leading-7 text-slate-300">{guide.body}</p>
             </article>

@@ -67,7 +67,7 @@ export default function PaymentMethodsPanel({ shelter }: { shelter: Shelter }) {
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+    <form onSubmit={submit} className="grid gap-6 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
       <div>
         <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Métodos de Pago</p>
         <h2 className="mt-2 text-2xl font-semibold">Yape y Plin del albergue</h2>
@@ -103,7 +103,7 @@ export default function PaymentMethodsPanel({ shelter }: { shelter: Shelter }) {
       {message && <p className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300">{message}</p>}
       {error && <p className="rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-300">{error}</p>}
 
-      <button disabled={loading} className="w-fit rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-50">
+      <button disabled={loading} className="w-fit rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300 disabled:opacity-50">
         {loading ? "Guardando..." : "Guardar métodos de pago"}
       </button>
     </form>
@@ -140,9 +140,9 @@ function PaymentSection({
       </div>
       <div className="flex flex-wrap items-center gap-4">
         {(preview || qrPath) && (
-          <img src={preview ?? `${STORAGE}/${qrPath}`} alt={`QR ${title}`} className="h-28 w-28 rounded-xl border border-white/10 bg-white object-contain p-1" />
+          <img src={preview ?? `${STORAGE}/${qrPath}`} alt={`QR ${title}`} className="h-28 w-28 rounded-xl border border-white/10 bg-cream-50 object-contain p-1" />
         )}
-        <label className="cursor-pointer rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slate-200 hover:bg-white/10">
+        <label className="cursor-pointer rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slate-200 hover:bg-cream-50/10">
           Subir QR
           <input type="file" accept="image/jpeg,image/png,image/gif" className="hidden" onChange={(e) => onFile(e.target.files?.[0] ?? null)} />
         </label>

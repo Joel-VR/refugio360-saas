@@ -52,7 +52,7 @@ export default function ShelterDonarPage() {
       <div className="max-w-2xl mx-auto">
 
         {/* Mensaje de bienvenida */}
-        <div className="bg-white rounded-2xl shadow p-6 mb-6 text-center">
+        <div className="bg-cream-50 rounded-2xl shadow p-6 mb-6 text-center">
           {shelter.logo_path ? (
             <img
               src={`http://127.0.0.1:8000/storage/${shelter.logo_path}`}

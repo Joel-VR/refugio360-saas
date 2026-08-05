@@ -42,7 +42,7 @@ export default function SuperAdminSheltersPage() {
               setError("");
               setStatus(filter.value);
             }}
-            className={`rounded-md px-4 py-2 text-sm font-semibold ${status === filter.value ? "bg-cyan-300 text-slate-950" : "border border-white/10 text-slate-200 hover:bg-white/10"}`}
+            className={`rounded-md px-4 py-2 text-sm font-semibold ${status === filter.value ? "bg-cyan-300 text-slate-custom-900" : "border border-white/10 text-slate-200 hover:bg-cream-50/10"}`}
           >
             {filter.label}
           </button>
@@ -51,7 +51,7 @@ export default function SuperAdminSheltersPage() {
 
       {error && <p className="rounded-lg border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-200">{error}</p>}
       {loading ? (
-        <p className="rounded-lg border border-white/10 bg-white/5 p-5 text-sm text-slate-300">Cargando albergues...</p>
+        <p className="rounded-lg border border-white/10 bg-cream-50/5 p-5 text-sm text-slate-300">Cargando albergues...</p>
       ) : (
         <ShelterReviewList initialShelters={shelters} emptyText="No hay albergues para este filtro." />
       )}

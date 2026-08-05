@@ -33,7 +33,7 @@ export function ShelterReviewList({
   }
 
   if (shelters.length === 0) {
-    return <p className="rounded-lg border border-white/10 bg-white/5 p-5 text-sm text-slate-300">{emptyText}</p>;
+    return <p className="rounded-lg border border-white/10 bg-cream-50/5 p-5 text-sm text-slate-300">{emptyText}</p>;
   }
 
   return (
@@ -44,7 +44,7 @@ export function ShelterReviewList({
         const pending = shelter.approval_status === "pending_review";
 
         return (
-          <article key={shelter.id} className="rounded-lg border border-white/10 bg-white/5 p-5 shadow-xl shadow-black/10">
+          <article key={shelter.id} className="rounded-lg border border-white/10 bg-cream-50/5 p-5 shadow-xl shadow-black/10">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-3">
@@ -65,7 +65,7 @@ export function ShelterReviewList({
                   type="button"
                   disabled={!pending || busyId === shelter.id}
                   onClick={() => changeStatus(shelter.id, "approved")}
-                  className="rounded-md bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-950 disabled:cursor-not-allowed disabled:opacity-45"
+                  className="rounded-md bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-custom-900 disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   Aprobar
                 </button>
@@ -103,7 +103,7 @@ export function StatusBadge({ status }: { status?: string }) {
   };
 
   return (
-    <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${styles[status ?? ""] ?? "border-slate-500/40 bg-slate-500/10 text-slate-200"}`}>
+    <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${styles[status ?? ""] ?? "border-slate-500/40 bg-cream-1000/10 text-slate-200"}`}>
       {statusLabel(status)}
     </span>
   );

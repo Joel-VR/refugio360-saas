@@ -72,7 +72,7 @@ export default function NewShelterPage() {
           </div>
           <Link
             href="/admin/albergues"
-            className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 transition hover:bg-white/10"
+            className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 transition hover:bg-cream-50/10"
           >
             Volver
           </Link>
@@ -80,7 +80,7 @@ export default function NewShelterPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur"
+          className="flex flex-col gap-6 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur"
         >
           {/* Nombre */}
           <label className="flex flex-col gap-2">
@@ -171,7 +171,7 @@ export default function NewShelterPage() {
                 }`}
               >
                 <div
-                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-cream-50 shadow transition-transform ${
                     form.is_active ? "translate-x-5" : "translate-x-0.5"
                   }`}
                 />
@@ -191,14 +191,14 @@ export default function NewShelterPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
             <Link
               href="/admin/albergues"
-              className="rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-slate-200 transition hover:bg-white/10"
+              className="rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-slate-200 transition hover:bg-cream-50/10"
             >
               Cancelar
             </Link>
             <button
               type="submit"
               disabled={loading}
-              className="rounded-full bg-emerald-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
+              className="rounded-full bg-emerald-400 px-6 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-emerald-300 disabled:opacity-50"
             >
               {loading ? "Guardando…" : "Guardar albergue"}
             </button>

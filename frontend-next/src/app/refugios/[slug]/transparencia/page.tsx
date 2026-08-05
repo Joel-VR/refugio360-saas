@@ -45,16 +45,16 @@ export default function ShelterTransparencyPage() {
 
   const maxCategory = useMemo(() => Math.max(1, ...Object.values(data?.expense_categories ?? {})), [data]);
 
-  if (loading) return <main className="min-h-screen bg-[#f7f8f3] px-5 py-12 text-slate-700">Cargando transparencia...</main>;
-  if (error || !data) return <main className="min-h-screen bg-[#f7f8f3] px-5 py-12 text-rose-700">{error || "No encontrado."}</main>;
+  if (loading) return <main className="min-h-screen bg-cream-100 px-5 py-12 text-slate-custom-700">Cargando transparencia...</main>;
+  if (error || !data) return <main className="min-h-screen bg-cream-100 px-5 py-12 text-rose-700">{error || "No encontrado."}</main>;
 
   return (
-    <main className="min-h-screen bg-[#f7f8f3] text-slate-950">
+    <main className="min-h-screen bg-cream-100 text-slate-custom-900">
       <section className="mx-auto grid w-full max-w-6xl gap-8 px-5 py-10">
-        <div className="flex flex-col gap-3 border-b border-slate-200 pb-6">
-          <Link href="/transparencia" className="text-sm font-semibold text-teal-700">Volver a transparencia global</Link>
+        <div className="flex flex-col gap-3 border-b border-slate-custom-50 pb-6">
+          <Link href="/transparencia" className="text-sm font-semibold text-brand-600">Volver a transparencia global</Link>
           <h1 className="text-3xl font-semibold sm:text-5xl">Transparencia de {data.shelter.name}</h1>
-          <p className="max-w-2xl text-sm leading-6 text-slate-600">{data.shelter.description}</p>
+          <p className="max-w-2xl text-sm leading-6 text-slate-custom-700">{data.shelter.description}</p>
         </div>
 
         <div className="grid gap-4 md:grid-cols-3">
@@ -63,7 +63,7 @@ export default function ShelterTransparencyPage() {
           <Metric label="Balance" value={money(data.summary.balance)} />
         </div>
 
-        <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
           <h2 className="text-xl font-semibold">Distribución de gastos</h2>
           <div className="mt-5 grid gap-3">
             {Object.entries(data.expense_categories).map(([key, value]) => (
@@ -73,7 +73,7 @@ export default function ShelterTransparencyPage() {
                   <span className="font-semibold">{money(value)}</span>
                 </div>
                 <div className="h-3 overflow-hidden rounded-full bg-slate-100">
-                  <div className="h-full rounded-full bg-teal-700" style={{ width: `${Math.max(3, (Number(value) / maxCategory) * 100)}%` }} />
+                  <div className="h-full rounded-full bg-brand-600" style={{ width: `${Math.max(3, (Number(value) / maxCategory) * 100)}%` }} />
                 </div>
               </div>
             ))}
@@ -81,7 +81,7 @@ export default function ShelterTransparencyPage() {
         </section>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <section className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
             <h2 className="text-xl font-semibold">Donaciones aprobadas</h2>
             <div className="mt-4 overflow-x-auto">
               <table className="w-full text-left text-sm">
@@ -100,7 +100,7 @@ export default function ShelterTransparencyPage() {
             </div>
           </section>
 
-          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <section className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
             <h2 className="text-xl font-semibold">Gastos aprobados</h2>
             <div className="mt-4 grid gap-3">
               {data.expenses.data.map((expense) => (
@@ -112,7 +112,7 @@ export default function ShelterTransparencyPage() {
                     </div>
                     <p className="font-semibold">{money(expense.amount)}</p>
                   </div>
-                  {expense.document_path && <a href={`${STORAGE}/${expense.document_path}`} className="mt-2 inline-block text-xs font-semibold text-teal-700" download>Descargar comprobante</a>}
+                  {expense.document_path && <a href={`${STORAGE}/${expense.document_path}`} className="mt-2 inline-block text-xs font-semibold text-brand-600" download>Descargar comprobante</a>}
                 </article>
               ))}
             </div>
@@ -125,7 +125,7 @@ export default function ShelterTransparencyPage() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{label}</p>
       <p className="mt-2 text-3xl font-semibold">{value}</p>
     </div>

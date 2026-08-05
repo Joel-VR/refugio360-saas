@@ -27,7 +27,7 @@ export default function SuperAdminPendingSheltersPage() {
 
       {error && <p className="rounded-lg border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-200">{error}</p>}
       {loading ? (
-        <p className="rounded-lg border border-white/10 bg-white/5 p-5 text-sm text-slate-300">Cargando solicitudes...</p>
+        <p className="rounded-lg border border-white/10 bg-cream-50/5 p-5 text-sm text-slate-300">Cargando solicitudes...</p>
       ) : (
         <ShelterReviewList
           initialShelters={shelters}

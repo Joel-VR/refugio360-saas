@@ -44,7 +44,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
             <Link
               key={l.href}
               href={l.href}
-              className="flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-white/10 hover:text-slate-100"
+              className="flex items-center justify-between gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-300 transition hover:bg-cream-50/10 hover:text-slate-100"
             >
               <span className="flex items-center gap-3">
                 <span>{l.icon}</span>

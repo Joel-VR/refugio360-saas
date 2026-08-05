@@ -43,7 +43,7 @@ function CopyButton({ phone }: { phone: string }) {
       className={`flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition ${
         copied
           ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
-          : 'border-white/15 bg-white/5 text-slate-300 hover:bg-white/10'
+          : 'border-white/15 bg-cream-50/5 text-slate-300 hover:bg-cream-50/10'
       }`}
     >
       {copied ? '✓ Número copiado' : '📋 Copiar número'}
@@ -74,7 +74,7 @@ function PaymentMethodCard({
       className={`flex flex-col gap-4 rounded-2xl border p-5 text-left transition ${
         selected
           ? 'border-cyan-400/60 bg-cyan-400/5 ring-1 ring-cyan-400/30'
-          : 'border-white/10 bg-white/5 hover:border-white/20 hover:bg-white/8'
+          : 'border-white/10 bg-cream-50/5 hover:border-white/20 hover:bg-cream-50/8'
       }`}
     >
       <div className="flex items-center gap-3">
@@ -102,7 +102,7 @@ function PaymentMethodCard({
             />
           )}
           {selected && (
-            <p className="text-xs text-slate-400 bg-white/5 rounded-xl px-4 py-3 border border-white/10">
+            <p className="text-xs text-slate-400 bg-cream-50/5 rounded-xl px-4 py-3 border border-white/10">
               📲 Escanea el QR o envía al número de arriba, luego sube tu comprobante abajo.
             </p>
           )}
@@ -222,7 +222,7 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
         </p>
         <Link
           href="/"
-          className="mt-8 inline-block rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+          className="mt-8 inline-block rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300"
         >
           Volver al albergue
         </Link>
@@ -234,7 +234,7 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
       {/* ── PASO 1 + 2: método de pago ─────────────────────────────────────── */}
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+      <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
         <p className="text-xs uppercase tracking-widest text-cyan-300 mb-1">Paso 1</p>
         <h2 className="text-lg font-semibold text-slate-100 mb-4">Selecciona el método de pago</h2>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -244,7 +244,7 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
       </div>
 
       {/* ── PASO 3: datos del donante + pago ───────────────────────────────── */}
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+      <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
         <p className="text-xs uppercase tracking-widest text-cyan-300 mb-1">Paso 2</p>
         <h2 className="text-lg font-semibold text-slate-100 mb-4">Registro de pago</h2>
 
@@ -256,7 +256,7 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
               value={donorName}
               onChange={e => setDonorName(e.target.value)}
               placeholder="Ana García"
-              className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
+              className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
             />
             {errors.donorName && <p className="text-xs text-rose-400">{errors.donorName}</p>}
           </div>
@@ -269,7 +269,7 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="ana@email.com"
-              className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
+              className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
             />
             {errors.email && <p className="text-xs text-rose-400">{errors.email}</p>}
           </div>
@@ -284,7 +284,7 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
               value={amount}
               onChange={e => setAmount(e.target.value)}
               placeholder="50.00"
-              className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
+              className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
             />
             {errors.amount && <p className="text-xs text-rose-400">{errors.amount}</p>}
           </div>
@@ -296,7 +296,7 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
               value={opRef}
               onChange={e => setOpRef(e.target.value)}
               placeholder="ej. 123456789"
-              className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
+              className="rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
             />
             {errors.opRef && <p className="text-xs text-rose-400">{errors.opRef}</p>}
           </div>
@@ -313,14 +313,14 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
             value={notes}
             onChange={e => setNotes(e.target.value)}
             placeholder="Cuéntanos algo si quieres..."
-            className="resize-none rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
+            className="resize-none rounded-xl border border-white/10 bg-slate-950/70 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/20 transition"
           />
           <p className="text-xs text-slate-500 text-right">{notes.length}/500</p>
         </div>
       </div>
 
       {/* ── PASO 4: comprobante ────────────────────────────────────────────── */}
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+      <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
         <p className="text-xs uppercase tracking-widest text-cyan-300 mb-1">Paso 3</p>
         <h2 className="text-lg font-semibold text-slate-100 mb-4">Sube tu comprobante</h2>
 
@@ -337,7 +337,7 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
             <button
               type="button"
               onClick={e => { e.stopPropagation(); fileRef.current?.click(); }}
-              className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-white/10 transition"
+              className="rounded-full border border-white/15 bg-cream-50/5 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-cream-50/10 transition"
             >
               Seleccionar archivo
             </button>
@@ -392,7 +392,7 @@ export default function DonationForm({ shelter }: { shelter: Shelter }) {
       <button
         type="submit"
         disabled={loading || !method}
-        className="rounded-full bg-cyan-400 py-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="rounded-full bg-cyan-400 py-4 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {loading ? (
           <>

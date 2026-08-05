@@ -23,9 +23,9 @@ export default function SuperAdminUsersPage() {
 
       {error && <p className="rounded-lg border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-200">{error}</p>}
 
-      <div className="overflow-hidden rounded-lg border border-white/10 bg-white/5">
+      <div className="overflow-hidden rounded-lg border border-white/10 bg-cream-50/5">
         <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="border-b border-white/10 bg-white/5 text-xs uppercase tracking-[0.16em] text-slate-400">
+          <thead className="border-b border-white/10 bg-cream-50/5 text-xs uppercase tracking-[0.16em] text-slate-400">
             <tr>
               <th className="px-4 py-3">Usuario</th>
               <th className="px-4 py-3">Rol</th>

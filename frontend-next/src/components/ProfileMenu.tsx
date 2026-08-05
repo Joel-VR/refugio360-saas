@@ -66,7 +66,7 @@ export function ProfileMenu({ variant = "light" }: { variant?: "light" | "dark" 
         title="Perfil"
         onClick={() => setOpen((value) => !value)}
         className={`grid h-10 w-10 place-items-center overflow-hidden rounded-full border text-sm font-semibold shadow-sm transition ${
-          isDark ? "border-white/15 bg-slate-900 text-cyan-200 hover:bg-white/10" : "border-slate-200 bg-white text-teal-800 hover:bg-slate-50"
+          isDark ? "border-white/15 bg-slate-custom-900 text-cyan-200 hover:bg-cream-50/10" : "border-slate-custom-50 bg-cream-50 text-brand-600 hover:bg-cream-100"
         }`}
       >
         {user.profile_photo_url ? (
@@ -78,7 +78,7 @@ export function ProfileMenu({ variant = "light" }: { variant?: "light" | "dark" 
 
       {open && (
         <div className={`absolute right-0 z-50 mt-2 w-64 rounded-lg border p-2 shadow-xl ${
-          isDark ? "border-white/10 bg-slate-950 text-slate-100" : "border-slate-200 bg-white text-slate-950"
+          isDark ? "border-white/10 bg-slate-950 text-slate-100" : "border-slate-custom-50 bg-cream-50 text-slate-custom-900"
         }`}>
           <div className={`border-b px-3 py-3 ${isDark ? "border-white/10" : "border-slate-100"}`}>
             <p className="truncate text-sm font-semibold">{user.name}</p>
@@ -88,7 +88,7 @@ export function ProfileMenu({ variant = "light" }: { variant?: "light" | "dark" 
             href="/perfil"
             onClick={() => setOpen(false)}
             className={`mt-2 flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
-              isDark ? "hover:bg-white/10" : "hover:bg-slate-100"
+              isDark ? "hover:bg-cream-50/10" : "hover:bg-slate-100"
             }`}
           >
             <UserIcon />
@@ -98,7 +98,7 @@ export function ProfileMenu({ variant = "light" }: { variant?: "light" | "dark" 
             type="button"
             onClick={handleLogout}
             className={`flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium ${
-              isDark ? "text-rose-200 hover:bg-white/10" : "text-rose-700 hover:bg-rose-50"
+              isDark ? "text-rose-200 hover:bg-cream-50/10" : "text-rose-700 hover:bg-rose-50"
             }`}
           >
             <LogoutIcon />
@@ -132,8 +132,8 @@ export function AuthNav() {
 
   return (
     <>
-      <Link href="/login" className="font-semibold text-teal-700">Ingresar</Link>
-      <Link href="/registro" className="rounded-md bg-teal-700 px-3 py-2 font-semibold text-white">Registrarse</Link>
+      <Link href="/login" className="font-semibold text-brand-600">Ingresar</Link>
+      <Link href="/registro" className="rounded-md bg-brand-600 px-3 py-2 font-semibold text-white">Registrarse</Link>
     </>
   );
 }

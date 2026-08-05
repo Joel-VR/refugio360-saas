@@ -27,7 +27,7 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,_#1f2937,_#0f172a_55%,_#020617)] px-6 py-10 text-slate-100">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Admin</p>
@@ -35,7 +35,7 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
             </div>
             <Link
               href="/admin/animales/nuevo"
-              className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+              className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300"
             >
               + Nuevo animal
             </Link>
@@ -50,8 +50,8 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
                   href={href}
                   className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                     isActive
-                      ? "bg-cyan-400 text-slate-950"
-                      : "border border-white/10 bg-white/5 text-slate-200 hover:bg-white/10"
+                      ? "bg-cyan-400 text-slate-custom-900"
+                      : "border border-white/10 bg-cream-50/5 text-slate-200 hover:bg-cream-50/10"
                   }`}
                 >
                   {filter.label}
@@ -76,7 +76,7 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
                 className="group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-950/70 shadow-lg transition hover:border-white/20 hover:shadow-xl"
               >
                 {/* foto */}
-                <div className="relative h-48 bg-slate-900 flex items-center justify-center text-5xl">
+                <div className="relative h-48 bg-slate-custom-900 flex items-center justify-center text-5xl">
                   {photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -110,7 +110,7 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
         </div>
 
         {animals.length === 0 && (
-          <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 p-8 text-center text-slate-300">
+          <div className="rounded-3xl border border-dashed border-white/15 bg-cream-50/5 p-8 text-center text-slate-300">
             No hay animales para el filtro seleccionado.
           </div>
         )}

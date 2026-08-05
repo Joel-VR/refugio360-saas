@@ -78,7 +78,7 @@ export default function AdoptionStatusUpdater({
         onChange={(e) => setNotes(e.target.value)}
         rows={2}
         placeholder="Notas internas (opcional)..."
-        className="resize-none rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-xs text-slate-300 placeholder-slate-600 outline-none focus:border-cyan-400 transition"
+        className="resize-none rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-xs text-slate-300 placeholder-slate-custom-400 outline-none focus:border-cyan-400 transition"
       />
 
       {error && (
@@ -97,7 +97,7 @@ export default function AdoptionStatusUpdater({
         <button
           onClick={handleUpdate}
           disabled={loading}
-          className="flex-1 rounded-full bg-cyan-400 py-2 text-xs font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-50"
+          className="flex-1 rounded-full bg-cyan-400 py-2 text-xs font-semibold text-slate-custom-900 transition hover:bg-cyan-300 disabled:opacity-50"
         >
           {loading ? "Guardando…" : "Actualizar estado"}
         </button>

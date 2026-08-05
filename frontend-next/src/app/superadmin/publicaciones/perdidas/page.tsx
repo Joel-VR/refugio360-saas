@@ -11,12 +11,12 @@ export default function SuperAdminLostPostsPage() {
         </p>
       </div>
 
-      <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+      <div className="rounded-lg border border-white/10 bg-cream-50/5 p-6">
         <h2 className="text-xl font-semibold text-white">Sin solicitudes para revisar</h2>
         <p className="mt-2 text-sm text-slate-400">
           Cuando se implemente el módulo de publicaciones, aquí aparecerán los reportes pendientes con acciones de aprobar y rechazar.
         </p>
-        <Link href="/superadmin/dashboard" className="mt-5 inline-block rounded-md border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-white/10">
+        <Link href="/superadmin/dashboard" className="mt-5 inline-block rounded-md border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 hover:bg-cream-50/10">
           Volver al dashboard
         </Link>
       </div>
