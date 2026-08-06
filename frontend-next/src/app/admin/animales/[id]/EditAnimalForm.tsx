@@ -75,7 +75,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+    <form onSubmit={handleSubmit} className="grid gap-6 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
       <div className="grid gap-5 md:grid-cols-2">
         <label className="grid gap-2">
           <span className="text-sm text-slate-300">Nombre *</span>
@@ -167,7 +167,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
           type="file"
           multiple
           accept="image/jpg,image/jpeg,image/png,image/webp"
-          className="rounded-2xl border border-dashed border-white/15 bg-slate-950/70 px-4 py-5 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-cyan-400 file:px-4 file:py-2 file:font-semibold file:text-slate-950"
+          className="rounded-2xl border border-dashed border-white/15 bg-slate-950/70 px-4 py-5 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-cyan-400 file:px-4 file:py-2 file:font-semibold file:text-slate-custom-900"
         />
       </label>
 
@@ -180,14 +180,14 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
         <Link
           href="/admin/animales"
-          className="rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-slate-200 transition hover:bg-white/10"
+          className="rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-slate-200 transition hover:bg-cream-50/10"
         >
           Cancelar
         </Link>
         <button
           type="submit"
           disabled={loading}
-          className="rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300 disabled:opacity-50"
+          className="rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-emerald-300 disabled:opacity-50"
         >
           {loading ? "Guardando…" : "Actualizar animal"}
         </button>

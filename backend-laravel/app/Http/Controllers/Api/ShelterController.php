@@ -40,6 +40,7 @@ class ShelterController extends Controller
             'email'       => ['nullable', 'email', 'max:255'],
             'phone'       => ['nullable', 'string', 'max:20'],
             'is_active'   => ['sometimes', 'boolean'],
+            'approval_status' => ['sometimes', 'in:pending_review,approved,rejected'],
         ]);
 
         $shelter = Shelter::create($validated);
@@ -96,6 +97,7 @@ class ShelterController extends Controller
             'email'       => ['nullable', 'email', 'max:255'],
             'phone'       => ['nullable', 'string', 'max:20'],
             'is_active'   => ['sometimes', 'boolean'],
+            'approval_status' => ['sometimes', 'in:pending_review,approved,rejected'],
         ]);
 
         $shelter->update($validated);

@@ -2,25 +2,49 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #2e3838;
+
+  --cream-bg: #f8f5f0;
+  --card-bg: #ffffff;
+  --border-color: #eef0f0;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+@theme @theme {
+  /* Naranja terracota - color principal, para botones y acentos */
+  --color-brand-50: #fdf3ef;
+  --color-brand-100: #f9e2d8;
+  --color-brand-400: #e3aa8c;
+  --color-brand-500: #d98c6a;
+  --color-brand-600: #c67650;
+  --color-brand-700: #a35f3f;
+
+  /* Verde salvia - para elementos secundarios, éxito, naturaleza */
+  --color-sage-50: #f2f4ee;
+  --color-sage-100: #e2e7d8;
+  --color-sage-400: #b7c4a3;
+  --color-sage-500: #a3b18a;
+  --color-sage-600: #869670;
+  --color-sage-700: #6b7859;
+
+
+  /* Gris pizarra - para textos y bordes */
+  --color-slate-custom-50: #eef0f0;
+  --color-slate-custom-400: #7c8a8b;
+  --color-slate-custom-600: #5d6c6d;
+  --color-slate-custom-700: #4f5d5e;
+  --color-slate-custom-900: #2e3838;
+  --color-cream-50: var(--card-bg);
+  --color-cream-100: var(--cream-bg);
+
+  --color-slate-custom-50: var(--border-color);
+  --color-slate-custom-900: var(--foreground);
+  
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
 }

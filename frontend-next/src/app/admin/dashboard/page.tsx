@@ -21,7 +21,7 @@ function StatCard({
   color: string;
 }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+    <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
       <p className={`text-xs font-semibold uppercase tracking-widest ${color}`}>{label}</p>
       <p className="mt-2 text-4xl font-bold text-slate-100">{value}</p>
       {sub && <p className="mt-1 text-sm text-slate-500">{sub}</p>}
@@ -41,7 +41,7 @@ function ProgressBar({
   const pct = total > 0 ? Math.round((value / total) * 100) : 0;
   return (
     <div className="flex items-center gap-3 text-sm">
-      <div className="flex-1 h-1.5 rounded-full bg-white/10 overflow-hidden">
+      <div className="flex-1 h-1.5 rounded-full bg-cream-50/10 overflow-hidden">
         <div
           className={`h-full rounded-full ${color}`}
           style={{ width: `${pct}%` }}
@@ -70,7 +70,7 @@ export default async function DashboardPage() {
         <p className="max-w-md text-sm text-slate-400">
           {errorMsg}
         </p>
-        <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-left text-xs text-slate-400 font-mono w-full max-w-md">
+        <div className="mt-4 rounded-2xl border border-white/10 bg-cream-50/5 p-4 text-left text-xs text-slate-400 font-mono w-full max-w-md">
           <p className="text-slate-500 mb-1">Verifica:</p>
           <p>1. Laravel corriendo: <span className="text-cyan-400">php artisan serve</span></p>
           <p>2. URL en <span className="text-cyan-400">.env.local</span>: <span className="text-slate-300">NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1</span></p>
@@ -96,13 +96,13 @@ export default async function DashboardPage() {
           <div className="flex gap-3">
             <Link
               href="/admin/albergues/nuevo"
-              className="rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+              className="rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300"
             >
               + Albergue
             </Link>
             <Link
               href="/admin/animales/nuevo"
-              className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-white/10"
+              className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-cream-50/10"
             >
               + Animal
             </Link>
@@ -130,7 +130,7 @@ export default async function DashboardPage() {
         {/* Charts row */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Animales por estado */}
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+          <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
             <h2 className="mb-5 text-xs font-semibold uppercase tracking-widest text-slate-400">
               Animales por estado
             </h2>
@@ -157,7 +157,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Adopciones por estado */}
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+          <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
             <h2 className="mb-5 text-xs font-semibold uppercase tracking-widest text-slate-400">
               Solicitudes por estado
             </h2>
@@ -186,7 +186,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Actividad reciente */}
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+        <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
           <div className="mb-5 flex items-center justify-between">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400">
               Adopciones recientes
@@ -263,7 +263,7 @@ export default async function DashboardPage() {
             <Link
               key={l.href}
               href={l.href}
-              className="flex flex-col gap-2 rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:border-white/20 hover:bg-white/10"
+              className="flex flex-col gap-2 rounded-3xl border border-white/10 bg-cream-50/5 p-6 transition hover:border-white/20 hover:bg-cream-50/10"
             >
               <span className="text-2xl">{l.icon}</span>
               <p className="font-medium text-slate-200">{l.label}</p>

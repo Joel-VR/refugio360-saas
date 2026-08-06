@@ -18,7 +18,7 @@ export default async function SheltersPage() {
         <p className="text-4xl">⚠️</p>
         <p className="text-lg font-semibold text-rose-300">Error al cargar albergues</p>
         <p className="max-w-md text-sm text-slate-400">{errorMsg}</p>
-        <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-left text-xs text-slate-400 font-mono w-full max-w-md">
+        <div className="mt-4 rounded-2xl border border-white/10 bg-cream-50/5 p-4 text-left text-xs text-slate-400 font-mono w-full max-w-md">
           <p className="text-slate-500 mb-1">Verifica:</p>
           <p>1. Laravel corriendo: <span className="text-cyan-400">php artisan serve</span></p>
           <p>2. Archivo <span className="text-cyan-400">.env.local</span> en la raíz del frontend</p>
@@ -27,7 +27,7 @@ export default async function SheltersPage() {
         </div>
         <Link
           href="/admin/dashboard"
-          className="mt-2 rounded-full border border-white/15 px-4 py-2 text-sm text-slate-300 hover:bg-white/10 transition"
+          className="mt-2 rounded-full border border-white/15 px-4 py-2 text-sm text-slate-300 hover:bg-cream-50/10 transition"
         >
           ← Volver al dashboard
         </Link>
@@ -40,7 +40,7 @@ export default async function SheltersPage() {
       <section className="mx-auto w-full max-w-6xl flex flex-col gap-8">
 
         {/* Header */}
-        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Admin</p>
@@ -54,7 +54,7 @@ export default async function SheltersPage() {
             </div>
             <Link
               href="/admin/albergues/nuevo"
-              className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+              className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300"
             >
               + Nuevo albergue
             </Link>
@@ -63,20 +63,20 @@ export default async function SheltersPage() {
 
         {/* Empty state */}
         {shelters.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 p-16 text-center">
+          <div className="rounded-3xl border border-dashed border-white/15 bg-cream-50/5 p-16 text-center">
             <p className="text-3xl">🏠</p>
             <p className="mt-4 text-slate-400">
               No hay albergues registrados aún.
             </p>
             <Link
               href="/admin/albergues/nuevo"
-              className="mt-6 inline-flex rounded-full bg-cyan-400 px-5 py-2.5 text-sm font-semibold text-slate-950 hover:bg-cyan-300 transition"
+              className="mt-6 inline-flex rounded-full bg-cyan-400 px-5 py-2.5 text-sm font-semibold text-slate-custom-900 hover:bg-cyan-300 transition"
             >
               Crear el primero
             </Link>
           </div>
         ) : (
-          <div className="rounded-3xl border border-white/10 bg-white/5 overflow-hidden backdrop-blur">
+          <div className="rounded-3xl border border-white/10 bg-cream-50/5 overflow-hidden backdrop-blur">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
@@ -105,7 +105,7 @@ export default async function SheltersPage() {
                   {shelters.map((shelter, i) => (
                     <tr
                       key={shelter.id}
-                      className={`border-b border-white/5 transition hover:bg-white/5 ${
+                      className={`border-b border-white/5 transition hover:bg-cream-50/5 ${
                         i === shelters.length - 1 ? "border-b-0" : ""
                       }`}
                     >
@@ -124,7 +124,7 @@ export default async function SheltersPage() {
                           {shelter.email && <span>{shelter.email}</span>}
                           {shelter.phone && <span>{shelter.phone}</span>}
                           {!shelter.email && !shelter.phone && (
-                            <span className="text-slate-600">—</span>
+                            <span className="text-slate-custom-700">—</span>
                           )}
                         </div>
                       </td>

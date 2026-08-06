@@ -5,8 +5,29 @@ export type Shelter = {
   description: string | null;
   email: string | null;
   phone: string | null;
+  address?: string | null;
   logo_path: string | null;
   is_active: boolean;
+  approval_status?: "pending_review" | "approved" | "rejected";
+  users?: Array<{
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+    status?: boolean;
+    shelter_id: number | null;
+  }>;
+  yape_phone?: string | null;
+  yape_owner?: string | null;
+  yape_qr_path?: string | null;
+  plin_phone?: string | null;
+  plin_owner?: string | null;
+  plin_qr_path?: string | null;
+  accepts_donations?: boolean;
+  payment_methods?: {
+    yape: { enabled: boolean; phone: string | null; owner: string | null; qr_path: string | null };
+    plin: { enabled: boolean; phone: string | null; owner: string | null; qr_path: string | null };
+  };
   animals_count?: number;
   adoptions_count?: number;
   stats?: {
@@ -27,5 +48,10 @@ export type CreateShelterPayload = {
   description?: string;
   email?: string;
   phone?: string;
+  address?: string;
   is_active?: boolean;
+  yape_phone?: string;
+  yape_owner?: string;
+  plin_phone?: string;
+  plin_owner?: string;
 };

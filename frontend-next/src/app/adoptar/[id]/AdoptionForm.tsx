@@ -69,7 +69,7 @@ export default function AdoptionForm({ animalId, shelterId }: Props) {
   const isLoading = state.phase === "loading";
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-6">
+    <div className="rounded-2xl border border-white/10 bg-slate-custom-900/60 p-6">
       <h2 className="mb-5 text-xs font-semibold uppercase tracking-widest text-slate-400">
         Postular adopción
       </h2>
@@ -87,7 +87,7 @@ export default function AdoptionForm({ animalId, shelterId }: Props) {
             value={form.applicant_name}
             onChange={handleChange}
             placeholder="Ana García López"
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
+            className="rounded-xl border border-white/10 bg-cream-50/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
           />
         </div>
 
@@ -107,7 +107,7 @@ export default function AdoptionForm({ animalId, shelterId }: Props) {
               value={form.dni}
               onChange={handleChange}
               placeholder="12345678"
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
+              className="rounded-xl border border-white/10 bg-cream-50/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
             />
           </div>
 
@@ -126,7 +126,7 @@ export default function AdoptionForm({ animalId, shelterId }: Props) {
               value={form.phone}
               onChange={handleChange}
               placeholder="987654321"
-              className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
+              className="rounded-xl border border-white/10 bg-cream-50/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
             />
           </div>
         </div>
@@ -143,7 +143,7 @@ export default function AdoptionForm({ animalId, shelterId }: Props) {
             value={form.address}
             onChange={handleChange}
             placeholder="Av. Los Olivos 123, Lima"
-            className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
+            className="rounded-xl border border-white/10 bg-cream-50/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
           />
         </div>
 
@@ -160,7 +160,7 @@ export default function AdoptionForm({ animalId, shelterId }: Props) {
             value={form.notes}
             onChange={handleChange}
             placeholder="Cuéntanos un poco sobre ti y tu hogar..."
-            className="resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-600 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
+            className="resize-none rounded-xl border border-white/10 bg-cream-50/5 px-4 py-2.5 text-sm text-slate-100 placeholder-slate-custom-400 outline-none focus:border-cyan-400/60 focus:ring-1 focus:ring-cyan-400/30 transition"
           />
         </div>
 
@@ -174,7 +174,7 @@ export default function AdoptionForm({ animalId, shelterId }: Props) {
         <button
           type="submit"
           disabled={isLoading}
-          className="mt-1 rounded-full bg-cyan-400 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-1 rounded-full bg-cyan-400 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Enviando…" : "Enviar postulación"}
         </button>

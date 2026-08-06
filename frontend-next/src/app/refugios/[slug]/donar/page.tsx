@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useParams }           from 'next/navigation';
 import dynamic from 'next/dynamic';
-const DonationForm = dynamic(() => import('./DonationForm'), { ssr: false });
+import { RoleGate } from '@/lib/RoleGate';
+const DonationFlow = dynamic(() => import('./DonationFlow'), { ssr: false });
 
 interface Shelter {
   id: number;
@@ -17,6 +18,11 @@ interface Shelter {
   plin_phone: string | null;
   plin_owner: string | null;
   plin_qr_path: string | null;
+  accepts_donations: boolean;
+  payment_methods: {
+    yape: { enabled: boolean; phone: string | null; owner: string | null; qr_path: string | null };
+    plin: { enabled: boolean; phone: string | null; owner: string | null; qr_path: string | null };
+  };
 }
 
 export default function ShelterDonarPage() {
@@ -26,11 +32,11 @@ export default function ShelterDonarPage() {
   const [error, setError]     = useState('');
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/shelters`)
+    const API = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '');
+    fetch(`${API}/public/shelters/${slug}`)
       .then(r => r.json())
-      .then((data: Shelter[]) => {
-        const found = data.find(s => s.slug === slug);
-        if (found) setShelter(found);
+      .then((found: Shelter) => {
+        if (found?.id) setShelter(found);
         else setError('Albergue no encontrado.');
         setLoading(false);
       })
@@ -46,10 +52,10 @@ export default function ShelterDonarPage() {
       <div className="max-w-2xl mx-auto">
 
         {/* Mensaje de bienvenida */}
-        <div className="bg-white rounded-2xl shadow p-6 mb-6 text-center">
+        <div className="bg-cream-50 rounded-2xl shadow p-6 mb-6 text-center">
           {shelter.logo_path ? (
             <img
-              src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${shelter.logo_path}`}
+              src={`http://127.0.0.1:8000/storage/${shelter.logo_path}`}
               alt={shelter.name}
               className="w-20 h-20 rounded-full object-cover mx-auto mb-3"
             />
@@ -69,7 +75,9 @@ export default function ShelterDonarPage() {
         </div>
 
         {/* Formulario de donación */}
-        <DonationForm shelter={shelter} />
+        <RoleGate allow={['natural_person']}>
+          <DonationFlow shelter={shelter as never} />
+        </RoleGate>
       </div>
     </main>
   );

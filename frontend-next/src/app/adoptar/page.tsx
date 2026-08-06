@@ -35,9 +35,9 @@ function AnimalCard({ animal }: { animal: Animal }) {
   const isAvailable = animal.lifecycle_status === "apto";
 
   return (
-    <article className="group flex flex-col rounded-3xl border border-white/10 bg-slate-900/60 shadow-lg shadow-black/20 overflow-hidden transition hover:border-white/20 hover:shadow-xl hover:shadow-black/30">
+    <article className="group flex flex-col rounded-3xl border border-white/10 bg-slate-custom-900/60 shadow-lg shadow-black/20 overflow-hidden transition hover:border-white/20 hover:shadow-xl hover:shadow-black/30">
       {/* foto placeholder */}
-      <div className="relative h-48 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center text-5xl">
+      <div className="relative h-48 bg-gradient-to-br from-slate-800 to-slate-custom-900 flex items-center justify-center text-5xl">
         {animal.photos && animal.photos.length > 0 ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -86,7 +86,7 @@ function AnimalCard({ animal }: { animal: Animal }) {
           {isAvailable ? (
             <Link
               href={`/adoptar/${animal.id}`}
-              className="block w-full rounded-full bg-cyan-400 py-2.5 text-center text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+              className="block w-full rounded-full bg-cyan-400 py-2.5 text-center text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300"
             >
               Ver y postular
             </Link>
@@ -155,7 +155,7 @@ export default async function AdoptarPage() {
         )}
 
         {animals.length === 0 && (
-          <div className="rounded-3xl border border-dashed border-white/15 bg-white/5 p-16 text-center">
+          <div className="rounded-3xl border border-dashed border-white/15 bg-cream-50/5 p-16 text-center">
             <p className="text-2xl">🐾</p>
             <p className="mt-4 text-slate-400">
               No hay animales registrados aún.

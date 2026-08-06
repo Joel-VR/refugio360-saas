@@ -53,7 +53,7 @@ export default function EditShelterForm({ shelter }: { shelter: Shelter }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-6 rounded-3xl border border-white/10 bg-white/5 p-8 shadow-2xl shadow-black/20 backdrop-blur"
+      className="flex flex-col gap-6 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur"
     >
       <label className="flex flex-col gap-2">
         <span className="text-sm text-slate-300">Nombre <span className="text-rose-400">*</span></span>
@@ -121,7 +121,7 @@ export default function EditShelterForm({ shelter }: { shelter: Shelter }) {
             className="sr-only"
           />
           <div className={`w-11 h-6 rounded-full transition-colors ${form.is_active ? "bg-cyan-400" : "bg-slate-700"}`}>
-            <div className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${form.is_active ? "translate-x-5" : "translate-x-0.5"}`} />
+            <div className={`absolute top-0.5 h-5 w-5 rounded-full bg-cream-50 shadow transition-transform ${form.is_active ? "translate-x-5" : "translate-x-0.5"}`} />
           </div>
         </div>
         <span className="text-sm text-slate-300">Albergue activo</span>
@@ -134,13 +134,13 @@ export default function EditShelterForm({ shelter }: { shelter: Shelter }) {
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-        <Link href="/admin/albergues" className="rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-slate-200 transition hover:bg-white/10">
+        <Link href="/admin/albergues" className="rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-slate-200 transition hover:bg-cream-50/10">
           Cancelar
         </Link>
         <button
           type="submit"
           disabled={loading}
-          className="rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 disabled:opacity-50"
+          className="rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300 disabled:opacity-50"
         >
           {loading ? "Guardando…" : "Guardar cambios"}
         </button>
