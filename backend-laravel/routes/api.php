@@ -81,6 +81,14 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', 'admin.role'])->group(fun
     Route::delete('shelters/{shelter}/payment-methods/{method}/qr', [AdminPaymentMethodController::class, 'destroyQr']);
 });
 
+// ── Gastos ────────────────────────────────────────────────────────────────
+Route::prefix('v1/admin')->middleware(['auth:sanctum', 'admin.role'])->group(function () {
+    Route::get('expenses',              [\App\Http\Controllers\Api\ExpenseController::class, 'index']);
+    Route::post('expenses',             [\App\Http\Controllers\Api\ExpenseController::class, 'store']);
+    Route::get('expenses/{expense}',    [\App\Http\Controllers\Api\ExpenseController::class, 'show']);
+    Route::delete('expenses/{expense}', [\App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
+});
+
 Route::prefix('v1')->group(function () {
     // Compatibilidad temporal para clientes antiguos.
     Route::middleware(['auth:sanctum', 'admin.role'])->group(function () {
