@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getDashboardStats } from "@/lib/api";
+import { getServerAuthHeaders } from "@/lib/server-auth";
 
 const ADOPTION_STATUS_BADGE: Record<string, { label: string; cls: string }> = {
   pendiente:  { label: "Pendiente",  cls: "bg-amber-400/10 text-amber-300 border-amber-400/30" },
@@ -21,10 +22,10 @@ function StatCard({
   color: string;
 }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
+    <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm">
       <p className={`text-xs font-semibold uppercase tracking-widest ${color}`}>{label}</p>
-      <p className="mt-2 text-4xl font-bold text-slate-100">{value}</p>
-      {sub && <p className="mt-1 text-sm text-slate-500">{sub}</p>}
+      <p className="mt-2 text-4xl font-bold text-slate-custom-900">{value}</p>
+      {sub && <p className="mt-1 text-sm text-slate-custom-700">{sub}</p>}
     </div>
   );
 }
@@ -41,13 +42,13 @@ function ProgressBar({
   const pct = total > 0 ? Math.round((value / total) * 100) : 0;
   return (
     <div className="flex items-center gap-3 text-sm">
-      <div className="flex-1 h-1.5 rounded-full bg-cream-50/10 overflow-hidden">
+      <div className="flex-1 h-1.5 rounded-full bg-slate-custom-50 overflow-hidden">
         <div
           className={`h-full rounded-full ${color}`}
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="w-8 text-right text-slate-400">{pct}%</span>
+      <span className="w-8 text-right text-slate-custom-700">{pct}%</span>
     </div>
   );
 }
@@ -57,81 +58,67 @@ export default async function DashboardPage() {
   let errorMsg: string | null = null;
 
   try {
-    stats = await getDashboardStats();
+    stats = await getDashboardStats(await getServerAuthHeaders());
   } catch (err) {
     errorMsg = err instanceof Error ? err.message : "Error desconocido";
   }
 
   if (errorMsg || !stats) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#020617] px-6 text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
         <p className="text-4xl">⚠️</p>
-        <p className="text-lg font-semibold text-rose-300">No se pudo conectar con la API</p>
-        <p className="max-w-md text-sm text-slate-400">
+        <p className="text-lg font-semibold text-rose-700">No se pudo conectar con la API</p>
+        <p className="max-w-md text-sm text-slate-custom-700">
           {errorMsg}
         </p>
-        <div className="mt-4 rounded-2xl border border-white/10 bg-cream-50/5 p-4 text-left text-xs text-slate-400 font-mono w-full max-w-md">
-          <p className="text-slate-500 mb-1">Verifica:</p>
-          <p>1. Laravel corriendo: <span className="text-cyan-400">php artisan serve</span></p>
-          <p>2. URL en <span className="text-cyan-400">.env.local</span>: <span className="text-slate-300">NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1</span></p>
-          <p>3. Migración: <span className="text-cyan-400">php artisan migrate</span></p>
+        <div className="mt-4 rounded-2xl border border-slate-custom-50 bg-slate-custom-50/20 p-4 text-left text-xs text-slate-custom-700 font-mono w-full max-w-md">
+          <p className="text-slate-custom-700 mb-1 font-semibold">Verifica:</p>
+          <p>1. Laravel corriendo: <span className="text-brand-600">php artisan serve</span></p>
+          <p>2. URL en <span className="text-brand-600">.env.local</span>: <span className="text-slate-custom-900">NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1</span></p>
+          <p>3. Migración: <span className="text-brand-600">php artisan migrate</span></p>
           <p>4. CORS activo en Laravel</p>
         </div>
       </div>
     );
   }
 
-  const { animals, adoptions, shelters, recent_adoptions } = stats;
+  const { animals, adoptions, recent_adoptions } = stats;
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_#1f2937,_#0f172a_55%,_#020617)] px-6 py-10 text-slate-100">
+    <div className="px-6 py-10">
       <section className="mx-auto w-full max-w-6xl flex flex-col gap-8">
 
         {/* Header */}
         <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Admin</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight">Dashboard</h1>
+            <p className="text-sm uppercase tracking-[0.3em] text-brand-600">Refugio</p>
+            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-slate-custom-900">Dashboard</h1>
           </div>
-          <div className="flex gap-3">
-            <Link
-              href="/admin/albergues/nuevo"
-              className="rounded-full bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300"
-            >
-              + Albergue
-            </Link>
-            <Link
-              href="/admin/animales/nuevo"
-              className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slate-200 transition hover:bg-cream-50/10"
-            >
-              + Animal
-            </Link>
-          </div>
+          <Link
+            href="/admin/animales/nuevo"
+            className="rounded-full border border-slate-custom-50 px-4 py-2 text-sm font-medium text-slate-custom-700 transition hover:bg-slate-custom-50 w-fit"
+          >
+            + Animal
+          </Link>
         </div>
 
         {/* KPI Cards */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Animales totales" value={animals.total} color="text-cyan-300" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <StatCard label="Animales totales" value={animals.total} color="text-brand-600" />
           <StatCard
             label="Disponibles"
             value={animals.apto}
             sub="Listos para adopción"
-            color="text-emerald-300"
+            color="text-sage-600"
           />
-          <StatCard label="Adopciones" value={adoptions.total} color="text-violet-300" />
-          <StatCard
-            label="Albergues"
-            value={shelters.total}
-            sub={`${shelters.active} activos`}
-            color="text-amber-300"
-          />
+          <StatCard label="Adopciones" value={adoptions.total} color="text-brand-600" />
         </div>
 
         {/* Charts row */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Animales por estado */}
-          <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
-            <h2 className="mb-5 text-xs font-semibold uppercase tracking-widest text-slate-400">
+          <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm">
+            <h2 className="mb-5 text-xs font-semibold uppercase tracking-widest text-slate-custom-700">
               Animales por estado
             </h2>
             <div className="flex flex-col gap-4">
@@ -143,8 +130,8 @@ export default async function DashboardPage() {
               ].map((item) => (
                 <div key={item.label}>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="text-slate-300">{item.label}</span>
-                    <span className="text-slate-400 font-medium">{item.value}</span>
+                    <span className="text-slate-custom-700">{item.label}</span>
+                    <span className="text-slate-custom-900 font-medium">{item.value}</span>
                   </div>
                   <ProgressBar
                     value={item.value}
@@ -157,8 +144,8 @@ export default async function DashboardPage() {
           </div>
 
           {/* Adopciones por estado */}
-          <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
-            <h2 className="mb-5 text-xs font-semibold uppercase tracking-widest text-slate-400">
+          <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm">
+            <h2 className="mb-5 text-xs font-semibold uppercase tracking-widest text-slate-custom-700">
               Solicitudes por estado
             </h2>
             <div className="flex flex-col gap-4">
@@ -171,8 +158,8 @@ export default async function DashboardPage() {
               ].map((item) => (
                 <div key={item.label}>
                   <div className="flex justify-between text-sm mb-1">
-                    <span className="text-slate-300">{item.label}</span>
-                    <span className="text-slate-400 font-medium">{item.value}</span>
+                    <span className="text-slate-custom-700">{item.label}</span>
+                    <span className="text-slate-custom-900 font-medium">{item.value}</span>
                   </div>
                   <ProgressBar
                     value={item.value}
@@ -186,21 +173,21 @@ export default async function DashboardPage() {
         </div>
 
         {/* Actividad reciente */}
-        <div className="rounded-3xl border border-white/10 bg-cream-50/5 p-6 backdrop-blur">
+        <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm">
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+            <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-custom-700">
               Adopciones recientes
             </h2>
             <Link
               href="/admin/adopciones"
-              className="text-xs text-cyan-400 hover:text-cyan-300 transition"
+              className="text-xs text-brand-600 hover:text-brand-700 transition"
             >
               Ver todas →
             </Link>
           </div>
 
           {recent_adoptions.length === 0 ? (
-            <p className="text-center text-sm text-slate-500 py-6">
+            <p className="text-center text-sm text-slate-custom-700 py-6">
               Sin solicitudes aún.
             </p>
           ) : (
@@ -208,18 +195,18 @@ export default async function DashboardPage() {
               {recent_adoptions.map((a) => {
                 const badge = ADOPTION_STATUS_BADGE[a.status] ?? {
                   label: a.status,
-                  cls: "bg-slate-400/10 text-slate-400 border-slate-400/30",
+                  cls: "bg-slate-100 text-slate-custom-700 border-slate-custom-50",
                 };
                 return (
                   <div
                     key={a.id}
-                    className="flex items-center justify-between rounded-2xl border border-white/8 bg-slate-950/50 px-4 py-3"
+                    className="flex items-center justify-between rounded-2xl border border-slate-custom-50 bg-slate-custom-50/30 px-4 py-3"
                   >
                     <div className="flex flex-col gap-0.5">
-                      <p className="text-sm font-medium text-slate-200">
+                      <p className="text-sm font-medium text-slate-custom-900">
                         {a.applicant_name}
                       </p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-slate-custom-700">
                         {a.animal?.name
                           ? `${a.animal.name} (${a.animal.species})`
                           : `Animal #${a.animal_id}`}{" "}
@@ -239,14 +226,8 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick links */}
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2">
           {[
-            {
-              href: "/admin/albergues",
-              icon: "🏠",
-              label: "Gestionar albergues",
-              sub: `${shelters.total} registrados`,
-            },
             {
               href: "/admin/adopciones",
               icon: "📋",
@@ -263,11 +244,11 @@ export default async function DashboardPage() {
             <Link
               key={l.href}
               href={l.href}
-              className="flex flex-col gap-2 rounded-3xl border border-white/10 bg-cream-50/5 p-6 transition hover:border-white/20 hover:bg-cream-50/10"
+              className="flex flex-col gap-2 rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm transition hover:border-brand-600"
             >
               <span className="text-2xl">{l.icon}</span>
-              <p className="font-medium text-slate-200">{l.label}</p>
-              <p className="text-xs text-slate-500">{l.sub}</p>
+              <p className="font-medium text-slate-custom-900">{l.label}</p>
+              <p className="text-xs text-slate-custom-700">{l.sub}</p>
             </Link>
           ))}
         </div>

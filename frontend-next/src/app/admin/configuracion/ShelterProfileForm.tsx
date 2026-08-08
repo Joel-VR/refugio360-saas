@@ -1,0 +1,196 @@
+"use client";
+
+import { useState } from "react";
+import { updateShelterProfile, updateShelterLogo } from "@/lib/api";
+import type { Shelter } from "@/types/shelter";
+
+const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
+
+export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelter }) {
+  const [shelter, setShelter] = useState(initialShelter);
+  const [form, setForm] = useState({
+    name: initialShelter.name ?? "",
+    description: initialShelter.description ?? "",
+    email: initialShelter.email ?? "",
+    phone: initialShelter.phone ?? "",
+    address: initialShelter.address ?? "",
+  });
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      setLogoFile(file);
+      setLogoPreview(URL.createObjectURL(file));
+    }
+  }
+
+  async function submitProfile(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setMessage("");
+
+    try {
+      const updated = await updateShelterProfile(shelter.id, form);
+      setShelter(updated);
+      setMessage("Perfil del albergue actualizado.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo guardar.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function submitLogo() {
+    if (!logoFile) return;
+
+    setLoading(true);
+    setError("");
+    setMessage("");
+
+    try {
+      const updated = await updateShelterLogo(shelter.id, logoFile);
+      setShelter(updated);
+      setLogoFile(null);
+      setLogoPreview(null);
+      setMessage("Logo del albergue actualizado.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo actualizar el logo.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="grid gap-6">
+      {/* Logo section */}
+      <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
+        <div className="mb-6">
+          <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Logo del Albergue</p>
+          <h3 className="mt-2 text-xl font-semibold text-slate-custom-900">Imagen representativa</h3>
+        </div>
+
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+          <div className="flex flex-col gap-3">
+            {logoPreview || shelter.logo_path ? (
+              <img
+                src={logoPreview ?? `${STORAGE}/${shelter.logo_path}`}
+                alt="Logo del albergue"
+                className="h-32 w-32 rounded-xl border border-slate-custom-50 bg-cream-100 object-contain p-2"
+              />
+            ) : (
+              <div className="h-32 w-32 rounded-xl border-2 border-dashed border-slate-custom-50 bg-slate-custom-50/30 flex items-center justify-center text-4xl">
+                🏠
+              </div>
+            )}
+            <label className="cursor-pointer rounded-full border border-slate-custom-50 px-4 py-2 text-center text-sm font-medium text-slate-custom-700 hover:bg-slate-custom-50">
+              Cambiar logo
+              <input type="file" accept="image/jpeg,image/png,image/gif" className="hidden" onChange={handleLogoChange} />
+            </label>
+          </div>
+
+          {logoFile && (
+            <div className="flex flex-col gap-3 flex-1">
+              <p className="text-sm text-slate-custom-700">
+                Archivo seleccionado: <strong>{logoFile.name}</strong>
+              </p>
+              <button
+                type="button"
+                onClick={submitLogo}
+                disabled={loading}
+                className="rounded-full bg-brand-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
+              >
+                {loading ? "Guardando..." : "Guardar logo"}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Profile form */}
+      <form onSubmit={submitProfile} className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
+        <div className="mb-6">
+          <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Información del Albergue</p>
+          <h3 className="mt-2 text-xl font-semibold text-slate-custom-900">Datos principales</h3>
+        </div>
+
+        <div className="grid gap-6">
+          <div>
+            <label className="block text-sm font-medium text-slate-custom-900 mb-2">Nombre del albergue</label>
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-custom-900 mb-2">Descripción</label>
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+            />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="block text-sm font-medium text-slate-custom-900 mb-2">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-custom-900 mb-2">Teléfono</label>
+              <input
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-slate-custom-900 mb-2">Dirección</label>
+            <input
+              type="text"
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+            />
+          </div>
+        </div>
+
+        {message && <p className="mt-4 rounded-xl border border-emerald-300/30 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</p>}
+        {error && <p className="mt-4 rounded-xl border border-rose-300/30 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p>}
+
+        <button
+          disabled={loading}
+          className="mt-6 rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
+        >
+          {loading ? "Guardando..." : "Guardar cambios"}
+        </button>
+      </form>
+    </div>
+  );
+}

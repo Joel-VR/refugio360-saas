@@ -21,20 +21,20 @@ const GUIDES = [
 
 export default function AdminDocumentationPage() {
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,_#0f172a_0%,_#111827_48%,_#020617_100%)] px-6 py-10 text-slate-100">
+    <main className="px-6 py-10">
       <section className="mx-auto grid w-full max-w-4xl gap-6">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Ayuda</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight">Documentación para administrador</h1>
+            <p className="text-sm uppercase tracking-[0.3em] text-brand-600">Ayuda</p>
+            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-slate-custom-900">Documentación para administrador</h1>
           </div>
-          <Link href="/admin/dashboard" className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 hover:bg-cream-50/10">Volver</Link>
+          <Link href="/admin/dashboard" className="rounded-full border border-slate-custom-50 px-4 py-2 text-sm text-slate-custom-700 hover:bg-slate-custom-50">Volver</Link>
         </div>
         <div className="grid gap-4">
           {GUIDES.map((guide) => (
-            <article key={guide.title} className="rounded-2xl border border-white/10 bg-cream-50/5 p-6">
-              <h2 className="text-xl font-semibold">{guide.title}</h2>
-              <p className="mt-3 text-sm leading-7 text-slate-300">{guide.body}</p>
+            <article key={guide.title} className="rounded-2xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm">
+              <h2 className="text-xl font-semibold text-slate-custom-900">{guide.title}</h2>
+              <p className="mt-3 text-sm leading-7 text-slate-custom-700">{guide.body}</p>
             </article>
           ))}
         </div>

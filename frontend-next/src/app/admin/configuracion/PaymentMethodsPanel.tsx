@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { adminFetch } from "@/lib/adminAuth";
+import { authHeaders } from "@/lib/api";
 import type { Shelter } from "@/types/shelter";
 
 const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
 const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
-export default function PaymentMethodsPanel({ shelter }: { shelter: Shelter }) {
-  const [current, setCurrent] = useState(shelter);
+export function PaymentMethodsPanel({ shelter: initialShelter }: { shelter: Shelter }) {
+  const [current, setCurrent] = useState(initialShelter);
   const [form, setForm] = useState({
-    yape_phone: shelter.yape_phone ?? "",
-    yape_owner: shelter.yape_owner ?? "",
-    plin_phone: shelter.plin_phone ?? "",
-    plin_owner: shelter.plin_owner ?? "",
+    yape_phone: initialShelter.yape_phone ?? "",
+    yape_owner: initialShelter.yape_owner ?? "",
+    plin_phone: initialShelter.plin_phone ?? "",
+    plin_owner: initialShelter.plin_owner ?? "",
   });
   const [yapeQr, setYapeQr] = useState<File | null>(null);
   const [plinQr, setPlinQr] = useState<File | null>(null);
@@ -36,7 +36,11 @@ export default function PaymentMethodsPanel({ shelter }: { shelter: Shelter }) {
     if (plinQr) fd.append("plin_qr", plinQr);
 
     try {
-      const res = await adminFetch(`${API}/admin/shelters/${shelter.id}/payment-methods`, { method: "POST", body: fd });
+      const res = await fetch(`${API}/admin/shelters/${initialShelter.id}/payment-methods`, {
+        method: "POST",
+        headers: { Accept: "application/json", ...authHeaders() },
+        body: fd,
+      });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
         const firstError = body?.errors ? Object.values(body.errors).flat()[0] : body?.message;
@@ -56,7 +60,10 @@ export default function PaymentMethodsPanel({ shelter }: { shelter: Shelter }) {
   async function deleteQr(method: "yape" | "plin") {
     setError("");
     setMessage("");
-    const res = await adminFetch(`${API}/admin/shelters/${shelter.id}/payment-methods/${method}/qr`, { method: "DELETE" });
+    const res = await fetch(`${API}/admin/shelters/${initialShelter.id}/payment-methods/${method}/qr`, {
+      method: "DELETE",
+      headers: { Accept: "application/json", ...authHeaders() },
+    });
     const body = await res.json().catch(() => ({}));
     if (!res.ok) {
       setError(body?.message ?? "No se pudo eliminar el QR.");
@@ -67,11 +74,11 @@ export default function PaymentMethodsPanel({ shelter }: { shelter: Shelter }) {
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-6 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+    <form onSubmit={submit} className="grid gap-6 rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
       <div>
-        <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Métodos de Pago</p>
-        <h2 className="mt-2 text-2xl font-semibold">Yape y Plin del albergue</h2>
-        <p className="mt-2 text-sm text-slate-400">Configura al menos un método con número de 9 dígitos y titular.</p>
+        <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Métodos de Pago</p>
+        <h2 className="mt-2 text-2xl font-semibold text-slate-custom-900">Yape y Plin del albergue</h2>
+        <p className="mt-2 text-sm text-slate-custom-700">Configura al menos un método con número de 9 dígitos y titular.</p>
       </div>
 
       <PaymentSection
@@ -100,10 +107,10 @@ export default function PaymentMethodsPanel({ shelter }: { shelter: Shelter }) {
         onDelete={() => deleteQr("plin")}
       />
 
-      {message && <p className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300">{message}</p>}
-      {error && <p className="rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-300">{error}</p>}
+      {message && <p className="rounded-xl border border-emerald-300/30 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{message}</p>}
+      {error && <p className="rounded-xl border border-rose-300/30 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p>}
 
-      <button disabled={loading} className="w-fit rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300 disabled:opacity-50">
+      <button disabled={loading} className="w-fit rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50">
         {loading ? "Guardando..." : "Guardar métodos de pago"}
       </button>
     </form>
@@ -126,27 +133,48 @@ function PaymentSection({
 }) {
   const preview = file ? URL.createObjectURL(file) : null;
   return (
-    <section className="grid gap-4 rounded-2xl border border-white/10 bg-slate-950/50 p-5">
-      <h3 className="text-lg font-semibold text-slate-100">{title}</h3>
+    <section className="grid gap-4 rounded-2xl border border-slate-custom-50 bg-slate-custom-50/50 p-5">
+      <h3 className="text-lg font-semibold text-slate-custom-900">{title}</h3>
       <div className="grid gap-4 sm:grid-cols-2">
-        <label className="grid gap-2 text-sm text-slate-300">
+        <label className="grid gap-2 text-sm text-slate-custom-700">
           Número celular
-          <input name={phoneName} value={phone} onChange={onChange} maxLength={9} placeholder="987654321" className="rounded-xl border border-white/10 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400" />
+          <input
+            name={phoneName}
+            value={phone}
+            onChange={onChange}
+            maxLength={9}
+            placeholder="987654321"
+            className="rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+          />
         </label>
-        <label className="grid gap-2 text-sm text-slate-300">
+        <label className="grid gap-2 text-sm text-slate-custom-700">
           Titular
-          <input name={ownerName} value={owner} onChange={onChange} placeholder="Nombre de la cuenta" className="rounded-xl border border-white/10 bg-slate-950 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400" />
+          <input
+            name={ownerName}
+            value={owner}
+            onChange={onChange}
+            placeholder="Nombre de la cuenta"
+            className="rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+          />
         </label>
       </div>
       <div className="flex flex-wrap items-center gap-4">
         {(preview || qrPath) && (
-          <img src={preview ?? `${STORAGE}/${qrPath}`} alt={`QR ${title}`} className="h-28 w-28 rounded-xl border border-white/10 bg-cream-50 object-contain p-1" />
+          <img src={preview ?? `${STORAGE}/${qrPath}`} alt={`QR ${title}`} className="h-28 w-28 rounded-xl border border-slate-custom-50 bg-cream-100 object-contain p-1" />
         )}
-        <label className="cursor-pointer rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slate-200 hover:bg-cream-50/10">
+        <label className="cursor-pointer rounded-full border border-slate-custom-50 px-4 py-2 text-sm font-medium text-slate-custom-700 hover:bg-slate-custom-50">
           Subir QR
           <input type="file" accept="image/jpeg,image/png,image/gif" className="hidden" onChange={(e) => onFile(e.target.files?.[0] ?? null)} />
         </label>
-        {qrPath && <button type="button" onClick={onDelete} className="rounded-full border border-rose-400/30 px-4 py-2 text-sm text-rose-300 hover:bg-rose-400/10">Eliminar QR actual</button>}
+        {qrPath && (
+          <button
+            type="button"
+            onClick={onDelete}
+            className="rounded-full border border-rose-300/30 px-4 py-2 text-sm text-rose-700 hover:bg-rose-50"
+          >
+            Eliminar QR actual
+          </button>
+        )}
       </div>
     </section>
   );

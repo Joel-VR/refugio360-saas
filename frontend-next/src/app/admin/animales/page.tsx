@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAnimals } from "@/lib/api";
+import { getAnimalsPage } from "@/lib/api";
 
 const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
@@ -16,26 +16,30 @@ const FILTERS = [
 ];
 
 type AnimalsPageProps = {
-  searchParams?: Promise<{ status?: string }>;
+  searchParams?: Promise<{ status?: string; page?: string }>;
 };
 
 export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
   const params = await searchParams;
   const activeStatus = params?.status ?? "";
-  const animals = await getAnimals(activeStatus ? { status: activeStatus } : {});
+  const currentPage = Number(params?.page ?? "1") || 1;
+  const { items: animals, page } = await getAnimalsPage({
+    ...(activeStatus ? { status: activeStatus } : {}),
+    page: currentPage,
+  });
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,_#1f2937,_#0f172a_55%,_#020617)] px-6 py-10 text-slate-100">
+    <main className="px-6 py-10">
       <section className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-        <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+        <div className="flex flex-col gap-4 rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
           <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Admin</p>
-              <h1 className="mt-2 text-4xl font-semibold tracking-tight">Animales registrados</h1>
+              <p className="text-sm uppercase tracking-[0.3em] text-brand-600">Admin</p>
+              <h1 className="mt-2 text-4xl font-semibold tracking-tight text-slate-custom-900">Animales registrados</h1>
             </div>
             <Link
               href="/admin/animales/nuevo"
-              className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300"
+              className="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700"
             >
               + Nuevo animal
             </Link>
@@ -50,8 +54,8 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
                   href={href}
                   className={`rounded-full px-4 py-2 text-sm font-medium transition ${
                     isActive
-                      ? "bg-cyan-400 text-slate-custom-900"
-                      : "border border-white/10 bg-cream-50/5 text-slate-200 hover:bg-cream-50/10"
+                      ? "bg-brand-600 text-white"
+                      : "border border-slate-custom-50 bg-cream-100 text-slate-custom-700 hover:bg-slate-custom-50"
                   }`}
                 >
                   {filter.label}
@@ -61,7 +65,7 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
           </div>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {animals.map((animal) => {
             const badge = STATUS_BADGE[animal.lifecycle_status] ?? {
               label: animal.lifecycle_status,
@@ -73,10 +77,10 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
               <Link
                 key={animal.id}
                 href={`/admin/animales/${animal.id}`}   // ← este es el cambio
-                className="group flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-slate-950/70 shadow-lg transition hover:border-white/20 hover:shadow-xl"
+                className="group flex flex-col overflow-hidden rounded-3xl border border-slate-custom-50 bg-cream-50 shadow-sm transition hover:border-brand-600 hover:shadow-md"
               >
                 {/* foto */}
-                <div className="relative h-48 bg-slate-custom-900 flex items-center justify-center text-5xl">
+                <div className="relative h-48 bg-slate-200 flex items-center justify-center text-5xl">
                   {photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -94,12 +98,12 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
 
                 {/* info */}
                 <div className="flex flex-col gap-2 p-5">
-                  <p className="text-xs uppercase tracking-widest text-slate-400">{animal.species}</p>
-                  <h2 className="text-xl font-semibold">{animal.name}</h2>
+                  <p className="text-xs uppercase tracking-widest text-slate-custom-400">{animal.species}</p>
+                  <h2 className="text-xl font-semibold text-slate-custom-900">{animal.name}</h2>
                   {animal.health_status && (
-                    <p className="text-sm text-slate-400 line-clamp-2">{animal.health_status}</p>
+                    <p className="text-sm text-slate-custom-400 line-clamp-2">{animal.health_status}</p>
                   )}
-                  <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
+                  <div className="mt-2 flex items-center justify-between text-xs text-slate-custom-400">
                     <span>Refugio #{animal.shelter_id}</span>
                     <span>{animal.photos?.length ?? 0} foto{animal.photos?.length !== 1 ? "s" : ""}</span>
                   </div>
@@ -110,8 +114,26 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
         </div>
 
         {animals.length === 0 && (
-          <div className="rounded-3xl border border-dashed border-white/15 bg-cream-50/5 p-8 text-center text-slate-300">
+          <div className="rounded-3xl border border-dashed border-slate-custom-50 bg-cream-50 p-8 text-center text-slate-custom-700">
             No hay animales para el filtro seleccionado.
+          </div>
+        )}
+
+        {page.lastPage > 1 && (
+          <div className="flex items-center justify-between text-sm text-slate-custom-400">
+            <Link
+              href={`/admin/animales?${new URLSearchParams({ ...(activeStatus ? { status: activeStatus } : {}), page: String(Math.max(1, currentPage - 1)) })}`}
+              className={`rounded-full border border-slate-custom-50 px-4 py-2 ${currentPage <= 1 ? "pointer-events-none opacity-40" : "hover:bg-slate-custom-50"}`}
+            >
+              ← Anterior
+            </Link>
+            <span>Página {page.currentPage} de {page.lastPage} · {page.total} animales</span>
+            <Link
+              href={`/admin/animales?${new URLSearchParams({ ...(activeStatus ? { status: activeStatus } : {}), page: String(Math.min(page.lastPage, currentPage + 1)) })}`}
+              className={`rounded-full border border-slate-custom-50 px-4 py-2 ${currentPage >= page.lastPage ? "pointer-events-none opacity-40" : "hover:bg-slate-custom-50"}`}
+            >
+              Siguiente →
+            </Link>
           </div>
         )}
       </section>

@@ -1,47 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { authHeaders, friendlyErrorMessage } from "@/lib/api";
 
 const API_BASE_URL = (
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1"
 ).replace(/\/$/, "");
 
-type Shelter = {
-  id: number;
-  name: string;
-  // otros campos si los hay
-};
-
 export default function NewAnimalPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [shelters, setShelters] = useState<Shelter[]>([]);
-  const [loadingShelters, setLoadingShelters] = useState(true);
-  const [selectedShelter, setSelectedShelter] = useState<string>("");
-
-  useEffect(() => {
-    const fetchShelters = async () => {
-      try {
-        const res = await fetch(`${API_BASE_URL}/shelters`, {
-          headers: { Accept: "application/json" },
-        });
-        if (!res.ok) throw new Error("Error al cargar shelters");
-        const data = await res.json();
-        setShelters(data);
-        if (data.length > 0) {
-          setSelectedShelter(String(data[0].id)); // seleccionar el primero por defecto
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Error al cargar shelters");
-      } finally {
-        setLoadingShelters(false);
-      }
-    };
-    fetchShelters();
-  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,13 +22,6 @@ export default function NewAnimalPage() {
     const form = e.currentTarget;
     const data = new FormData();
 
-    const shelterId = (form.elements.namedItem("shelter_id") as HTMLSelectElement).value;
-    if (!shelterId) {
-      setError("Debes seleccionar un albergue");
-      setLoading(false);
-      return;
-    }
-    data.append("shelter_id", shelterId);
     data.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
     data.append("species", (form.elements.namedItem("species") as HTMLSelectElement).value);
     data.append("lifecycle_status", (form.elements.namedItem("lifecycle_status") as HTMLSelectElement).value);
@@ -76,7 +40,7 @@ export default function NewAnimalPage() {
     try {
       const res = await fetch(`${API_BASE_URL}/animals`, {
         method: "POST",
-        headers: { Accept: "application/json" },
+        headers: { Accept: "application/json", ...authHeaders() },
         body: data,
       });
 
@@ -87,60 +51,35 @@ export default function NewAnimalPage() {
 
       router.push("/admin/animales");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error desconocido");
+      setError(friendlyErrorMessage(err, "No se pudo registrar el animal."));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(180deg,_#0f172a_0%,_#111827_48%,_#020617_100%)] px-6 py-10 text-slate-100">
+    <main className="px-6 py-10">
       <section className="mx-auto w-full max-w-4xl">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-amber-300">Nuevo registro</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight">Crear animal</h1>
+            <p className="text-sm uppercase tracking-[0.3em] text-brand-600">Nuevo registro</p>
+            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-slate-custom-900">Crear animal</h1>
           </div>
-          <Link href="/admin/animales" className="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-200 transition hover:bg-cream-50/10">
+          <Link href="/admin/animales" className="rounded-full border border-slate-custom-50 px-4 py-2 text-sm text-slate-custom-700 transition hover:bg-slate-custom-50">
             Volver
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid gap-6 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+        <form onSubmit={handleSubmit} className="grid gap-6 rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
           <div className="grid gap-5 md:grid-cols-2">
-            {/* Selector de albergue */}
             <label className="grid gap-2">
-              <span className="text-sm text-slate-300">Albergue *</span>
-              <select
-                name="shelter_id"
-                required
-                value={selectedShelter}
-                onChange={(e) => setSelectedShelter(e.target.value)}
-                className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition focus:border-cyan-400 disabled:opacity-50"
-                disabled={loadingShelters}
-              >
-                {loadingShelters ? (
-                  <option value="">Cargando albergues…</option>
-                ) : shelters.length === 0 ? (
-                  <option value="">No hay albergues disponibles</option>
-                ) : (
-                  shelters.map((shelter) => (
-                    <option key={shelter.id} value={shelter.id}>
-                      {shelter.name}
-                    </option>
-                  ))
-                )}
-              </select>
+              <span className="text-sm text-slate-custom-700">Nombre *</span>
+              <input name="name" required className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600" placeholder="Firulais" />
             </label>
 
             <label className="grid gap-2">
-              <span className="text-sm text-slate-300">Nombre *</span>
-              <input name="name" required className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition placeholder:text-slate-500 focus:border-cyan-400" placeholder="Firulais" />
-            </label>
-
-            <label className="grid gap-2">
-              <span className="text-sm text-slate-300">Especie *</span>
-              <select name="species" required className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition focus:border-cyan-400">
+              <span className="text-sm text-slate-custom-700">Especie *</span>
+              <select name="species" required className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600">
                 <option value="perro">Perro</option>
                 <option value="gato">Gato</option>
                 <option value="otro">Otro</option>
@@ -148,13 +87,13 @@ export default function NewAnimalPage() {
             </label>
 
             <label className="grid gap-2">
-              <span className="text-sm text-slate-300">Edad estimada (meses)</span>
-              <input name="estimated_age" type="number" min="0" className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition placeholder:text-slate-500 focus:border-cyan-400" placeholder="12" />
+              <span className="text-sm text-slate-custom-700">Edad estimada (meses)</span>
+              <input name="estimated_age" type="number" min="0" className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600" placeholder="12" />
             </label>
 
             <label className="grid gap-2">
-              <span className="text-sm text-slate-300">Estado *</span>
-              <select name="lifecycle_status" required className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition focus:border-cyan-400">
+              <span className="text-sm text-slate-custom-700">Estado *</span>
+              <select name="lifecycle_status" required className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600">
                 <option value="cuarentena">Cuarentena</option>
                 <option value="tratamiento">Tratamiento</option>
                 <option value="apto">Apto para adopción</option>
@@ -164,29 +103,29 @@ export default function NewAnimalPage() {
           </div>
 
           <label className="grid gap-2">
-            <span className="text-sm text-slate-300">Estado de salud</span>
-            <textarea name="health_status" rows={4} className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition placeholder:text-slate-500 focus:border-cyan-400" placeholder="Descripción general..." />
+            <span className="text-sm text-slate-custom-700">Estado de salud</span>
+            <textarea name="health_status" rows={4} className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600" placeholder="Descripción general..." />
           </label>
 
           <label className="grid gap-2">
-            <span className="text-sm text-slate-300">Fotos (máx. 3)</span>
-            <input name="photos" type="file" multiple accept="image/jpg,image/jpeg,image/png,image/webp" className="rounded-2xl border border-dashed border-white/15 bg-slate-950/70 px-4 py-5 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-cyan-400 file:px-4 file:py-2 file:font-semibold file:text-slate-custom-900" />
+            <span className="text-sm text-slate-custom-700">Fotos (máx. 3)</span>
+            <input name="photos" type="file" multiple accept="image/jpg,image/jpeg,image/png,image/webp" className="rounded-2xl border border-dashed border-slate-custom-50 bg-cream-100 px-4 py-5 text-sm text-slate-custom-700 file:mr-4 file:rounded-full file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:font-semibold file:text-white" />
           </label>
 
           {error && (
-            <p className="rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-300">
+            <p className="rounded-xl border border-rose-300/30 bg-rose-50 px-4 py-3 text-sm text-rose-700">
               {error}
             </p>
           )}
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <Link href="/admin/animales" className="rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-slate-200 transition hover:bg-cream-50/10">
+            <Link href="/admin/animales" className="rounded-full border border-slate-custom-50 px-5 py-3 text-center text-sm font-medium text-slate-custom-700 transition hover:bg-slate-custom-50">
               Cancelar
             </Link>
             <button
               type="submit"
-              disabled={loading || loadingShelters || shelters.length === 0}
-              className="rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-emerald-300 disabled:opacity-50"
+              disabled={loading}
+              className="rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
             >
               {loading ? "Guardando…" : "Guardar animal"}
             </button>

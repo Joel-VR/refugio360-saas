@@ -21,7 +21,7 @@ const ROLES = [
   {
     icon: "M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z M15 12a3 3 0 11-6 0 3 3 0 016 0z",
     title: "Visitantes",
-    body: "Visualizan refugios, animales, transparencia y mascotas perdidas/encontradas aprobadas.",
+    body: "Visualizan refugios, animales y transparencia de donaciones.",
   },
   {
     icon: "M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.106A6.375 6.375 0 0012.75 8.5m0 0a4.125 4.125 0 100-8.25 4.125 4.125 0 000 8.25zm-8.25 0a4.125 4.125 0 100-8.25 4.125 4.125 0 000 8.25zM4.5 19.234a12.318 12.318 0 018.25-2.109",
@@ -75,6 +75,28 @@ export default function HomePage() {
             <Link href="/donar" className="rounded-full border border-brand-600 px-6 py-3 text-sm font-semibold text-brand-600 transition hover:bg-cream-50">
               Quiero donar
             </Link>
+          </div>
+        </div>
+
+        {/* CÓMO FUNCIONA */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">Cómo funciona</p>
+          <div className="mt-4 grid gap-4 md:grid-cols-3">
+            {[
+              { step: "1", title: "Explora sin cuenta", body: "Mira refugios, animales disponibles y la transparencia de donaciones, sin registrarte." },
+              { step: "2", title: "Regístrate según tu perfil", body: "Elige Persona natural para adoptar o donar, o Albergue si representas una organización." },
+              { step: "3", title: "Dona, adopta o publica", body: "Con tu cuenta ya puedes donar, solicitar una adopción o publicar mascotas perdidas/encontradas." },
+            ].map((item) => (
+              <div key={item.step} className="flex gap-4 rounded-lg border border-slate-custom-50 bg-white p-5">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
+                  {item.step}
+                </span>
+                <div>
+                  <h3 className="font-semibold">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-slate-custom-700">{item.body}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

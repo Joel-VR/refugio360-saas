@@ -60,11 +60,11 @@ export default function AdoptionStatusUpdater({
   }
 
   return (
-    <div className="flex flex-col gap-3 border-t border-white/10 pt-3">
+    <div className="flex flex-col gap-3 border-t border-slate-custom-50 pt-3">
       <select
         value={status}
         onChange={(e) => setStatus(e.target.value as AdoptionStatus)}
-        className="rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-sm text-slate-100 outline-none focus:border-cyan-400 transition"
+        className="rounded-xl border border-slate-custom-50 bg-cream-100 px-3 py-2 text-sm text-slate-custom-900 outline-none focus:border-brand-600 transition"
       >
         {STATUS_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>
@@ -78,17 +78,17 @@ export default function AdoptionStatusUpdater({
         onChange={(e) => setNotes(e.target.value)}
         rows={2}
         placeholder="Notas internas (opcional)..."
-        className="resize-none rounded-xl border border-white/10 bg-slate-950/70 px-3 py-2 text-xs text-slate-300 placeholder-slate-custom-400 outline-none focus:border-cyan-400 transition"
+        className="resize-none rounded-xl border border-slate-custom-50 bg-cream-100 px-3 py-2 text-xs text-slate-custom-700 placeholder-slate-custom-400 outline-none focus:border-brand-600 transition"
       />
 
       {error && (
-        <p className="text-xs text-rose-300 border border-rose-400/30 bg-rose-400/10 rounded-xl px-3 py-2">
+        <p className="text-xs text-rose-700 border border-rose-300/30 bg-rose-50 rounded-xl px-3 py-2">
           {error}
         </p>
       )}
 
       {success && (
-        <p className="text-xs text-emerald-300 border border-emerald-400/30 bg-emerald-400/10 rounded-xl px-3 py-2">
+        <p className="text-xs text-emerald-700 border border-emerald-300/30 bg-emerald-50 rounded-xl px-3 py-2">
           ✓ Estado actualizado
         </p>
       )}
@@ -97,7 +97,7 @@ export default function AdoptionStatusUpdater({
         <button
           onClick={handleUpdate}
           disabled={loading}
-          className="flex-1 rounded-full bg-cyan-400 py-2 text-xs font-semibold text-slate-custom-900 transition hover:bg-cyan-300 disabled:opacity-50"
+          className="flex-1 rounded-full bg-brand-600 py-2 text-xs font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
         >
           {loading ? "Guardando…" : "Actualizar estado"}
         </button>
@@ -106,8 +106,8 @@ export default function AdoptionStatusUpdater({
           disabled={loading}
           className={`rounded-full border px-3 py-2 text-xs transition disabled:opacity-50 ${
             confirmDelete
-              ? "border-rose-400/50 bg-rose-400/10 text-rose-300"
-              : "border-white/10 text-slate-500 hover:text-rose-300 hover:border-rose-400/30"
+              ? "border-rose-400/50 bg-rose-50 text-rose-700"
+              : "border-slate-custom-50 text-slate-custom-400 hover:text-rose-700 hover:border-rose-300/30"
           }`}
         >
           {confirmDelete ? "¿Sí?" : "✕"}
