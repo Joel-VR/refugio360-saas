@@ -2,6 +2,8 @@ import type { Animal } from "@/types/animal";
 import type { Adoption, CreateAdoptionPayload } from "@/types/adoption";
 import type { Shelter, CreateShelterPayload } from "@/types/shelter";
 import type { DashboardStats } from "@/types/dashboard";
+import type { CreateLostFoundPostPayload, LostFoundPost, LostFoundPostType } from "@/types/lostFoundPost";
+import type { Donation } from "@/types/donation";
 
 /*
  * IMPORTANTE: el backend Laravel sirve las rutas bajo /api/ automáticamente.
@@ -39,15 +41,19 @@ export function getStoredToken(): string | null {
   return window.localStorage.getItem("auth_token");
 }
 
-function authHeaders(): HeadersInit {
+export function authHeaders(): HeadersInit {
   const token = getStoredToken();
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+// El token también se guarda en una cookie (no httpOnly) para que los Server
+// Components de Next.js puedan leerlo con `next/headers` y reenviarlo a la
+// API — localStorage solo es visible desde el navegador.
 export function storeSession({ token, user }: AuthResponse) {
   window.localStorage.setItem("auth_token", token);
   window.localStorage.setItem("user_role", user.role);
   window.localStorage.setItem("auth_user", JSON.stringify(user));
+  document.cookie = `auth_token=${token}; path=/; SameSite=Lax`;
 }
 
 export function storeAuthUser(user: AuthUser) {
@@ -70,24 +76,43 @@ export function clearSession() {
   window.localStorage.removeItem("auth_token");
   window.localStorage.removeItem("user_role");
   window.localStorage.removeItem("auth_user");
+  document.cookie = "auth_token=; path=/; SameSite=Lax; Max-Age=0";
+}
+
+export const NETWORK_ERROR_MESSAGE =
+  "No se pudo conectar con el servidor. Verifica tu conexión e inténtalo de nuevo.";
+
+export function friendlyErrorMessage(
+  err: unknown,
+  fallback = "Ocurrió un error inesperado. Inténtalo de nuevo."
+): string {
+  if (err instanceof TypeError) return NETWORK_ERROR_MESSAGE;
+  if (err instanceof Error && err.message) return err.message;
+  return fallback;
 }
 
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const { headers, ...fetchOptions } = options ?? {};
 
-  const res = await fetch(`${API_BASE_URL}${path}`, {
-    cache: "no-store",
-    ...fetchOptions,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...authHeaders(),
-      ...headers,
-    },
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE_URL}${path}`, {
+      cache: "no-store",
+      ...fetchOptions,
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        ...authHeaders(),
+        ...headers,
+      },
+    });
+  } catch (err) {
+    console.error(`Fallo de red al llamar ${API_BASE_URL}${path}`, err);
+    throw new Error(NETWORK_ERROR_MESSAGE);
+  }
 
   if (!res.ok) {
-    let message = `HTTP ${res.status}`;
+    let message = "Ocurrió un error al procesar tu solicitud. Inténtalo de nuevo.";
     try {
       const body = await res.json();
       const firstValidationError = body?.errors
@@ -97,7 +122,8 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
     } catch {
       // respuesta no-JSON (ej. HTML de error de Laravel)
     }
-    throw new Error(`${message} — ${API_BASE_URL}${path}`);
+    console.error(`Error de API en ${API_BASE_URL}${path} (HTTP ${res.status}): ${message}`);
+    throw new Error(message);
   }
 
   if (res.status === 204) return null as T;
@@ -106,14 +132,34 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
 
 // ─── Animales ────────────────────────────────────────────────────────────────
 
+export type PageInfo = { currentPage: number; lastPage: number; total: number };
+
+export function pageInfoFrom(body: { current_page?: number; last_page?: number; total?: number; meta?: { current_page?: number; last_page?: number; total?: number } }): PageInfo {
+  return {
+    currentPage: body.current_page ?? body.meta?.current_page ?? 1,
+    lastPage: body.last_page ?? body.meta?.last_page ?? 1,
+    total: body.total ?? body.meta?.total ?? 0,
+  };
+}
+
 export async function getAnimals(
-  params: { status?: string } = {}
+  params: { status?: string; per_page?: number; page?: number } = {}
 ): Promise<Animal[]> {
+  const { items } = await getAnimalsPage(params);
+  return items;
+}
+
+export async function getAnimalsPage(
+  params: { status?: string; per_page?: number; page?: number } = {}
+): Promise<{ items: Animal[]; page: PageInfo }> {
   const url = new URL(`${API_BASE_URL}/animals`);
   if (params.status) url.searchParams.set("status", params.status);
+  url.searchParams.set("per_page", String(params.per_page ?? 24));
+  if (params.page) url.searchParams.set("page", String(params.page));
   const res = await fetch(url.toString(), { cache: "no-store" });
   if (!res.ok) throw new Error(`Error al cargar animales: ${res.status}`);
-  return res.json();
+  const body = await res.json();
+  return { items: body.data ?? body, page: pageInfoFrom(body) };
 }
 export async function getAnimal(id: string | number) {
   const res = await fetch(`${API_BASE_URL}/animals/${id}`, {
@@ -155,15 +201,35 @@ export async function createAdoption(
 }
 
 export async function getAdoptions(
-  params: { status?: string; animal_id?: number } = {}
+  params: { status?: string; animal_id?: number; per_page?: number; page?: number } = {},
+  extraHeaders: HeadersInit = {}
 ): Promise<Adoption[]> {
+  const { items } = await getAdoptionsPage(params, extraHeaders);
+  return items;
+}
+
+export async function getAdoptionsPage(
+  params: { status?: string; animal_id?: number; per_page?: number; page?: number } = {},
+  extraHeaders: HeadersInit = {}
+): Promise<{ items: Adoption[]; page: PageInfo }> {
   const url = new URL(`${API_BASE_URL}/adoptions`);
   if (params.status) url.searchParams.set("status", params.status);
   if (params.animal_id)
     url.searchParams.set("animal_id", String(params.animal_id));
-  const res = await fetch(url.toString(), { cache: "no-store" });
+  url.searchParams.set("per_page", String(params.per_page ?? 24));
+  if (params.page) url.searchParams.set("page", String(params.page));
+  const res = await fetch(url.toString(), {
+    cache: "no-store",
+    headers: { Accept: "application/json", ...authHeaders(), ...extraHeaders },
+  });
   if (!res.ok) throw new Error(`Error al cargar adopciones: ${res.status}`);
-  return res.json();
+  const body = await res.json();
+  return { items: body.data ?? body, page: pageInfoFrom(body) };
+}
+
+export async function getMyAdoptions(): Promise<Adoption[]> {
+  const body = await apiFetch<{ data: Adoption[] } | Adoption[]>("/adoptions/mine?per_page=50");
+  return Array.isArray(body) ? body : body.data;
 }
 
 export async function updateAdoptionStatus(
@@ -183,12 +249,20 @@ export async function deleteAdoption(id: number): Promise<void> {
 
 // ─── Albergues ───────────────────────────────────────────────────────────────
 
-export async function getShelters(onlyActive = false): Promise<Shelter[]> {
+export async function getShelters(
+  onlyActive = false,
+  extraHeaders: HeadersInit = {}
+): Promise<Shelter[]> {
   const url = new URL(`${API_BASE_URL}/shelters`);
   if (onlyActive) url.searchParams.set("only_active", "true");
-  const res = await fetch(url.toString(), { cache: "no-store" });
+  url.searchParams.set("per_page", "100");
+  const res = await fetch(url.toString(), {
+    cache: "no-store",
+    headers: { Accept: "application/json", ...authHeaders(), ...extraHeaders },
+  });
   if (!res.ok) throw new Error(`Error al cargar albergues: ${res.status}`);
-  return res.json();
+  const body = await res.json();
+  return body.data ?? body;
 }
 
 export async function getShelter(id: number | string): Promise<Shelter> {
@@ -214,6 +288,35 @@ export async function updateShelter(
   });
 }
 
+export async function updateShelterProfile(
+  id: number,
+  payload: { name?: string; description?: string; email?: string; phone?: string; address?: string }
+): Promise<Shelter> {
+  return apiFetch(`/admin/shelters/${id}/profile`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateShelterLogo(id: number, file: File): Promise<Shelter> {
+  const fd = new FormData();
+  fd.append("logo", file);
+
+  const res = await fetch(`${API_BASE_URL}/admin/shelters/${id}/logo`, {
+    method: "POST",
+    headers: { Accept: "application/json", ...authHeaders() },
+    body: fd,
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    const firstValidationError = body?.errors ? Object.values(body.errors).flat()[0] : null;
+    throw new Error(String(firstValidationError ?? body?.message ?? "No se pudo actualizar el logo."));
+  }
+
+  return res.json();
+}
+
 export async function toggleShelterActive(id: number): Promise<Shelter> {
   return apiFetch(`/shelters/${id}/toggle`, { method: "PATCH", body: "{}" });
 }
@@ -224,8 +327,8 @@ export async function deleteShelter(id: number): Promise<void> {
 
 // ─── Dashboard ───────────────────────────────────────────────────────────────
 
-export async function getDashboardStats(): Promise<DashboardStats> {
-  return apiFetch("/dashboard/stats");
+export async function getDashboardStats(extraHeaders: HeadersInit = {}): Promise<DashboardStats> {
+  return apiFetch("/admin/dashboard/stats", { headers: extraHeaders });
 }
 
 // ─── Autenticación ───────────────────────────────────────────────────────────
@@ -268,8 +371,8 @@ export async function login(payload: {
   });
 }
 
-export async function getCurrentUser(): Promise<{ user: AuthUser }> {
-  return apiFetch("/auth/me");
+export async function getCurrentUser(extraHeaders: HeadersInit = {}): Promise<{ user: AuthUser }> {
+  return apiFetch("/auth/me", { headers: extraHeaders });
 }
 
 export async function updateProfile(payload: {
@@ -366,4 +469,79 @@ export async function updateSuperAdminShelterStatus(
 
 export async function getSuperAdminUsers(): Promise<SuperAdminUser[]> {
   return apiFetch("/superadmin/users");
+}
+
+// ─── Donaciones (cuenta) ─────────────────────────────────────────────────────
+
+export async function getMyDonations(): Promise<Donation[]> {
+  const body = await apiFetch<{ data: Donation[] } | Donation[]>("/donations/mine?per_page=50");
+  return Array.isArray(body) ? body : body.data;
+}
+
+// ─── Mascotas perdidas / encontradas ────────────────────────────────────────
+
+export async function getLostFoundPosts(type?: LostFoundPostType): Promise<LostFoundPost[]> {
+  const url = new URL(`${API_BASE_URL}/lost-found-posts`);
+  if (type) url.searchParams.set("type", type);
+  url.searchParams.set("per_page", "50");
+  const res = await fetch(url.toString(), { cache: "no-store", headers: { Accept: "application/json" } });
+  if (!res.ok) throw new Error("No se pudieron cargar las publicaciones.");
+  const body = await res.json();
+  return body.data ?? body;
+}
+
+export async function getMyLostFoundPosts(): Promise<LostFoundPost[]> {
+  const body = await apiFetch<{ data: LostFoundPost[] } | LostFoundPost[]>("/lost-found-posts/mine");
+  return Array.isArray(body) ? body : body.data;
+}
+
+export async function createLostFoundPost(payload: CreateLostFoundPostPayload): Promise<LostFoundPost> {
+  const fd = new FormData();
+  fd.append("type", payload.type);
+  fd.append("zone", payload.zone);
+  fd.append("description", payload.description);
+  fd.append("contact_phone", payload.contact_phone);
+  if (payload.pet_name) fd.append("pet_name", payload.pet_name);
+  if (payload.species) fd.append("species", payload.species);
+  if (payload.photo) fd.append("photo", payload.photo);
+
+  const res = await fetch(`${API_BASE_URL}/lost-found-posts`, {
+    method: "POST",
+    headers: { Accept: "application/json", ...authHeaders() },
+    body: fd,
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    const firstValidationError = body?.errors ? Object.values(body.errors).flat()[0] : null;
+    throw new Error(String(firstValidationError ?? body?.message ?? "No se pudo publicar."));
+  }
+
+  return res.json();
+}
+
+export async function deleteLostFoundPost(id: number): Promise<void> {
+  await apiFetch(`/lost-found-posts/${id}`, { method: "DELETE" });
+}
+
+export async function getSuperAdminLostFoundPosts(
+  type?: LostFoundPostType,
+  status?: string
+): Promise<LostFoundPost[]> {
+  const params = new URLSearchParams();
+  if (type) params.set("type", type);
+  if (status) params.set("status", status);
+  params.set("per_page", "50");
+  const body = await apiFetch<{ data: LostFoundPost[] }>(`/superadmin/lost-found-posts?${params}`);
+  return body.data ?? [];
+}
+
+export async function updateSuperAdminLostFoundPostStatus(
+  id: number,
+  status: "approved" | "rejected"
+): Promise<LostFoundPost> {
+  return apiFetch(`/superadmin/lost-found-posts/${id}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
 }

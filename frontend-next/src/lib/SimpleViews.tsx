@@ -1,8 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { AuthNav } from "@/components/ProfileMenu";
 
+const NAV_LINKS = [
+  { href: "/refugios", label: "Refugios" },
+  { href: "/mascotas/perdidas", label: "Mascotas perdidas" },
+  { href: "/mascotas/encontradas", label: "Mascotas encontradas" },
+];
+
 export function PublicShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
   return (
     <main className="min-h-screen bg-cream-100 text-slate-custom-900">
       <nav className="border-b border-slate-custom-50 bg-white px-6 py-4">
@@ -17,14 +28,23 @@ export function PublicShell({ children }: { children: React.ReactNode }) {
           <span>Refugio360</span>
         </Link>
           <div className="flex flex-wrap items-center gap-4 text-sm text-slate-custom-700">
-            <Link href="/refugios">Refugios</Link>
-            <Link href="/mascotas/perdidas">Perdidas</Link>
-            <Link href="/mascotas/encontradas">Encontradas</Link>
+            {NAV_LINKS.map((link) => {
+              const active = pathname === link.href || pathname.startsWith(`${link.href}/`);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={active ? "font-semibold text-brand-600" : "hover:text-brand-600"}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
             <AuthNav />
           </div>
         </div>
       </nav>
-      
+
       {children}
     </main>
   );

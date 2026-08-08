@@ -48,3 +48,26 @@ body {
   color: var(--foreground);
   font-family: var(--font-body), Arial, Helvetica, sans-serif;
 }
+
+/* Admin dark theme overrides — scoped to [data-admin-theme="dark"], palette taken from the adopciones dark view */
+[data-admin-theme="dark"] {
+  --color-cream-50: #111827;
+  --color-cream-100: #0f172a;
+  --color-slate-custom-50: rgba(255, 255, 255, 0.1);
+  --color-slate-custom-400: #64748b;
+  --color-slate-custom-600: #94a3b8;
+  --color-slate-custom-700: #cbd5e1;
+  --color-slate-custom-900: #f1f5f9;
+  --color-brand-50: rgba(34, 211, 238, 0.1);
+  --color-brand-600: #22d3ee;
+  --color-brand-700: #67e8f9;
+}
+
+/* Page shell background: soft cream in light mode, adopciones-style navy gradient in dark mode */
+.admin-shell {
+  background: var(--color-cream-100);
+}
+
+[data-admin-theme="dark"] .admin-shell {
+  background: radial-gradient(circle at top left, #1f2937, #0f172a 55%, #020617);
+}
