@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Animal;
+use App\Models\LostFoundPost;
 use App\Models\Shelter;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -24,8 +25,8 @@ class SuperAdminController extends Controller
                 'natural_people' => User::where('role', 'natural_person')->count(),
                 'shelter_admins' => User::where('role', 'shelter_admin')->count(),
                 'animals_total' => Animal::withoutGlobalScopes()->count(),
-                'lost_posts_pending' => 0,
-                'found_posts_pending' => 0,
+                'lost_posts_pending' => LostFoundPost::where('type', 'perdida')->where('status', 'pending_review')->count(),
+                'found_posts_pending' => LostFoundPost::where('type', 'encontrada')->where('status', 'pending_review')->count(),
             ],
             'pending_shelters' => $this->shelterQuery()
                 ->where('approval_status', 'pending_review')
@@ -61,6 +62,31 @@ class SuperAdminController extends Controller
             ->update(['status' => $validated['approval_status'] === 'approved']);
 
         return response()->json($this->shelterQuery()->findOrFail($shelter->id));
+    }
+
+    public function lostFoundPosts(Request $request): JsonResponse
+    {
+        $status = $request->query('status');
+
+        $posts = LostFoundPost::with('user:id,name,email')
+            ->when($request->filled('type'), fn ($query) => $query->where('type', $request->string('type')))
+            ->when($status, fn ($query) => $query->where('status', $status))
+            ->latest()
+            ->paginate($request->integer('per_page', 20));
+
+        return response()->json($posts);
+    }
+
+    public function updateLostFoundPostStatus(Request $request, LostFoundPost $post): JsonResponse
+    {
+        $validated = $request->validate([
+            'status' => ['required', Rule::in(['approved', 'rejected'])],
+            'admin_notes' => ['nullable', 'string'],
+        ]);
+
+        $post->update($validated);
+
+        return response()->json($post->fresh()->load('user:id,name,email'));
     }
 
     public function users(): JsonResponse

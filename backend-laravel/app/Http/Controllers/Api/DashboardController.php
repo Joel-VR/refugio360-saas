@@ -12,45 +12,28 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    /**
-     * Estadísticas globales para el panel administrativo.
-     *
-     * IMPORTANTE: usamos withoutGlobalScopes() porque el modelo Animal y Adoption
-     * tienen un global scope multi-tenant que filtra por shelter_id del usuario auth.
-     * Como el panel admin funciona sin auth activa, el scope no filtra pero puede
-     * generar errores. withoutGlobalScopes() lo elimina de forma segura.
-     */
     public function stats(): JsonResponse
     {
-        // Animales por estado — sin scope
-        $animalsByStatus = Animal::withoutGlobalScopes()
-            ->select('lifecycle_status', DB::raw('count(*) as total'))
+        // Animales por estado — usa el global scope del modelo para filtrar por shelter_id del usuario
+        $animalsByStatus = Animal::select('lifecycle_status', DB::raw('count(*) as total'))
             ->groupBy('lifecycle_status')
             ->pluck('total', 'lifecycle_status')
             ->toArray();
 
-        // Adopciones por estado — sin scope
-        $adoptionsByStatus = Adoption::withoutGlobalScopes()
-            ->select('status', DB::raw('count(*) as total'))
+        // Adopciones por estado — usa el global scope del modelo
+        $adoptionsByStatus = Adoption::select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
             ->pluck('total', 'status')
             ->toArray();
 
-        // Últimas 5 adopciones — sin scope, con relaciones básicas
-        $recentAdoptions = Adoption::withoutGlobalScopes()
-            ->with([
-                'animal' => fn ($q) => $q->withoutGlobalScopes()->select('id', 'name', 'species'),
+        // Últimas 5 adopciones — usa el global scope
+        $recentAdoptions = Adoption::with([
+                'animal:id,name,species',
                 'shelter:id,name',
             ])
             ->latest()
             ->limit(5)
             ->get(['id', 'shelter_id', 'animal_id', 'applicant_name', 'status', 'created_at']);
-
-        // Albergues
-        $shelterStats = Shelter::select(
-            DB::raw('count(*) as total'),
-            DB::raw('sum(case when is_active then 1 else 0 end) as active')
-        )->first();
 
         return response()->json([
             'animals' => [
@@ -67,10 +50,6 @@ class DashboardController extends Controller
                 'aprobado'   => $adoptionsByStatus['aprobado']   ?? 0,
                 'rechazado'  => $adoptionsByStatus['rechazado']  ?? 0,
                 'adoptado'   => $adoptionsByStatus['adoptado']   ?? 0,
-            ],
-            'shelters' => [
-                'total'  => (int) ($shelterStats->total  ?? 0),
-                'active' => (int) ($shelterStats->active ?? 0),
             ],
             'recent_adoptions' => $recentAdoptions,
         ]);

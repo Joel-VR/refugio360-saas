@@ -14,7 +14,6 @@ class StoreAdoptionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'shelter_id'     => ['required', 'exists:shelters,id'],
             'animal_id'      => ['required', 'exists:animals,id'],
             'applicant_name' => ['required', 'string', 'max:255'],
             'dni'            => ['required', 'digits:8'],
@@ -30,7 +29,6 @@ class StoreAdoptionRequest extends FormRequest
             'dni.digits'           => 'El DNI debe tener exactamente 8 dígitos.',
             'phone.digits'         => 'El teléfono debe tener exactamente 9 dígitos.',
             'animal_id.exists'     => 'El animal seleccionado no existe.',
-            'shelter_id.exists'    => 'El albergue no existe.',
         ];
     }
 }

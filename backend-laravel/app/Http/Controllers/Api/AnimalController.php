@@ -21,13 +21,18 @@ class AnimalController extends Controller
             $query->where('lifecycle_status', $status);
         }
 
-        return response()->json($query->latest()->get());
+        $perPage = min($request->integer('per_page', 20), 100);
+
+        return response()->json($query->latest()->paginate($perPage));
     }
 
     public function store(Request $request): JsonResponse
     {
+        $user = $request->user();
+        $isSuperAdmin = $user->role === 'super_admin';
+
         $validated = $request->validate([
-            'shelter_id' => ['required', 'exists:shelters,id'],
+            'shelter_id' => [$isSuperAdmin ? 'required' : 'sometimes', 'exists:shelters,id'],
             'name' => ['required', 'string', 'max:255'],
             'species' => ['required', 'string', 'max:20'],
             'estimated_age' => ['nullable', 'integer', 'min:0'],
@@ -37,6 +42,10 @@ class AnimalController extends Controller
             'photos' => ['nullable', 'array', 'max:3'],
             'photos.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
         ]);
+
+        if (!$isSuperAdmin) {
+            $validated['shelter_id'] = $user->shelter_id;
+        }
 
         $animal = DB::transaction(function () use ($request, $validated) {
             $animalData = collect($validated)->except('photos')->all();
@@ -79,6 +88,10 @@ class AnimalController extends Controller
             'is_sterilized' => ['sometimes', 'boolean'],
             'lifecycle_status' => ['sometimes', 'in:cuarentena,tratamiento,apto,apto_adopcion,adoptado'],
         ]);
+
+        if ($request->user()->role !== 'super_admin') {
+            unset($validated['shelter_id']);
+        }
 
         if (array_key_exists('lifecycle_status', $validated)) {
             $validated['lifecycle_status'] = $this->normalizeLifecycleStatus(

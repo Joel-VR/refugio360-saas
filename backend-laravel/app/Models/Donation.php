@@ -12,6 +12,7 @@ class Donation extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'shelter_id',
         'animal_id',
         'donor_name',
@@ -33,6 +34,11 @@ class Donation extends Model
         'is_recurring' => 'boolean',
         'is_anonymous' => 'boolean',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function shelter()
     {

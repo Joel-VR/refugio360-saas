@@ -12,6 +12,7 @@ class Adoption extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'user_id',
         'shelter_id',
         'animal_id',
         'applicant_name',
@@ -28,6 +29,11 @@ class Adoption extends Model
     | Relaciones
     |--------------------------------------------------------------------------
     */
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function shelter()
     {

@@ -73,6 +73,7 @@ class DonationController extends Controller
         $path = $request->file('voucher')->store('vouchers', 'public');
 
         $donation = Donation::create([
+            'user_id'             => $request->user()->id,
             'shelter_id'          => $data['shelter_id'],
             'animal_id'           => $data['animal_id'] ?? null,
             'donation_type'       => $data['donation_type'],
@@ -89,6 +90,20 @@ class DonationController extends Controller
         ]);
 
         return response()->json($donation, 201);
+    }
+
+    /**
+     * GET /api/v1/donations/mine
+     * Donaciones del usuario autenticado, en cualquier estado.
+     */
+    public function mine(Request $request)
+    {
+        $donations = Donation::with(['shelter:id,name,slug', 'animal:id,name'])
+            ->where('user_id', $request->user()->id)
+            ->latest()
+            ->paginate($request->integer('per_page', 20));
+
+        return response()->json($donations);
     }
 
     /**

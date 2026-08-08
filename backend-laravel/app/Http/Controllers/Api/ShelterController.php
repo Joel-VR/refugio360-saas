@@ -9,6 +9,7 @@ use App\Models\Adoption;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ShelterController extends Controller
 {
@@ -20,10 +21,12 @@ class ShelterController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
+        $perPage = min($request->integer('per_page', 20), 100);
+
         $shelters = Shelter::withCount(['animals', 'adoptions'])
             ->when($request->boolean('only_active'), fn ($q) => $q->where('is_active', true))
             ->latest()
-            ->get();
+            ->paginate($perPage);
 
         return response()->json($shelters);
     }
@@ -123,5 +126,65 @@ class ShelterController extends Controller
         $shelter->update(['is_active' => !$shelter->is_active]);
 
         return response()->json($shelter->fresh()->loadCount(['animals', 'adoptions']));
+    }
+
+    /**
+     * Actualizar perfil del albergue (solo datos básicos: name, description, email, phone, address).
+     * Acceso: el dueño del albergue (shelter_admin) o super_admin.
+     */
+    public function updateProfile(Request $request, Shelter $shelter): JsonResponse
+    {
+        $this->authorizeShelter($request, $shelter);
+
+        $validated = $request->validate([
+            'name'        => ['sometimes', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'email'       => ['nullable', 'email', 'max:255'],
+            'phone'       => ['nullable', 'string', 'max:20'],
+            'address'     => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $shelter->update($validated);
+
+        return response()->json($shelter->fresh());
+    }
+
+    /**
+     * Actualizar logo del albergue.
+     * Acceso: el dueño del albergue (shelter_admin) o super_admin.
+     */
+    public function updateLogo(Request $request, Shelter $shelter): JsonResponse
+    {
+        $this->authorizeShelter($request, $shelter);
+
+        $request->validate([
+            'logo' => ['required', 'image', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
+        ]);
+
+        if ($request->hasFile('logo')) {
+            // Borrar logo anterior si existe
+            if ($shelter->logo_path) {
+                Storage::disk('public')->delete($shelter->logo_path);
+            }
+            // Guardar nuevo logo
+            $shelter->logo_path = $request->file('logo')->store('shelter_logos', 'public');
+            $shelter->save();
+        }
+
+        return response()->json($shelter->fresh());
+    }
+
+    /**
+     * Verificar que el usuario autenticado sea el dueño del albergue o un super_admin.
+     */
+    private function authorizeShelter(Request $request, Shelter $shelter): void
+    {
+        $user = $request->user();
+        if ($user->role === 'super_admin') {
+            return;
+        }
+        if ((int) $user->shelter_id !== (int) $shelter->id) {
+            abort(403, 'No puedes administrar este albergue.');
+        }
     }
 }

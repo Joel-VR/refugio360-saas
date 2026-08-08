@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAdoptionRequest;
+use App\Http\Resources\AdoptionResource;
 use App\Models\Adoption;
 use App\Models\Animal;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class AdoptionController extends Controller
 {
@@ -15,7 +17,7 @@ class AdoptionController extends Controller
      * listar todas las solicitudes de adopcion
      * permite filtrar por status y por animal_id.
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): AnonymousResourceCollection
     {
         $query = Adoption::with(['animal.photos', 'shelter']);
 
@@ -27,7 +29,11 @@ class AdoptionController extends Controller
             $query->where('animal_id', $request->integer('animal_id'));
         }
 
-        return response()->json($query->latest()->get());
+        $perPage = min($request->integer('per_page', 20), 100);
+
+        // se retorna directamente (no envuelto en response()->json()) para que
+        // Laravel agregue el wrapper de paginación data/links/meta.
+        return AdoptionResource::collection($query->latest()->paginate($perPage));
     }
 
     /**
@@ -44,9 +50,28 @@ class AdoptionController extends Controller
             ], 422);
         }
 
-        $adoption = Adoption::create($request->validated());
+        $adoption = Adoption::create([
+            ...$request->validated(),
+            'shelter_id' => $animal->shelter_id,
+            'user_id' => $request->user()->id,
+        ]);
 
         return response()->json($adoption->load(['animal.photos', 'shelter']), 201);
+    }
+
+    /**
+     * solicitudes del usuario autenticado, en cualquier estado.
+     */
+    public function mine(Request $request): AnonymousResourceCollection
+    {
+        $perPage = min($request->integer('per_page', 20), 100);
+
+        $adoptions = Adoption::with(['animal.photos', 'shelter'])
+            ->where('user_id', $request->user()->id)
+            ->latest()
+            ->paginate($perPage);
+
+        return AdoptionResource::collection($adoptions);
     }
 
     /**
@@ -54,7 +79,7 @@ class AdoptionController extends Controller
      */
     public function show(Adoption $adoption): JsonResponse
     {
-        return response()->json($adoption->load(['animal.photos', 'shelter']));
+        return response()->json(new AdoptionResource($adoption->load(['animal.photos', 'shelter'])));
     }
 
     /**
@@ -74,7 +99,7 @@ class AdoptionController extends Controller
             $adoption->animal->update(['lifecycle_status' => 'adoptado']);
         }
 
-        return response()->json($adoption->fresh()->load(['animal.photos', 'shelter']));
+        return response()->json(new AdoptionResource($adoption->fresh()->load(['animal.photos', 'shelter'])));
     }
 
     /**
