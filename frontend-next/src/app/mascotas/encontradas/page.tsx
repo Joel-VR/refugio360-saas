@@ -1,13 +1,10 @@
-import Link from "next/link";
-import { PlaceholderList, SimplePage } from "@/lib/SimpleViews";
+import { SimplePage } from "@/lib/SimpleViews";
+import { LostFoundPublicList } from "@/components/LostFoundPublicList";
 
 export default function FoundPetsPage() {
   return (
-    <SimplePage title="Mascotas encontradas" description="Publicaciones aprobadas por super admin. Para reportar un encuentro debes iniciar sesión.">
-      <Link href="/login?next=/cuenta/mascotas-encontradas/nueva" className="w-fit rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white">
-        Reportar mascota encontrada
-      </Link>
-      <PlaceholderList items={["Gato naranja · encontrado en Pillco Marca · aprobado", "Perrita pequeña · encontrada cerca al mercado · aprobada"]} />
+    <SimplePage title="Mascotas encontradas" description="Publicaciones aprobadas por el super admin. Para reportar un encuentro debes iniciar sesión.">
+      <LostFoundPublicList type="encontrada" publishHref="/cuenta/mascotas-encontradas/nueva" />
     </SimplePage>
   );
 }

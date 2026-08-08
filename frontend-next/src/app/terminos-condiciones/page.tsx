@@ -45,7 +45,7 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
         Cualquier persona registrada puede publicar un reporte de mascota perdida o encontrada. Esta información es
         proporcionada directamente por el usuario y bajo su responsabilidad. Refugio360 no garantiza la veracidad de
         estos reportes ni actúa como intermediario en la recuperación del animal; solo facilita la visibilidad de la
-        publicación.
+        publicación, y cada reporte pasa por una revisión del super administrador antes de publicarse.
       </p>
     ),
   },

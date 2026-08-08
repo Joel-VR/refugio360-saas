@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { createAdoption } from "@/lib/api";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { createAdoption, friendlyErrorMessage, getStoredUser } from "@/lib/api";
 
 type Props = {
   animalId: number;
@@ -15,6 +17,7 @@ type FormState =
   | { phase: "error"; message: string };
 
 export default function AdoptionForm({ animalId, shelterId }: Props) {
+  const pathname = usePathname();
   const [form, setForm] = useState({
     applicant_name: "",
     dni: "",
@@ -23,6 +26,7 @@ export default function AdoptionForm({ animalId, shelterId }: Props) {
     notes: "",
   });
   const [state, setState] = useState<FormState>({ phase: "idle" });
+  const user = getStoredUser();
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -44,12 +48,23 @@ export default function AdoptionForm({ animalId, shelterId }: Props) {
     } catch (err) {
       setState({
         phase: "error",
-        message:
-          err instanceof Error
-            ? err.message
-            : "Ocurrió un error. Inténtalo de nuevo.",
+        message: friendlyErrorMessage(err, "No se pudo enviar tu postulación. Inténtalo de nuevo."),
       });
     }
+  }
+
+  if (!user || user.role !== "natural_person") {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-slate-custom-900/60 p-6 text-center">
+        <p className="text-sm text-slate-300">Necesitas iniciar sesión como persona natural para postular a esta adopción.</p>
+        <Link
+          href={`/login?next=${encodeURIComponent(pathname)}`}
+          className="mt-4 inline-block rounded-full bg-cyan-400 px-5 py-2.5 text-sm font-semibold text-slate-custom-900 transition hover:bg-cyan-300"
+        >
+          Iniciar sesión
+        </Link>
+      </div>
+    );
   }
 
   if (state.phase === "success") {

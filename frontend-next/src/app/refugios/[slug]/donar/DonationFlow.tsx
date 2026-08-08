@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { authHeaders, friendlyErrorMessage } from "@/lib/api";
 
 const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
 const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
@@ -124,7 +125,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
     fd.append("voucher", file!);
 
     try {
-      const res = await fetch(`${API}/donations`, { method: "POST", headers: { Accept: "application/json" }, body: fd });
+      const res = await fetch(`${API}/donations`, { method: "POST", headers: { Accept: "application/json", ...authHeaders() }, body: fd });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
         const firstError = body?.errors ? Object.values(body.errors).flat()[0] : body?.message;
@@ -133,7 +134,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
       setDonationId(body.id ?? null);
       setStep(4);
     } catch (err) {
-      setErrors({ submit: err instanceof Error ? err.message : "No se pudo registrar la donación." });
+      setErrors({ submit: friendlyErrorMessage(err, "No se pudo registrar la donación.") });
     } finally {
       setLoading(false);
     }
