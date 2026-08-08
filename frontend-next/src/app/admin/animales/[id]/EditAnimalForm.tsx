@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { authHeaders, friendlyErrorMessage } from "@/lib/api";
 
 const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
 
@@ -56,7 +57,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
     try {
       const res = await fetch(`${API_BASE_URL}/animals/${animal.id}`, {
         method: "PUT", // o "PATCH" según tu API
-        headers: { Accept: "application/json" },
+        headers: { Accept: "application/json", ...authHeaders() },
         body: data,
       });
 
@@ -68,33 +69,33 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
       router.push("/admin/animales");
       router.refresh(); // para actualizar el listado
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error desconocido");
+      setError(friendlyErrorMessage(err));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-6 rounded-3xl border border-white/10 bg-cream-50/5 p-8 shadow-2xl shadow-black/20 backdrop-blur">
+    <form onSubmit={handleSubmit} className="grid gap-6 rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
       <div className="grid gap-5 md:grid-cols-2">
         <label className="grid gap-2">
-          <span className="text-sm text-slate-300">Nombre *</span>
+          <span className="text-sm text-slate-custom-700">Nombre *</span>
           <input
             name="name"
             required
             defaultValue={animal.name}
-            className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition placeholder:text-slate-500 focus:border-cyan-400"
+            className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
             placeholder="Firulais"
           />
         </label>
 
         <label className="grid gap-2">
-          <span className="text-sm text-slate-300">Especie *</span>
+          <span className="text-sm text-slate-custom-700">Especie *</span>
           <select
             name="species"
             required
             defaultValue={animal.species}
-            className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition focus:border-cyan-400"
+            className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600"
           >
             <option value="perro">Perro</option>
             <option value="gato">Gato</option>
@@ -103,24 +104,24 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
         </label>
 
         <label className="grid gap-2">
-          <span className="text-sm text-slate-300">Edad estimada (meses)</span>
+          <span className="text-sm text-slate-custom-700">Edad estimada (meses)</span>
           <input
             name="estimated_age"
             type="number"
             min="0"
             defaultValue={animal.estimated_age ?? ""}
-            className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition placeholder:text-slate-500 focus:border-cyan-400"
+            className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
             placeholder="12"
           />
         </label>
 
         <label className="grid gap-2">
-          <span className="text-sm text-slate-300">Estado *</span>
+          <span className="text-sm text-slate-custom-700">Estado *</span>
           <select
             name="lifecycle_status"
             required
             defaultValue={animal.lifecycle_status}
-            className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition focus:border-cyan-400"
+            className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600"
           >
             <option value="cuarentena">Cuarentena</option>
             <option value="tratamiento">Tratamiento</option>
@@ -131,12 +132,12 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
       </div>
 
       <label className="grid gap-2">
-        <span className="text-sm text-slate-300">Estado de salud</span>
+        <span className="text-sm text-slate-custom-700">Estado de salud</span>
         <textarea
           name="health_status"
           rows={4}
           defaultValue={animal.health_status ?? ""}
-          className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 outline-none transition placeholder:text-slate-500 focus:border-cyan-400"
+          className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
           placeholder="Descripción general..."
         />
       </label>
@@ -144,7 +145,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
       {/* Visualización de fotos actuales */}
       {currentPhotos.length > 0 && (
         <div className="grid gap-2">
-          <span className="text-sm text-slate-300">Fotos actuales</span>
+          <span className="text-sm text-slate-custom-700">Fotos actuales</span>
           <div className="flex flex-wrap gap-3">
             {currentPhotos.map((photo, idx) => (
               <img
@@ -159,7 +160,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
       )}
 
       <label className="grid gap-2">
-        <span className="text-sm text-slate-300">
+        <span className="text-sm text-slate-custom-700">
           {currentPhotos.length > 0 ? "Reemplazar fotos (máx. 3)" : "Subir fotos (máx. 3)"}
         </span>
         <input
@@ -167,12 +168,12 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
           type="file"
           multiple
           accept="image/jpg,image/jpeg,image/png,image/webp"
-          className="rounded-2xl border border-dashed border-white/15 bg-slate-950/70 px-4 py-5 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-cyan-400 file:px-4 file:py-2 file:font-semibold file:text-slate-custom-900"
+          className="rounded-2xl border border-dashed border-slate-custom-50 bg-cream-100 px-4 py-5 text-sm text-slate-custom-700 file:mr-4 file:rounded-full file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:font-semibold file:text-white"
         />
       </label>
 
       {error && (
-        <p className="rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-300">
+        <p className="rounded-xl border border-rose-300/30 bg-rose-50 px-4 py-3 text-sm text-rose-700">
           {error}
         </p>
       )}
@@ -180,14 +181,14 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
         <Link
           href="/admin/animales"
-          className="rounded-full border border-white/15 px-5 py-3 text-center text-sm font-medium text-slate-200 transition hover:bg-cream-50/10"
+          className="rounded-full border border-slate-custom-50 px-5 py-3 text-center text-sm font-medium text-slate-custom-700 transition hover:bg-slate-custom-50"
         >
           Cancelar
         </Link>
         <button
           type="submit"
           disabled={loading}
-          className="rounded-full bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-custom-900 transition hover:bg-emerald-300 disabled:opacity-50"
+          className="rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
         >
           {loading ? "Guardando…" : "Actualizar animal"}
         </button>

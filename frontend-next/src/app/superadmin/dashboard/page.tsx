@@ -46,11 +46,11 @@ export default function SuperAdminDashboardPage() {
         </Link>
         <Link href="/superadmin/publicaciones/perdidas" className="rounded-lg border border-white/10 bg-cream-50/5 p-5 transition hover:bg-cream-50/10">
           <h2 className="text-lg font-semibold">Mascotas perdidas</h2>
-          <p className="mt-2 text-sm text-slate-400">Módulo pendiente de modelo de datos. Pendientes actuales: {data?.stats.lost_posts_pending ?? 0}.</p>
+          <p className="mt-2 text-sm text-slate-400">Pendientes de revisión: {data?.stats.lost_posts_pending ?? 0}.</p>
         </Link>
         <Link href="/superadmin/publicaciones/encontradas" className="rounded-lg border border-white/10 bg-cream-50/5 p-5 transition hover:bg-cream-50/10">
           <h2 className="text-lg font-semibold">Mascotas encontradas</h2>
-          <p className="mt-2 text-sm text-slate-400">Módulo pendiente de modelo de datos. Pendientes actuales: {data?.stats.found_posts_pending ?? 0}.</p>
+          <p className="mt-2 text-sm text-slate-400">Pendientes de revisión: {data?.stats.found_posts_pending ?? 0}.</p>
         </Link>
       </div>
 
