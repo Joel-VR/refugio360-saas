@@ -20,14 +20,21 @@ export default function SuperAdminPendingSheltersPage() {
   return (
     <section className="mx-auto grid max-w-6xl gap-6 px-6 py-10">
       <div>
-        <p className="text-sm uppercase tracking-[0.24em] text-cyan-300">Revisión</p>
-        <h1 className="mt-2 text-3xl font-semibold">Albergues pendientes</h1>
-        <p className="mt-2 max-w-2xl text-sm text-slate-400">Aprueba o rechaza solicitudes nuevas de albergues. Al aprobar, el albergue queda activo.</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">Revisión</p>
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-custom-900">Albergues pendientes</h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-custom-700">
+          Aprueba o rechaza solicitudes nuevas de albergues. Al aprobar, el albergue queda activo.
+        </p>
       </div>
 
-      {error && <p className="rounded-lg border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-200">{error}</p>}
+      {error && (
+        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
+      )}
+
       {loading ? (
-        <p className="rounded-lg border border-white/10 bg-cream-50/5 p-5 text-sm text-slate-300">Cargando solicitudes...</p>
+        <p className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 text-sm text-slate-custom-700">
+          Cargando solicitudes...
+        </p>
       ) : (
         <ShelterReviewList
           initialShelters={shelters}

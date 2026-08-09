@@ -33,26 +33,32 @@ export function ShelterReviewList({
   }
 
   if (shelters.length === 0) {
-    return <p className="rounded-lg border border-white/10 bg-cream-50/5 p-5 text-sm text-slate-300">{emptyText}</p>;
+    return (
+      <p className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 text-sm text-slate-custom-700">
+        {emptyText}
+      </p>
+    );
   }
 
   return (
     <div className="grid gap-4">
-      {error && <p className="rounded-lg border border-rose-400/30 bg-rose-400/10 px-4 py-3 text-sm text-rose-200">{error}</p>}
+      {error && (
+        <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>
+      )}
       {shelters.map((shelter) => {
         const responsible = shelter.users?.find((user) => user.role === "shelter_admin") ?? shelter.users?.[0];
         const pending = shelter.approval_status === "pending_review";
 
         return (
-          <article key={shelter.id} className="rounded-lg border border-white/10 bg-cream-50/5 p-5 shadow-xl shadow-black/10">
+          <article key={shelter.id} className="rounded-lg border border-slate-custom-50 bg-white p-5 shadow-sm">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-3">
-                  <h2 className="text-xl font-semibold text-white">{shelter.name}</h2>
+                  <h2 className="text-xl font-semibold text-slate-custom-900">{shelter.name}</h2>
                   <StatusBadge status={shelter.approval_status} />
                 </div>
-                <p className="mt-2 text-sm leading-6 text-slate-300">{shelter.description || "Sin descripción registrada."}</p>
-                <dl className="mt-4 grid gap-2 text-sm text-slate-300 sm:grid-cols-2">
+                <p className="mt-2 text-sm leading-6 text-slate-custom-700">{shelter.description || "Sin descripción registrada."}</p>
+                <dl className="mt-4 grid gap-2 text-sm text-slate-custom-700 sm:grid-cols-2">
                   <Info label="Responsable" value={responsible?.name} />
                   <Info label="Correo" value={responsible?.email ?? shelter.email} />
                   <Info label="Teléfono" value={shelter.phone} />
@@ -65,7 +71,7 @@ export function ShelterReviewList({
                   type="button"
                   disabled={!pending || busyId === shelter.id}
                   onClick={() => changeStatus(shelter.id, "approved")}
-                  className="rounded-md bg-emerald-400 px-4 py-2 text-sm font-semibold text-slate-custom-900 disabled:cursor-not-allowed disabled:opacity-45"
+                  className="rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   Aprobar
                 </button>
@@ -73,7 +79,7 @@ export function ShelterReviewList({
                   type="button"
                   disabled={!pending || busyId === shelter.id}
                   onClick={() => changeStatus(shelter.id, "rejected")}
-                  className="rounded-md border border-rose-300/40 px-4 py-2 text-sm font-semibold text-rose-100 hover:bg-rose-400/10 disabled:cursor-not-allowed disabled:opacity-45"
+                  className="rounded-md border border-red-300 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-45"
                 >
                   Rechazar
                 </button>
@@ -89,21 +95,21 @@ export function ShelterReviewList({
 function Info({ label, value }: { label: string; value?: string | null }) {
   return (
     <div>
-      <dt className="text-xs uppercase tracking-[0.16em] text-slate-500">{label}</dt>
-      <dd className="mt-1 truncate text-slate-200">{value || "No registrado"}</dd>
+      <dt className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-600">{label}</dt>
+      <dd className="mt-1 truncate text-slate-custom-700">{value || "No registrado"}</dd>
     </div>
   );
 }
 
 export function StatusBadge({ status }: { status?: string }) {
   const styles: Record<string, string> = {
-    approved: "border-emerald-300/40 bg-emerald-400/10 text-emerald-200",
-    rejected: "border-rose-300/40 bg-rose-400/10 text-rose-200",
-    pending_review: "border-amber-300/40 bg-amber-400/10 text-amber-100",
+    approved: "border-emerald-200 bg-emerald-50 text-emerald-700",
+    rejected: "border-red-200 bg-red-50 text-red-700",
+    pending_review: "border-amber-200 bg-amber-50 text-amber-700",
   };
 
   return (
-    <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${styles[status ?? ""] ?? "border-slate-500/40 bg-cream-1000/10 text-slate-200"}`}>
+    <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${styles[status ?? ""] ?? "border-slate-custom-50 bg-cream-50 text-slate-custom-700"}`}>
       {statusLabel(status)}
     </span>
   );

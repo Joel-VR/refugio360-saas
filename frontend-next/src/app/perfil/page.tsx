@@ -14,9 +14,9 @@ import {
 import { PublicShell } from "@/lib/SimpleViews";
 
 export default function ProfilePage() {
-  const [user, setUser] = useState<AuthUser | null>(() => readInitialUser());
-  const [name, setName] = useState(() => readInitialUser()?.name ?? "");
-  const [email, setEmail] = useState(() => readInitialUser()?.email ?? "");
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -40,6 +40,9 @@ export default function ProfilePage() {
   }
 
   useEffect(() => {
+    const stored = readInitialUser();
+    if (stored) hydrateUser(stored);
+
     if (!getStoredToken()) {
       window.location.href = "/login?next=/perfil";
       return;
