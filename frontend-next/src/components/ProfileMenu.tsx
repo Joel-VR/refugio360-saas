@@ -145,7 +145,6 @@ export function ProfileMenu({ variant = "light" }: { variant?: "light" | "dark" 
     </div>
   );
 }
-
 export function AuthNav() {
   const [hasSession, setHasSession] = useState(false);
 
@@ -167,10 +166,21 @@ export function AuthNav() {
   if (hasSession) return <ProfileMenu />;
 
   return (
-    <>
-      <Link href="/login" className="font-semibold text-brand-600">Ingresar</Link>
-      <Link href="/registro" className="rounded-md bg-brand-600 px-3 py-2 font-semibold text-white">Registrarse</Link>
-    </>
+    <div className="flex items-center gap-3">
+      <Link 
+        href="/login" 
+        className="px-4 py-2 text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors"
+      >
+        Ingresar
+      </Link>
+      
+      <Link 
+        href="/registro" 
+        className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 active:scale-95 transition-all"
+      >
+        Registrarse
+      </Link>
+    </div>
   );
 }
 

@@ -38,35 +38,62 @@ const ROLES = [
 export default function HomePage() {
   return (
     <PublicShell>
-      {/* HERO — banner de imagen (tal cual lo dejó el equipo) */}
-      <section className="relative aspect-video w-full">
-        <Image
-          src="/hero.jpg"
-          alt="Refugio360"
-          fill
-          priority
-          className="object-cover object-center"
-          sizes="100vw"
-        />
+      {/* HERO — banner de imagen */}
+      <section className="relative h-[300px] md:h-[500px] w-full">
+      <Image
+    src="/77.png"
+    alt="Refugio360"
+    fill
+    priority
+    className="object-cover object-center"
+    sizes="100vw"
+  />
+
+  {/* Capa de oscurecimiento suave */}
+  <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px]" />
+
+  {/* Contenido superpuesto: Huella + Texto estilizado */}
+  <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+    <div className="flex flex-col items-center gap-4 max-w-3xl">
+      
+      {/* Icono de Huella con ligero resplandor */}
+      <div className="rounded-full bg-white/10 p-3 backdrop-blur-md border border-white/20 shadow-lg">
+        <svg 
+          className="h-8 w-8 text-amber-300 drop-shadow md:h-10 md:w-10" 
+          fill="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path d="M12 12c-1.657 0-3 1.567-3 3.5S10.343 19 12 19s3-1.567 3-3.5S13.657 12 12 12zm-4.5-1c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm9 0c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-11-4c.967 0 1.75-.783 1.75-1.75S5.467 3.5 4.5 3.5 2.75 4.283 2.75 5.25 3.533 7 4.5 7zm15 0c.967 0 1.75-.783 1.75-1.75S20.467 3.5 19.5 3.5s-1.75.783-1.75 1.75.783 1.75 1.75 1.75z"/>
+        </svg>
+      </div>
+
+      {/* Título con letra estilizada y degradado cálido */}
+      <h1 className="text-4xl font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-100 to-amber-200 drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] sm:text-6xl md:text-7xl capitalize">
+        Cómplices al rescate
+      </h1>
+
+      {/* Subtítulo opcional de apoyo */}
+      <p className="text-sm font-medium text-amber-50/90 tracking-widest uppercase md:text-base drop-shadow">
+        Uniendo vidas · Salvando huellas
+      </p>
+
+    </div>
+  </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white px-6" />
+          <div className="text-center text-white px-600" />
         </div>
       </section>
 
       {/* TÍTULO + CTA */}
-      <section className="mx-auto grid max-w-6xl gap-10 px-4 md:px-6 py-10 md:py-14">
+      <section className="mx-auto grid max-w-6xl gap-10 px-4 md:px-6 pt-4 pb-10 md:pt-6 md:pb-14">            
         <div className="grid gap-5">
-          <p className="inline-flex w-fit items-center gap-2 rounded-full bg-brand-600/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-brand-600">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-600" />
-            Refugio360
-          </p>
+      
           <h1 className="max-w-3xl text-3xl md:text-5xl font-semibold tracking-tight">
-            Plataforma para refugios, adopciones y reportes de mascotas
+           ¡Bienvenido a Refugio360!
           </h1>
           <p className="max-w-2xl text-base leading-7 text-slate-custom-700">
-            Visitantes visualizan refugios, animales, transparencia y publicaciones aprobadas. Para donar, publicar o
-            solicitar adopción se requiere registro.
+            Explora nuestros refugios aliados, conoce a los peluditos en adopción y mira el impacto real de cada ayuda. Si deseas adoptar, publicar un caso o realizar una donación, solo necesitas crear tu cuenta en un par de clics. ¡Empecemos juntos a cambiar sus vidas!
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
             <Link href="/refugios" className="rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-sm shadow-brand-600/30 transition hover:bg-brand-700 hover:shadow-md">

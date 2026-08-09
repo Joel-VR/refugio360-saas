@@ -30,7 +30,7 @@ export default function RefugiosPage() {
     <SimplePage title="Refugios registrados" description="El visitante solo visualiza. Para donar o solicitar adopción se pedirá iniciar sesión.">
       {!isLoggedIn && (
         <div className="rounded-lg border border-brand-600/20 bg-brand-600/5 px-4 py-3 text-sm text-slate-custom-700">
-          👀 Estás explorando como visitante. Para donar o solicitar una adopción,{" "}
+          Estás explorando como visitante. Para donar o solicitar una adopción,{" "}
           <Link href="/registro" className="font-semibold text-brand-600 underline">crea una cuenta</Link> o{" "}
           <Link href="/login" className="font-semibold text-brand-600 underline">inicia sesión</Link>.
         </div>
