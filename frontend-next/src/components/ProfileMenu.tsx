@@ -118,6 +118,18 @@ export function ProfileMenu({ variant = "light" }: { variant?: "light" | "dark" 
               Configuración
             </Link>
           )}
+          {user.role === "natural_person" && (
+            <Link
+              href="/cuenta"
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium ${
+                isDark ? "hover:bg-cream-50/10" : "hover:bg-slate-custom-50"
+              }`}
+            >
+              <DashboardIcon />
+              Volver a mi dashboard
+            </Link>
+          )}
           <button
             type="button"
             onClick={handleLogout}

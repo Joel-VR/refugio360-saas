@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export type AppRole = "natural_person" | "shelter_admin" | "super_admin";
@@ -17,6 +18,7 @@ export function RoleGate({
   const [userStatus, setUserStatus] = useState<boolean | null>(null);
   const [shelterStatus, setShelterStatus] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     void Promise.resolve().then(() => {
@@ -48,7 +50,7 @@ export function RoleGate({
           <p className="mt-3 text-sm leading-6 text-slate-custom-700">
             Esta sección está reservada para: {allow.join(", ")}.
           </p>
-          <Link href="/login" className="mt-6 inline-block rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white">
+          <Link href={`/login?next=${encodeURIComponent(pathname)}`} className="mt-6 inline-block rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white">
             Ir a iniciar sesión
           </Link>
         </section>

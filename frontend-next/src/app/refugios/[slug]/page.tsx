@@ -49,7 +49,7 @@ export default function RefugioProfilePage() {
     <SimplePage title={shelter.name} description={shelter.description ?? "Perfil público del refugio."}>
       <div className="flex flex-wrap gap-3">
         <Link href={`/refugios/${slug}/animales`} className="rounded-md bg-brand-600 px-4 py-3 text-sm font-semibold text-white">Ver animales</Link>
-        <Link href={`/login?next=/refugios/${slug}/donar`} className="rounded-md border border-slate-300 px-4 py-3 text-sm font-semibold">Donar</Link>
+        <Link href={`/refugios/${slug}/donar`} className="rounded-md border border-slate-300 px-4 py-3 text-sm font-semibold">Donar</Link>
         <Link href={`/refugios/${slug}/transparencia`} className="rounded-md border border-slate-300 px-4 py-3 text-sm font-semibold">Transparencia</Link>
       </div>
     </SimplePage>
