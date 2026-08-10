@@ -39,9 +39,7 @@ export function MyLostFoundList({ type, newHref }: { type: LostFoundPostType; ne
 
   return (
     <div className="grid gap-5">
-      <Link href={newHref} className="w-fit rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white">
-        {type === "perdida" ? "Nueva publicación" : "Nuevo reporte"}
-      </Link>
+      
 
       {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 

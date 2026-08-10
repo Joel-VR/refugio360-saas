@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { clearSession, getCurrentUser, getStoredToken, getStoredUser, logout, storeAuthUser, type AuthUser } from "@/lib/api";
+import { clearSession, getCurrentUser, getStoredToken, getStoredUser, logout, storeAuthUser, ApiAuthError, type AuthUser } from "@/lib/api";
 
 export function ProfileMenu({ variant = "light" }: { variant?: "light" | "dark" }) {
   const [user, setUser] = useState<AuthUser | null>(() => (getStoredToken() ? getStoredUser() : null));
@@ -11,17 +11,23 @@ export function ProfileMenu({ variant = "light" }: { variant?: "light" | "dark" 
   const isDark = variant === "dark";
 
   useEffect(() => {
-    if (!getStoredToken()) return;
+  if (!getStoredToken()) return;
 
-    getCurrentUser()
-      .then(({ user }) => {
-        storeAuthUser(user);
-        setUser(user);
-      })
-      .catch(() => {
+  getCurrentUser()
+    .then(({ user }) => {
+      storeAuthUser(user);
+      setUser(user);
+    })
+    .catch((err) => {
+      // Solo cerramos sesión si el backend confirmó explícitamente que el token no es válido.
+      // Un fallo de red, CORS o backend caído momentáneamente NO debe desloguear.
+      if (err instanceof ApiAuthError) {
         clearSession();
         setUser(null);
-      });
+      }
+      // si es otro tipo de error, no tocamos la sesión; el usuario sigue viéndose logueado
+      // con los datos que ya tenía en localStorage (getStoredUser inicial)
+    });
 
     function handleStorage() {
       setUser(getStoredUser());

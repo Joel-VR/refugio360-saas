@@ -15,6 +15,22 @@ const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   adoptado: { label: "Adoptado", className: "border-violet-300 bg-violet-50 text-violet-700" },
 };
 
+function SearchIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 3.75a6.75 6.75 0 100 13.5 6.75 6.75 0 000-13.5zM21 21l-5.197-5.197" />
+    </svg>
+  );
+}
+
+function PawIcon({ className = "h-6 w-6" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+    </svg>
+  );
+}
+
 export default function AccountAdoptionsPage() {
   const [adoptions, setAdoptions] = useState<Adoption[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +45,16 @@ export default function AccountAdoptionsPage() {
 
   return (
     <section className="mx-auto grid max-w-5xl gap-5 px-6 py-10">
-      <h1 className="text-3xl font-semibold">Mis solicitudes de adopción</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-3xl font-semibold">Mis solicitudes de adopción</h1>
+        <Link
+          href="/adoptar"
+          className="inline-flex w-fit items-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+        >
+          <SearchIcon />
+          Buscar animales para adoptar
+        </Link>
+      </div>
 
       {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 
@@ -44,9 +69,6 @@ export default function AccountAdoptionsPage() {
       {!loading && adoptions.length === 0 && (
         <div className="rounded-lg border border-dashed border-slate-custom-50 bg-cream-50 p-8 text-center">
           <p className="text-sm text-slate-custom-700">Todavía no has solicitado ninguna adopción.</p>
-          <Link href="/adoptar" className="mt-3 inline-block rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white">
-            Buscar animales para adoptar
-          </Link>
         </div>
       )}
 
@@ -58,12 +80,12 @@ export default function AccountAdoptionsPage() {
 
             return (
               <article key={adoption.id} className="flex items-center gap-4 rounded-lg border border-slate-custom-50 bg-cream-50 p-4">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-100 text-2xl">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-100 text-slate-300">
                   {photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={`${STORAGE}/${photo.photo_path}`} alt={adoption.animal?.name ?? "Animal"} className="h-full w-full object-cover" />
                   ) : (
-                    <span>🐾</span>
+                    <PawIcon className="h-7 w-7" />
                   )}
                 </div>
                 <div className="min-w-0 flex-1">

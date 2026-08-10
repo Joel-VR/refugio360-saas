@@ -91,28 +91,23 @@ export function friendlyErrorMessage(
   return fallback;
 }
 
+export class ApiAuthError extends Error {}
+
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const { headers, ...fetchOptions } = options ?? {};
-
-  let res: Response;
-  try {
-    res = await fetch(`${API_BASE_URL}${path}`, {
-      cache: "no-store",
-      ...fetchOptions,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        ...authHeaders(),
-        ...headers,
-      },
-    });
-  } catch (err) {
-    console.error(`Fallo de red al llamar ${API_BASE_URL}${path}`, err);
-    throw new Error(NETWORK_ERROR_MESSAGE);
-  }
+  const res = await fetch(`${API_BASE_URL}${path}`, {
+    cache: "no-store",
+    ...fetchOptions,
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      ...authHeaders(),
+      ...headers,
+    },
+  });
 
   if (!res.ok) {
-    let message = "Ocurrió un error al procesar tu solicitud. Inténtalo de nuevo.";
+    let message = `HTTP ${res.status}`;
     try {
       const body = await res.json();
       const firstValidationError = body?.errors
@@ -120,10 +115,14 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
         : null;
       message = String(firstValidationError ?? body?.message ?? message);
     } catch {
-      // respuesta no-JSON (ej. HTML de error de Laravel)
+      // respuesta no-JSON
     }
-    console.error(`Error de API en ${API_BASE_URL}${path} (HTTP ${res.status}): ${message}`);
-    throw new Error(message);
+
+    // Solo 401/403 significan "tu sesión ya no es válida"
+    if (res.status === 401 || res.status === 403) {
+      throw new ApiAuthError(message);
+    }
+    throw new Error(`${message} — ${API_BASE_URL}${path}`);
   }
 
   if (res.status === 204) return null as T;

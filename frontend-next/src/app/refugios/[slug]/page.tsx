@@ -10,6 +10,27 @@ const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").
 
 type Shelter = { id: number; name: string; slug: string; description: string | null };
 
+function Icon({ path, className = "h-5 w-5" }: { path: string; className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.7">
+      <path strokeLinecap="round" strokeLinejoin="round" d={path} />
+    </svg>
+  );
+}
+
+const ICONS = {
+  back: "M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18",
+  paw: "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z",
+  gift: "M20 12v9H4v-9M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z",
+  chart: "M3 3v18h18M8 17V9m4 8V5m4 12v-6",
+};
+
+const TONES = {
+  violet: { badge: "bg-violet-100 text-violet-700" },
+  sky: { badge: "bg-sky-100 text-sky-700" },
+  emerald: { badge: "bg-emerald-100 text-emerald-700" },
+} as const;
+
 export default function RefugioProfilePage() {
   const { slug } = useParams<{ slug: string }>();
   const [shelter, setShelter] = useState<Shelter | null>(null);
@@ -29,29 +50,107 @@ export default function RefugioProfilePage() {
 
   if (loading) {
     return (
-      <SimplePage title="Cargando refugio..." description=" ">
-        <div className="h-24 animate-pulse rounded-lg border border-slate-custom-50 bg-cream-50" />
+      <SimplePage title="Cargando refugio..." description="Cargando información del albergue seleccionado...">
+        <div className="grid gap-4 sm:grid-cols-3">
+          <div className="h-32 animate-pulse rounded-2xl border border-slate-custom-50 bg-white" />
+          <div className="h-32 animate-pulse rounded-2xl border border-slate-custom-50 bg-white" />
+          <div className="h-32 animate-pulse rounded-2xl border border-slate-custom-50 bg-white" />
+        </div>
       </SimplePage>
     );
   }
 
   if (error || !shelter) {
     return (
-      <SimplePage title="Refugio" description="Perfil público del refugio.">
-        <div className="rounded-lg border border-rose-200 bg-rose-50 p-5 text-sm text-rose-700">
-          {error || "No encontramos este refugio."}
+      <SimplePage title="Refugio no encontrado" description="No pudimos obtener la información del refugio.">
+        <div className="space-y-4">
+          <Link
+            href="/refugios"
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-custom-50 bg-white px-4 py-2 text-xs font-medium text-slate-custom-700 transition hover:border-brand-600/40 hover:text-brand-600"
+          >
+            <Icon path={ICONS.back} className="h-4 w-4" />
+            Volver a refugios
+          </Link>
+          <div className="rounded-2xl border border-rose-200 bg-rose-50 p-5 text-sm text-rose-700">
+            {error || "No encontramos este refugio."}
+          </div>
         </div>
       </SimplePage>
     );
   }
 
   return (
-    <SimplePage title={shelter.name} description={shelter.description ?? "Perfil público del refugio."}>
-      <div className="flex flex-wrap gap-3">
-        <Link href={`/refugios/${slug}/animales`} className="rounded-md bg-brand-600 px-4 py-3 text-sm font-semibold text-white">Ver animales</Link>
-        <Link href={`/refugios/${slug}/donar`} className="rounded-md border border-slate-300 px-4 py-3 text-sm font-semibold">Donar</Link>
-        <Link href={`/refugios/${slug}/transparencia`} className="rounded-md border border-slate-300 px-4 py-3 text-sm font-semibold">Transparencia</Link>
+    <SimplePage
+      title={shelter.name}
+      description={shelter.description || "Albergue registrado en Refugio360."}
+    >
+      <div className="-mt-2 space-y-6">
+        {/* Botón Volver */}
+        <div>
+          <Link
+            href="/refugios"
+            className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-custom-50 bg-white px-4 py-2 text-xs font-medium text-slate-custom-700 transition hover:border-brand-600/40 hover:text-brand-600"
+          >
+            <Icon path={ICONS.back} className="h-4 w-4" />
+            Volver a refugios
+          </Link>
+        </div>
+
+        {/* Acciones del refugio */}
+        <div className="grid gap-4 sm:grid-cols-3">
+          <ActionCard
+            tone="violet"
+            icon={ICONS.paw}
+            href={`/refugios/${slug}/animales`}
+            title="Ver animales"
+            description="Conoce a los animales disponibles para adopción en este refugio."
+          />
+          <ActionCard
+            tone="sky"
+            icon={ICONS.gift}
+            href={`/refugios/${slug}/donar`}
+            title="Donar"
+            description="Apoya a este refugio con donaciones monetarias directamente."
+          />
+          <ActionCard
+            tone="emerald"
+            icon={ICONS.chart}
+            href={`/refugios/${slug}/transparencia`}
+            title="Transparencia"
+            description="Revisa el historial de ingresos y gastos registrados de este refugio."
+          />
+        </div>
       </div>
     </SimplePage>
+  );
+}
+
+function ActionCard({
+  tone,
+  icon,
+  href,
+  title,
+  description,
+}: {
+  tone: keyof typeof TONES;
+  icon: string;
+  href: string;
+  title: string;
+  description: string;
+}) {
+  const t = TONES[tone];
+  return (
+    <Link
+      href={href}
+      className="group flex flex-col justify-between gap-4 rounded-2xl border border-slate-custom-50 bg-white p-6 transition hover:-translate-y-0.5 hover:border-brand-600/30 hover:shadow-md hover:shadow-brand-600/5"
+    >
+      <span className={`flex h-11 w-11 items-center justify-center rounded-xl transition ${t.badge}`}>
+        <Icon path={icon} className="h-5 w-5" />
+      </span>
+      <div>
+        <p className="font-semibold text-slate-custom-900 group-hover:text-brand-600 transition">{title}</p>
+        <p className="mt-1 text-xs leading-5 text-slate-custom-700">{description}</p>
+      </div>
+    </Link>
   );
 }

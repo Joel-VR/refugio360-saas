@@ -13,6 +13,14 @@ const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   rejected: { label: "Rechazado", className: "border-rose-300 bg-rose-50 text-rose-700" },
 };
 
+function GiftIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20 12v9H4v-9M22 7H2v5h20V7zM12 22V7M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z" />
+    </svg>
+  );
+}
+
 export default function AccountDonationsPage() {
   const [donations, setDonations] = useState<Donation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +35,16 @@ export default function AccountDonationsPage() {
 
   return (
     <section className="mx-auto grid max-w-5xl gap-5 px-6 py-10">
-      <h1 className="text-3xl font-semibold">Mis donaciones</h1>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-3xl font-semibold">Mis donaciones</h1>
+        <Link
+          href="/refugios"
+          className="inline-flex w-fit items-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+        >
+          <GiftIcon />
+          Nueva donación
+        </Link>
+      </div>
 
       {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 
@@ -42,8 +59,12 @@ export default function AccountDonationsPage() {
       {!loading && donations.length === 0 && (
         <div className="rounded-lg border border-dashed border-slate-custom-50 bg-cream-50 p-8 text-center">
           <p className="text-sm text-slate-custom-700">Todavía no has hecho ninguna donación.</p>
-          <Link href="/donar" className="mt-3 inline-block rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white">
-            Hacer una donación
+          <Link
+            href="/refugios"
+            className="mt-3 inline-flex items-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
+          >
+            <GiftIcon />
+            Elegir un refugio para donar
           </Link>
         </div>
       )}
@@ -52,7 +73,6 @@ export default function AccountDonationsPage() {
         <div className="grid gap-3">
           {donations.map((donation) => {
             const badge = STATUS_BADGE[donation.status] ?? { label: donation.status, className: "border-slate-300 bg-slate-100 text-slate-600" };
-
             return (
               <article key={donation.id} className="flex items-center justify-between gap-4 rounded-lg border border-slate-custom-50 bg-cream-50 p-4">
                 <div className="min-w-0">
