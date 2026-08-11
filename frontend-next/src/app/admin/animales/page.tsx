@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAnimalsPage } from "@/lib/api";
+import { AnimalStatusDropdown } from './AnimalStatusDropdown';
 
 const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
@@ -74,27 +75,28 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
             const photo = animal.photos?.[0];
 
             return (
-              <Link
+              <div
                 key={animal.id}
-                href={`/admin/animales/${animal.id}`}   // ← este es el cambio
                 className="group flex flex-col overflow-hidden rounded-3xl border border-slate-custom-50 bg-cream-50 shadow-sm transition hover:border-brand-600 hover:shadow-md"
               >
-                {/* foto */}
-                <div className="relative h-48 bg-slate-200 flex items-center justify-center text-5xl">
-                  {photo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={`${STORAGE_URL}/${photo.photo_path}`}
-                      alt={animal.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span>{animal.species === "gato" ? "🐱" : animal.species === "perro" ? "🐶" : "🐾"}</span>
-                  )}
-                  <span className={`absolute top-3 right-3 rounded-full border px-3 py-1 text-xs font-medium ${badge.className}`}>
-                    {badge.label}
-                  </span>
-                </div>
+                {/* foto — clickeable para ir al detalle */}
+                <Link href={`/admin/animales/${animal.id}`} className="block">
+                  <div className="relative h-48 bg-slate-200 flex items-center justify-center text-5xl">
+                    {photo ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={`${STORAGE_URL}/${photo.photo_path}`}
+                        alt={animal.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span>{animal.species === "gato" ? "🐱" : animal.species === "perro" ? "🐶" : "🐾"}</span>
+                    )}
+                    <span className={`absolute top-3 right-3 rounded-full border px-3 py-1 text-xs font-medium ${badge.className}`}>
+                      {badge.label}
+                    </span>
+                  </div>
+                </Link>
 
                 {/* info */}
                 <div className="flex flex-col gap-2 p-5">
@@ -103,12 +105,13 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
                   {animal.health_status && (
                     <p className="text-sm text-slate-custom-400 line-clamp-2">{animal.health_status}</p>
                   )}
+                  <AnimalStatusDropdown animalId={animal.id} current={animal.lifecycle_status} />
                   <div className="mt-2 flex items-center justify-between text-xs text-slate-custom-400">
                     <span>Refugio #{animal.shelter_id}</span>
                     <span>{animal.photos?.length ?? 0} foto{animal.photos?.length !== 1 ? "s" : ""}</span>
                   </div>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>

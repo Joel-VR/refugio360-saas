@@ -118,6 +118,7 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', 'admin.role'])->group(fun
     Route::post('shelters/{shelter}/logo',      [ShelterController::class, 'updateLogo']);
     Route::post('shelters/{shelter}/payment-methods', [AdminPaymentMethodController::class, 'update']);
     Route::delete('shelters/{shelter}/payment-methods/{method}/qr', [AdminPaymentMethodController::class, 'destroyQr']);
+    
 });
 
 // ── Gastos ────────────────────────────────────────────────────────────────
@@ -125,7 +126,9 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', 'admin.role'])->group(fun
     Route::get('expenses',              [\App\Http\Controllers\Api\ExpenseController::class, 'index']);
     Route::post('expenses',             [\App\Http\Controllers\Api\ExpenseController::class, 'store']);
     Route::get('expenses/{expense}',    [\App\Http\Controllers\Api\ExpenseController::class, 'show']);
+    Route::put('expenses/{expense}', [\App\Http\Controllers\Api\ExpenseController::class, 'update']);
     Route::delete('expenses/{expense}', [\App\Http\Controllers\Api\ExpenseController::class, 'destroy']);
+    
 });
 
 Route::prefix('v1')->group(function () {

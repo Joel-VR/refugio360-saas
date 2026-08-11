@@ -60,6 +60,20 @@ class ExpenseController extends Controller
         return response()->json($expense->load('shelter'));
     }
 
+    public function update(Request $request, Expense $expense): JsonResponse
+    {
+        $data = $request->validate([
+            'description'  => ['sometimes', 'string', 'max:255'],
+            'amount'       => ['sometimes', 'numeric', 'min:0.01'],
+            'category'     => ['sometimes', 'in:alimentacion,veterinaria,infraestructura,otros'],
+            'expense_date' => ['sometimes', 'date'],
+        ]);
+
+        $expense->update($data);
+
+        return response()->json($expense);
+    }
+    
     public function destroy(Expense $expense): JsonResponse
     {
         $expense->delete();
