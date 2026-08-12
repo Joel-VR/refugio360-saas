@@ -4,9 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { authHeaders, friendlyErrorMessage } from "@/lib/api";
-
-const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
+import { authHeaders, friendlyErrorMessage, API_BASE_URL } from "@/lib/api";
 
 type Animal = {
   id: number;

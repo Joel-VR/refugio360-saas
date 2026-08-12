@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams }           from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { RoleGate } from '@/lib/RoleGate';
+import { API_BASE_URL as API } from '@/lib/api';
 const DonationFlow = dynamic(() => import('./DonationFlow'), { ssr: false });
 
 interface Shelter {
@@ -32,7 +33,6 @@ export default function ShelterDonarPage() {
   const [error, setError]     = useState('');
 
   useEffect(() => {
-    const API = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '');
     fetch(`${API}/public/shelters/${slug}`)
       .then(r => r.json())
       .then((found: Shelter) => {

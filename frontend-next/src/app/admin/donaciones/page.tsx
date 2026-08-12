@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import type { Donation, DonationStatus, PaginatedDonations } from "@/types/donation";
 import { adminFetch } from "@/lib/adminAuth";
+import { API_BASE_URL as API } from "@/lib/api";
 
-const API     = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
 const STORAGE = (process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage");
 
 const TABS: { key: DonationStatus; label: string; activeClass: string; badgeClass: string }[] = [

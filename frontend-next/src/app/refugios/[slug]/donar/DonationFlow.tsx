@@ -2,9 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { authHeaders, friendlyErrorMessage } from "@/lib/api";
+import { authHeaders, friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
 
-const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
 const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 const MAX_SIZE = 5 * 1024 * 1024;
 

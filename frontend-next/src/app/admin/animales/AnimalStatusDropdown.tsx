@@ -1,9 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { authHeaders } from '@/lib/api';
-
-const API = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '');
+import { authHeaders, API_BASE_URL as API } from '@/lib/api';
 
 const STATUSES = [
   { value: 'apto',        label: 'Apto adopción' },

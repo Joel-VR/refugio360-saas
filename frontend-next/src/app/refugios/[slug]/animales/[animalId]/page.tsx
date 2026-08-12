@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { SimplePage } from "@/lib/SimpleViews";
-import { friendlyErrorMessage } from "@/lib/api";
+import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
 import type { Animal } from "@/types/animal";
 
-const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
 const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {

@@ -3,9 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { SimplePage } from "@/lib/SimpleViews";
-import { friendlyErrorMessage, getStoredToken } from "@/lib/api";
-
-const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
+import { friendlyErrorMessage, getStoredToken, API_BASE_URL as API } from "@/lib/api";
 
 type Shelter = { id: number; name: string; slug: string; description: string | null; accepts_donations: boolean };
 

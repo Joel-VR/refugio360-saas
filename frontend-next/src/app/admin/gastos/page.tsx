@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { authHeaders, pageInfoFrom, type PageInfo } from '@/lib/api';
+import { authHeaders, pageInfoFrom, type PageInfo, API_BASE_URL as API } from '@/lib/api';
 import { Pagination } from '@/components/Pagination';
 
-const API = (process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000/api/v1').replace(/\/$/, '');
 const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? 'http://localhost:8000/storage';
 
 const CATEGORIES = [

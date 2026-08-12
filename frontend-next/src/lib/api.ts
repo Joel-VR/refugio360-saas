@@ -13,7 +13,7 @@ import type { Donation } from "@/types/donation";
  * Para cambiarlo crea frontend-next/.env.local con:
  *   NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
  */
-const API_BASE_URL = (
+export const API_BASE_URL = (
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1"
 ).replace(/\/$/, "");
 

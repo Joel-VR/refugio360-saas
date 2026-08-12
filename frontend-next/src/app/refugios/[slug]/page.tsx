@@ -4,9 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { SimplePage } from "@/lib/SimpleViews";
-import { friendlyErrorMessage } from "@/lib/api";
-
-const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
+import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
 
 type Shelter = { id: number; name: string; slug: string; description: string | null };
 

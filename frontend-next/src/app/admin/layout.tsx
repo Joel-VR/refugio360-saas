@@ -4,8 +4,7 @@ import { ProfileMenu } from "@/components/ProfileMenu";
 import { getServerAuthHeaders } from "@/lib/server-auth";
 import { AdminDesktopNav, AdminMobileNav } from "./AdminNav";
 import { ThemeProvider } from "@/lib/ThemeProvider";
-
-const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
+import { API_BASE_URL as API } from "@/lib/api";
 
 async function getPendingDonationsCount() {
   try {

@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { authHeaders } from "@/lib/api";
+import { authHeaders, API_BASE_URL as API } from "@/lib/api";
 import type { Shelter } from "@/types/shelter";
 
-const API = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1").replace(/\/$/, "");
 const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
 export function PaymentMethodsPanel({ shelter: initialShelter }: { shelter: Shelter }) {
