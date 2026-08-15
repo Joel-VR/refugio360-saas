@@ -14,13 +14,19 @@ export type Adoption = {
   applicant_name: string;
   dni: string;
   phone: string;
-  address: string;
+  address: string | null;
   status: AdoptionStatus;
   pdf_path: string | null;
   notes: string | null;
   created_at?: string;
   updated_at?: string;
   animal?: Animal;
+  shelter?: {
+    name: string;
+    email?: string | null;
+    phone?: string | null;
+    address?: string | null;
+  };
 };
 
 export type CreateAdoptionPayload = {
