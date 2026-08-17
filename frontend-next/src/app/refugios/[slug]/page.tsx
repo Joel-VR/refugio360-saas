@@ -140,14 +140,24 @@ function ActionCard({
   return (
     <Link
       href={href}
-      className="group flex flex-col justify-between gap-4 rounded-2xl border border-slate-custom-50 bg-white p-6 transition hover:-translate-y-0.5 hover:border-brand-600/30 hover:shadow-md hover:shadow-brand-600/5"
+      className="group flex flex-col justify-between gap-4 rounded-2xl border border-slate-custom-50 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-600 hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-600/20"
     >
-      <span className={`flex h-11 w-11 items-center justify-center rounded-xl transition ${t.badge}`}>
+      {/* Ícono con contenedor dinámico al hacer hover */}
+      <span
+        className={`flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-200 ${t.badge} group-hover:bg-white/20 group-hover:text-white`}
+      >
         <Icon path={icon} className="h-5 w-5" />
       </span>
+
       <div>
-        <p className="font-semibold text-slate-custom-900 group-hover:text-brand-600 transition">{title}</p>
-        <p className="mt-1 text-xs leading-5 text-slate-custom-700">{description}</p>
+        {/* Título: pasa a blanco en hover */}
+        <p className="font-semibold text-slate-custom-900 transition-colors duration-200 group-hover:text-white">
+          {title}
+        </p>
+        {/* Descripción: pasa a un blanco translúcido para mantener legibilidad */}
+        <p className="mt-1 text-xs leading-5 text-slate-custom-700 transition-colors duration-200 group-hover:text-white/90">
+          {description}
+        </p>
       </div>
     </Link>
   );

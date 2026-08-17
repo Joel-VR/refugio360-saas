@@ -29,22 +29,21 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   ]);
 
   const shelter = currentUser?.user?.shelter;
-  const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
   const NAV_LINKS = [
-    { href: "/admin/dashboard",      label: "Dashboard",      icon: "📊" },
-    { href: "/admin/animales",       label: "Animales",       icon: "🐾" },
-    { href: "/admin/adopciones",     label: "Adopciones",     icon: "📋" },
-    { href: "/admin/donaciones",     label: "Donaciones",     icon: "💰", badge: pendingCount },
-    { href: "/admin/gastos",         label: "Gastos",         icon: "💸" },
-    { href: "/admin/configuracion",  label: "Configuración",  icon: "⚙️" },
-    { href: "/admin/documentacion",  label: "Guías",          icon: "📘" },
-    { href: "/adoptar",              label: "Vista pública",  icon: "🌐", external: true },
+    { href: "/admin/dashboard",       label: "Dashboard",       icon: "📊" },
+    { href: "/admin/animales",        label: "Animales",        icon: "🐾" },
+    { href: "/admin/adopciones",      label: "Adopciones",      icon: "📋" },
+    { href: "/admin/donaciones",      label: "Donaciones",      icon: "💰", badge: pendingCount },
+    { href: "/admin/gastos",          label: "Gastos",          icon: "💸" },
+    { href: "/admin/configuracion",   label: "Configuración",   icon: "⚙️" },
+    { href: "/admin/documentacion",   label: "Guías",           icon: "📘" },
+    { href: "/adoptar",               label: "Vista pública",   icon: "🌐", external: true },
   ];
 
   return (
-    <RoleGate allow={["shelter_admin"]}>
-      <ThemeProvider>
+    <ThemeProvider>
+      <RoleGate allow={["shelter_admin"]}>
         <div className="admin-shell relative flex h-screen overflow-hidden text-slate-custom-900">
           <aside className="hidden w-60 flex-shrink-0 flex-col overflow-y-auto border-r border-slate-custom-50 bg-cream-50 px-4 py-8 md:flex">
             <div className="mb-8 flex items-center gap-3 px-2">
@@ -82,7 +81,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
           <main className="flex-1 overflow-y-auto pt-14 md:pt-0">{children}</main>
         </div>
-      </ThemeProvider>
-    </RoleGate>
+      </RoleGate>
+    </ThemeProvider>
   );
 }

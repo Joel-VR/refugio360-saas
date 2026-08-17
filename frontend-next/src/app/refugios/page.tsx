@@ -139,7 +139,7 @@ export default function RefugiosPage() {
                 </Link>
                 <Link
                   href={`/refugios/${shelter.slug}/donar`}
-                  className="inline-flex items-center justify-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-custom-700 transition hover:border-brand-600/40 hover:text-brand-600"
+                  className="inline-flex items-center justify-center gap-1 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-semibold text-sky-700 transition-colors duration-200 hover:border-sky-600 hover:bg-sky-600 hover:text-white"
                 >
                   <Icon path={ICONS.gift} className="h-3.5 w-3.5" />
                   Donar

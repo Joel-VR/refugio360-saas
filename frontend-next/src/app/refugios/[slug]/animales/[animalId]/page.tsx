@@ -29,7 +29,7 @@ const ICONS = {
   paw: "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z",
   heart: "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z",
   calendar: "M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5",
-  activity: "M2.25 12h3.812c1.06 0 1.957-.751 2.128-1.796l1.17-7.106a1.125 1.125 0 012.22 0l1.8 10.926a1.125 1.125 0 002.22 0l1.17-7.106a2.125 2.125 0 012.128-1.796H21.75",
+  heartPulse: "M20.25 8.511c0 4.5-8.25 10.239-8.25 10.239S3.75 13.011 3.75 8.511a4.739 4.739 0 019-2.03 4.739 4.739 0 019 2.03zM7.5 10.5h2.25l1.5-3 1.5 6 1.5-3h2.25",
   arrowRight: "M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3",
 };
 
@@ -161,7 +161,7 @@ export default function RefugioAnimalDetailPage() {
 
                   <div className="flex items-center gap-3 rounded-xl border border-slate-100 bg-cream-50/50 p-3 sm:col-span-2">
                     <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-white text-brand-600 shadow-sm">
-                      <Icon path={ICONS.activity} className="h-4 w-4" />
+                      <Icon path={ICONS.heartPulse} className="h-4 w-4" />
                     </div>
                     <div>
                       <p className="text-[11px] font-medium text-slate-custom-700">Estado de salud</p>
@@ -175,15 +175,14 @@ export default function RefugioAnimalDetailPage() {
 
               {/* Botón Acción Principal */}
               <div className="mt-8 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3">
-                {animal.lifecycle_status === "apto" ? (
-                <Link href={`/adoptar/${animalId}`} className="mt-4 inline-block w-fit rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700">
+                <Link
+                  href={`/login?next=/adoptar/${animalId}`}
+                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
+                >
+                  <Icon path={ICONS.heart} className="h-4 w-4" />
                   Solicitar adopción
+                  <Icon path={ICONS.arrowRight} className="h-4 w-4 ml-auto sm:ml-0" />
                 </Link>
-              ) : (
-                <span className="mt-4 inline-block w-fit cursor-not-allowed rounded-md bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-400">
-                  No disponible para adopción
-                </span>
-              )}
               </div>
 
             </div>
