@@ -1,13 +1,12 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { getAnimalsPage } from "@/lib/api";
 import { AnimalStatusDropdown } from './AnimalStatusDropdown';
 import { getAdminAnimalsPage } from "@/lib/api";
 import { getServerAuthHeaders } from "@/lib/server-auth";
-
-const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
+import { mediaUrl } from "@/lib/media";
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
-  apto: { label: "Apto adopción", className: "bg-emerald-400/10 text-emerald-300 border-emerald-400/30" },
+  apto: { label: "Apto adopciÃ³n", className: "bg-emerald-400/10 text-emerald-300 border-emerald-400/30" },
   cuarentena: { label: "Cuarentena", className: "bg-amber-400/10 text-amber-300 border-amber-400/30" },
   tratamiento: { label: "Tratamiento", className: "bg-orange-400/10 text-orange-300 border-orange-400/30" },
   adoptado: { label: "Adoptado", className: "bg-slate-400/10 text-slate-400 border-slate-400/30" },
@@ -15,7 +14,7 @@ const STATUS_BADGE: Record<string, { label: string; className: string }> = {
 
 const FILTERS = [
   { label: "Todos", value: "" },
-  { label: "Apto adopción", value: "apto_adopcion" },
+  { label: "Apto adopciÃ³n", value: "apto_adopcion" },
 ];
 
 type AnimalsPageProps = {
@@ -81,18 +80,18 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
                 key={animal.id}
                 className="group flex flex-col overflow-hidden rounded-3xl border border-slate-custom-50 bg-cream-50 shadow-sm transition hover:border-brand-600 hover:shadow-md"
               >
-                {/* foto — clickeable para ir al detalle */}
+                {/* foto â€” clickeable para ir al detalle */}
                 <Link href={`/admin/animales/${animal.id}`} className="block">
                   <div className="relative h-48 bg-slate-200 flex items-center justify-center text-5xl">
                     {photo ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={`${STORAGE_URL}/${photo.photo_path}`}
+                        src={`${mediaUrl(photo.photo_path)}`}
                         alt={animal.name}
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <span>{animal.species === "gato" ? "🐱" : animal.species === "perro" ? "🐶" : "🐾"}</span>
+                      <span>{animal.species === "gato" ? "ðŸ±" : animal.species === "perro" ? "ðŸ¶" : "ðŸ¾"}</span>
                     )}
                     <span className={`absolute top-3 right-3 rounded-full border px-3 py-1 text-xs font-medium ${badge.className}`}>
                       {badge.label}
@@ -130,14 +129,14 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
               href={`/admin/animales?${new URLSearchParams({ ...(activeStatus ? { status: activeStatus } : {}), page: String(Math.max(1, currentPage - 1)) })}`}
               className={`rounded-full border border-slate-custom-50 px-4 py-2 ${currentPage <= 1 ? "pointer-events-none opacity-40" : "hover:bg-slate-custom-50"}`}
             >
-              ← Anterior
+              â† Anterior
             </Link>
-            <span>Página {page.currentPage} de {page.lastPage} · {page.total} animales</span>
+            <span>PÃ¡gina {page.currentPage} de {page.lastPage} Â· {page.total} animales</span>
             <Link
               href={`/admin/animales?${new URLSearchParams({ ...(activeStatus ? { status: activeStatus } : {}), page: String(Math.min(page.lastPage, currentPage + 1)) })}`}
               className={`rounded-full border border-slate-custom-50 px-4 py-2 ${currentPage >= page.lastPage ? "pointer-events-none opacity-40" : "hover:bg-slate-custom-50"}`}
             >
-              Siguiente →
+              Siguiente â†’
             </Link>
           </div>
         )}
@@ -145,3 +144,5 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
     </main>
   );
 }
+
+

@@ -59,12 +59,13 @@ class Shelter extends Model
         return $this->hasMany(Expense::class);
     }
 
-    // Método para obtener QR de Yape o Plin
+    // MÃ©todo para obtener QR de Yape o Plin
     public function getQrUrl(string $method): ?string
     {
         $field = $method . '_qr_path';
         return $this->$field
-            ? asset('storage/' . $this->$field)
+            ? $this->$field
             : null;
     }
 }
+

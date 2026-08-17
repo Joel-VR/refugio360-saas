@@ -23,7 +23,7 @@ class AdminPaymentMethodController extends Controller
             'plin_owner' => ['nullable', 'string', 'max:255'],
             'plin_qr' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:5120'],
         ], [
-            '*.regex' => 'El número debe tener 9 dígitos.',
+            '*.regex' => 'El nÃºmero debe tener 9 dÃ­gitos.',
         ]);
 
         $payload = [
@@ -37,9 +37,9 @@ class AdminPaymentMethodController extends Controller
             if ($request->hasFile($method . '_qr')) {
                 $old = $shelter->{$method . '_qr_path'};
                 if ($old) {
-                    Storage::disk('public')->delete($old);
+                    $media->delete($old);
                 }
-                $payload[$method . '_qr_path'] = $request->file($method . '_qr')->store('payment_qrs', 'public');
+                $payload[$method . '_qr_path'] = $media->upload($request->file($method . '_qr'), 'payment_qrs');
             }
         }
 
@@ -47,7 +47,7 @@ class AdminPaymentMethodController extends Controller
         $hasPlin = filled($payload['plin_phone']) && filled($payload['plin_owner']);
         if (!$hasYape && !$hasPlin) {
             throw ValidationException::withMessages([
-                'payment_methods' => 'Configura al menos Yape o Plin con número y titular.',
+                'payment_methods' => 'Configura al menos Yape o Plin con nÃºmero y titular.',
             ]);
         }
 
@@ -66,7 +66,7 @@ class AdminPaymentMethodController extends Controller
 
         $field = $method . '_qr_path';
         if ($shelter->$field) {
-            Storage::disk('public')->delete($shelter->$field);
+            $media->delete($shelter->$field);
         }
 
         $shelter->update([$field => null]);
@@ -85,3 +85,6 @@ class AdminPaymentMethodController extends Controller
         }
     }
 }
+
+
+

@@ -1,10 +1,11 @@
-// src/app/admin/animales/[id]/EditAnimalForm.tsx
+﻿// src/app/admin/animales/[id]/EditAnimalForm.tsx
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { authHeaders, friendlyErrorMessage, API_BASE_URL } from "@/lib/api";
+import { mediaUrl } from "@/lib/media";
 
 type Animal = {
   id: number;
@@ -16,8 +17,6 @@ type Animal = {
   health_status: string | null;
   photos: { photo_path: string }[] | null;
 };
-
-const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
 export default function EditAnimalForm({ animal }: { animal: Animal }) {
   const router = useRouter();
@@ -35,7 +34,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
     const form = e.currentTarget;
     const data = new FormData();
 
-    // Agregamos los campos del formulario (se envían todos, incluso si no cambiaron)
+    // Agregamos los campos del formulario (se envÃ­an todos, incluso si no cambiaron)
     data.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
     data.append("species", (form.elements.namedItem("species") as HTMLSelectElement).value);
     data.append("lifecycle_status", (form.elements.namedItem("lifecycle_status") as HTMLSelectElement).value);
@@ -46,7 +45,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
     const health = (form.elements.namedItem("health_status") as HTMLTextAreaElement).value;
     if (health) data.append("health_status", health);
 
-    // Fotografías: si se seleccionan nuevas, se envían y la API debería reemplazar todas las anteriores
+    // FotografÃ­as: si se seleccionan nuevas, se envÃ­an y la API deberÃ­a reemplazar todas las anteriores
     const files = (form.elements.namedItem("photos") as HTMLInputElement).files;
     if (files && files.length > 0) {
       Array.from(files).slice(0, 3).forEach((file) => data.append("photos[]", file));
@@ -54,7 +53,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
 
     try {
       const res = await fetch(`${API_BASE_URL}/animals/${animal.id}`, {
-        method: "PUT", // o "PATCH" según tu API
+        method: "PUT", // o "PATCH" segÃºn tu API
         headers: { Accept: "application/json", ...authHeaders() },
         body: data,
       });
@@ -123,7 +122,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
           >
             <option value="cuarentena">Cuarentena</option>
             <option value="tratamiento">Tratamiento</option>
-            <option value="apto">Apto para adopción</option>
+            <option value="apto">Apto para adopciÃ³n</option>
             <option value="adoptado">Adoptado</option>
           </select>
         </label>
@@ -136,11 +135,11 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
           rows={4}
           defaultValue={animal.health_status ?? ""}
           className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
-          placeholder="Descripción general..."
+          placeholder="DescripciÃ³n general..."
         />
       </label>
 
-      {/* Visualización de fotos actuales */}
+      {/* VisualizaciÃ³n de fotos actuales */}
       {currentPhotos.length > 0 && (
         <div className="grid gap-2">
           <span className="text-sm text-slate-custom-700">Fotos actuales</span>
@@ -148,7 +147,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
             {currentPhotos.map((photo, idx) => (
               <img
                 key={idx}
-                src={`${STORAGE_URL}/${photo.photo_path}`}
+                src={`${mediaUrl(photo.photo_path)}`}
                 alt={`Foto ${idx + 1}`}
                 className="h-20 w-20 rounded-2xl object-cover"
               />
@@ -159,7 +158,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
 
       <label className="grid gap-2">
         <span className="text-sm text-slate-custom-700">
-          {currentPhotos.length > 0 ? "Reemplazar fotos (máx. 3)" : "Subir fotos (máx. 3)"}
+          {currentPhotos.length > 0 ? "Reemplazar fotos (mÃ¡x. 3)" : "Subir fotos (mÃ¡x. 3)"}
         </span>
         <input
           name="photos"
@@ -188,9 +187,11 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
           disabled={loading}
           className="rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
         >
-          {loading ? "Guardando…" : "Actualizar animal"}
+          {loading ? "Guardandoâ€¦" : "Actualizar animal"}
         </button>
       </div>
     </form>
   );
 }
+
+

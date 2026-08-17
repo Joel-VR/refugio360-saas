@@ -1,15 +1,14 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { friendlyErrorMessage, getMyAdoptions } from "@/lib/api";
+import { mediaUrl } from "@/lib/media";
 import type { Adoption } from "@/types/adoption";
-
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   pendiente: { label: "Pendiente", className: "border-amber-300 bg-amber-50 text-amber-700" },
-  evaluacion: { label: "En evaluación", className: "border-blue-300 bg-blue-50 text-blue-700" },
+  evaluacion: { label: "En evaluaciÃ³n", className: "border-blue-300 bg-blue-50 text-blue-700" },
   aprobado: { label: "Aprobado", className: "border-emerald-300 bg-emerald-50 text-emerald-700" },
   rechazado: { label: "Rechazado", className: "border-rose-300 bg-rose-50 text-rose-700" },
   adoptado: { label: "Adoptado", className: "border-violet-300 bg-violet-50 text-violet-700" },
@@ -46,7 +45,7 @@ export default function AccountAdoptionsPage() {
   return (
     <section className="mx-auto grid max-w-5xl gap-5 px-6 py-10">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-3xl font-semibold">Mis solicitudes de adopción</h1>
+        <h1 className="text-3xl font-semibold">Mis solicitudes de adopciÃ³n</h1>
         <Link
           href="/adoptar"
           className="inline-flex w-fit items-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
@@ -68,7 +67,7 @@ export default function AccountAdoptionsPage() {
 
       {!loading && adoptions.length === 0 && (
         <div className="rounded-lg border border-dashed border-slate-custom-50 bg-cream-50 p-8 text-center">
-          <p className="text-sm text-slate-custom-700">Todavía no has solicitado ninguna adopción.</p>
+          <p className="text-sm text-slate-custom-700">TodavÃ­a no has solicitado ninguna adopciÃ³n.</p>
         </div>
       )}
 
@@ -83,7 +82,7 @@ export default function AccountAdoptionsPage() {
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-100 text-slate-300">
                   {photo ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={`${STORAGE}/${photo.photo_path}`} alt={adoption.animal?.name ?? "Animal"} className="h-full w-full object-cover" />
+                    <img src={`${mediaUrl(photo.photo_path)}`} alt={adoption.animal?.name ?? "Animal"} className="h-full w-full object-cover" />
                   ) : (
                     <PawIcon className="h-7 w-7" />
                   )}
@@ -103,3 +102,5 @@ export default function AccountAdoptionsPage() {
     </section>
   );
 }
+
+

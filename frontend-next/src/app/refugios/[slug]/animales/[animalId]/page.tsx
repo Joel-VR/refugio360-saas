@@ -1,18 +1,17 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { SimplePage } from "@/lib/SimpleViews";
 import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
+import { mediaUrl } from "@/lib/media";
 import type { Animal } from "@/types/animal";
 
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
-
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
-  apto: { label: "Disponible para adopción", className: "border-emerald-200 bg-emerald-50 text-emerald-700" },
+  apto: { label: "Disponible para adopciÃ³n", className: "border-emerald-200 bg-emerald-50 text-emerald-700" },
   cuarentena: { label: "En cuarentena", className: "border-amber-200 bg-amber-50 text-amber-700" },
-  tratamiento: { label: "En tratamiento médico", className: "border-orange-200 bg-orange-50 text-orange-700" },
+  tratamiento: { label: "En tratamiento mÃ©dico", className: "border-orange-200 bg-orange-50 text-orange-700" },
   adoptado: { label: "Adoptado", className: "border-slate-200 bg-slate-100 text-slate-600" },
 };
 
@@ -52,7 +51,7 @@ export default function RefugioAnimalDetailPage() {
 
   if (loading) {
     return (
-      <SimplePage title="Cargando ficha..." description="Obteniendo la información del animal">
+      <SimplePage title="Cargando ficha..." description="Obteniendo la informaciÃ³n del animal">
         <div className="mx-auto max-w-4xl space-y-4">
           <div className="h-8 w-36 animate-pulse rounded-full bg-cream-100" />
           <div className="h-96 w-full animate-pulse rounded-2xl border border-slate-custom-50 bg-white" />
@@ -63,7 +62,7 @@ export default function RefugioAnimalDetailPage() {
 
   if (error || !animal) {
     return (
-      <SimplePage title="Ficha del animal" description="Información pública del animal.">
+      <SimplePage title="Ficha del animal" description="InformaciÃ³n pÃºblica del animal.">
         <div className="mx-auto max-w-4xl space-y-4">
           <Link
             href={`/refugios/${slug}/animales`}
@@ -87,9 +86,9 @@ export default function RefugioAnimalDetailPage() {
   };
 
   return (
-    <SimplePage title={`Ficha de ${animal.name}`} description="Información detallada para el proceso de adopción.">
+    <SimplePage title={`Ficha de ${animal.name}`} description="InformaciÃ³n detallada para el proceso de adopciÃ³n.">
       <div className="-mt-4 mx-auto max-w-4xl space-y-5">
-        {/* Botón Volver */}
+        {/* BotÃ³n Volver */}
         <Link
           href={`/refugios/${slug}/animales`}
           className="inline-flex items-center gap-2 rounded-full border border-slate-custom-50 bg-white px-4 py-2 text-xs font-medium text-slate-custom-700 transition hover:border-brand-600/40 hover:text-brand-600"
@@ -107,7 +106,7 @@ export default function RefugioAnimalDetailPage() {
               {photo ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={`${STORAGE}/${photo.photo_path}`}
+                  src={`${mediaUrl(photo.photo_path)}`}
                   alt={animal.name}
                   className="h-full w-full object-cover"
                 />
@@ -173,14 +172,14 @@ export default function RefugioAnimalDetailPage() {
                 </div>
               </div>
 
-              {/* Botón Acción Principal */}
+              {/* BotÃ³n AcciÃ³n Principal */}
               <div className="mt-8 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3">
                 <Link
                   href={`/login?next=/adoptar/${animalId}`}
                   className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
                 >
                   <Icon path={ICONS.heart} className="h-4 w-4" />
-                  Solicitar adopción
+                  Solicitar adopciÃ³n
                   <Icon path={ICONS.arrowRight} className="h-4 w-4 ml-auto sm:ml-0" />
                 </Link>
               </div>
@@ -192,3 +191,5 @@ export default function RefugioAnimalDetailPage() {
     </SimplePage>
   );
 }
+
+

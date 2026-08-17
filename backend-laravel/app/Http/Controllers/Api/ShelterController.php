@@ -17,7 +17,7 @@ class ShelterController extends Controller
      * Listar todos los albergues con conteo de animales y adopciones.
      *
      * withCount usa sub-queries directas sobre las tablas, sin pasar por
-     * los global scopes de Animal/Adoption, así que es seguro.
+     * los global scopes de Animal/Adoption, asÃ­ que es seguro.
      */
     public function index(Request $request): JsonResponse
     {
@@ -52,14 +52,14 @@ class ShelterController extends Controller
     }
 
     /**
-     * Ver detalle de un albergue con estadísticas desagregadas.
+     * Ver detalle de un albergue con estadÃ­sticas desagregadas.
      * Usa sub-queries directas para evitar el global scope.
      */
     public function show(Shelter $shelter): JsonResponse
     {
         $shelter->loadCount(['animals', 'adoptions']);
 
-        // Conteos por estado — consultas directas a la BD sin pasar por scopes
+        // Conteos por estado â€” consultas directas a la BD sin pasar por scopes
         $animalStats = DB::table('animals')
             ->where('shelter_id', $shelter->id)
             ->whereNull('deleted_at')
@@ -119,7 +119,7 @@ class ShelterController extends Controller
     }
 
     /**
-     * Toggle rápido activo/inactivo.
+     * Toggle rÃ¡pido activo/inactivo.
      */
     public function toggleActive(Shelter $shelter): JsonResponse
     {
@@ -129,8 +129,8 @@ class ShelterController extends Controller
     }
 
     /**
-     * Actualizar perfil del albergue (solo datos básicos: name, description, email, phone, address).
-     * Acceso: el dueño del albergue (shelter_admin) o super_admin.
+     * Actualizar perfil del albergue (solo datos bÃ¡sicos: name, description, email, phone, address).
+     * Acceso: el dueÃ±o del albergue (shelter_admin) o super_admin.
      */
     public function updateProfile(Request $request, Shelter $shelter): JsonResponse
     {
@@ -151,7 +151,7 @@ class ShelterController extends Controller
 
     /**
      * Actualizar logo del albergue.
-     * Acceso: el dueño del albergue (shelter_admin) o super_admin.
+     * Acceso: el dueÃ±o del albergue (shelter_admin) o super_admin.
      */
     public function updateLogo(Request $request, Shelter $shelter): JsonResponse
     {
@@ -164,10 +164,10 @@ class ShelterController extends Controller
         if ($request->hasFile('logo')) {
             // Borrar logo anterior si existe
             if ($shelter->logo_path) {
-                Storage::disk('public')->delete($shelter->logo_path);
+                $media->delete($shelter->logo_path);
             }
             // Guardar nuevo logo
-            $shelter->logo_path = $request->file('logo')->store('shelter_logos', 'public');
+            $shelter->logo_path = $media->upload($request->file('logo'), 'shelter_logos');
             $shelter->save();
         }
 
@@ -175,7 +175,7 @@ class ShelterController extends Controller
     }
 
     /**
-     * Verificar que el usuario autenticado sea el dueño del albergue o un super_admin.
+     * Verificar que el usuario autenticado sea el dueÃ±o del albergue o un super_admin.
      */
     private function authorizeShelter(Request $request, Shelter $shelter): void
     {
@@ -188,3 +188,5 @@ class ShelterController extends Controller
         }
     }
 }
+
+

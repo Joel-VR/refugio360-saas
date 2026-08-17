@@ -1,10 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { updateShelterProfile, updateShelterLogo } from "@/lib/api";
+import { mediaUrl } from "@/lib/media";
 import type { Shelter } from "@/types/shelter";
-
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
 export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelter }) {
   const [shelter, setShelter] = useState(initialShelter);
@@ -83,13 +82,13 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
           <div className="flex flex-col gap-3">
             {logoPreview || shelter.logo_path ? (
               <img
-                src={logoPreview ?? `${STORAGE}/${shelter.logo_path}`}
+                src={logoPreview ?? `${mediaUrl(shelter.logo_path)}`}
                 alt="Logo del albergue"
                 className="h-32 w-32 rounded-xl border border-slate-custom-50 bg-cream-100 object-contain p-2"
               />
             ) : (
               <div className="h-32 w-32 rounded-xl border-2 border-dashed border-slate-custom-50 bg-slate-custom-50/30 flex items-center justify-center text-4xl">
-                🏠
+                ðŸ 
               </div>
             )}
             <label className="cursor-pointer rounded-full border border-slate-custom-50 px-4 py-2 text-center text-sm font-medium text-slate-custom-700 hover:bg-slate-custom-50">
@@ -119,7 +118,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
       {/* Profile form */}
       <form onSubmit={submitProfile} className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
         <div className="mb-6">
-          <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Información del Albergue</p>
+          <p className="text-sm uppercase tracking-[0.24em] text-brand-600">InformaciÃ³n del Albergue</p>
           <h3 className="mt-2 text-xl font-semibold text-slate-custom-900">Datos principales</h3>
         </div>
 
@@ -136,7 +135,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-custom-900 mb-2">Descripción</label>
+            <label className="block text-sm font-medium text-slate-custom-900 mb-2">DescripciÃ³n</label>
             <textarea
               name="description"
               value={form.description}
@@ -158,7 +157,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-custom-900 mb-2">Teléfono</label>
+              <label className="block text-sm font-medium text-slate-custom-900 mb-2">TelÃ©fono</label>
               <input
                 type="tel"
                 name="phone"
@@ -170,7 +169,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-custom-900 mb-2">Dirección</label>
+            <label className="block text-sm font-medium text-slate-custom-900 mb-2">DirecciÃ³n</label>
             <input
               type="text"
               name="address"
@@ -194,3 +193,6 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
     </div>
   );
 }
+
+
+

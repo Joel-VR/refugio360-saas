@@ -1,13 +1,12 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { SimplePage } from "@/lib/SimpleViews";
 import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
+import { mediaUrl } from "@/lib/media";
 import type { Animal } from "@/types/animal";
-
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   apto: { label: "Disponible", className: "border-emerald-200 bg-emerald-50 text-emerald-700" },
@@ -60,7 +59,7 @@ export default function RefugioAnimalsPage() {
   }, [slug]);
 
   return (
-    <SimplePage title="Animales del refugio" description="Puedes visualizar sus fichas. Para solicitar adopción se pedirá iniciar sesión.">
+    <SimplePage title="Animales del refugio" description="Puedes visualizar sus fichas. Para solicitar adopciÃ³n se pedirÃ¡ iniciar sesiÃ³n.">
       <div className="-mt-4 flex flex-col gap-5">
         <BackButton slug={slug} />
 
@@ -100,7 +99,7 @@ export default function RefugioAnimalsPage() {
               <Icon path={ICONS.paw} className="h-6 w-6" />
             </div>
             <p className="mt-3 text-sm font-medium text-slate-custom-900">No hay animales publicados</p>
-            <p className="mt-1 text-xs text-slate-custom-700">Este refugio todavía no tiene animales registrados o disponibles en este momento.</p>
+            <p className="mt-1 text-xs text-slate-custom-700">Este refugio todavÃ­a no tiene animales registrados o disponibles en este momento.</p>
           </div>
         )}
 
@@ -125,7 +124,7 @@ export default function RefugioAnimalsPage() {
                       {photo ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={`${STORAGE}/${photo.photo_path}`}
+                          src={`${mediaUrl(photo.photo_path)}`}
                           alt={animal.name}
                           className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                         />
@@ -170,7 +169,7 @@ export default function RefugioAnimalsPage() {
                       </Link>
                     ) : (
                       <span
-                        title="Este animal no está disponible para adopción en este momento."
+                        title="Este animal no estÃ¡ disponible para adopciÃ³n en este momento."
                         className="flex-1 inline-flex cursor-not-allowed items-center justify-center rounded-xl bg-slate-100 py-2 text-xs font-semibold text-slate-400"
                       >
                         No disponible
@@ -186,3 +185,5 @@ export default function RefugioAnimalsPage() {
     </SimplePage>
   );
 }
+
+

@@ -1,11 +1,10 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { friendlyErrorMessage, getMyDonations } from "@/lib/api";
+import { mediaUrl } from "@/lib/media";
 import type { Donation } from "@/types/donation";
-
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   pending: { label: "Pendiente", className: "border-amber-300 bg-amber-50 text-amber-700" },
@@ -42,7 +41,7 @@ export default function AccountDonationsPage() {
           className="inline-flex w-fit items-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
         >
           <GiftIcon />
-          Nueva donación
+          Nueva donaciÃ³n
         </Link>
       </div>
 
@@ -58,7 +57,7 @@ export default function AccountDonationsPage() {
 
       {!loading && donations.length === 0 && (
         <div className="rounded-lg border border-dashed border-slate-custom-50 bg-cream-50 p-8 text-center">
-          <p className="text-sm text-slate-custom-700">Todavía no has hecho ninguna donación.</p>
+          <p className="text-sm text-slate-custom-700">TodavÃ­a no has hecho ninguna donaciÃ³n.</p>
           <Link
             href="/refugios"
             className="mt-3 inline-flex items-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
@@ -76,16 +75,16 @@ export default function AccountDonationsPage() {
             return (
               <article key={donation.id} className="flex items-center justify-between gap-4 rounded-lg border border-slate-custom-50 bg-cream-50 p-4">
                 <div className="min-w-0">
-                  <p className="font-semibold">S/. {Number(donation.amount ?? 0).toFixed(2)} · {donation.shelter?.name ?? `Albergue #${donation.shelter_id}`}</p>
+                  <p className="font-semibold">S/. {Number(donation.amount ?? 0).toFixed(2)} Â· {donation.shelter?.name ?? `Albergue #${donation.shelter_id}`}</p>
                   <p className="mt-1 text-sm text-slate-custom-700">
-                    {donation.payment_method.toUpperCase()} · {new Date(donation.created_at).toLocaleDateString("es-PE")}
-                    {donation.animal ? ` · Apadrinando a ${donation.animal.name}` : ""}
+                    {donation.payment_method.toUpperCase()} Â· {new Date(donation.created_at).toLocaleDateString("es-PE")}
+                    {donation.animal ? ` Â· Apadrinando a ${donation.animal.name}` : ""}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-3">
                   <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${badge.className}`}>{badge.label}</span>
                   {donation.voucher_path && (
-                    <a href={`${STORAGE}/${donation.voucher_path}`} target="_blank" rel="noreferrer" className="text-sm font-semibold text-brand-600 underline">
+                    <a href={`${mediaUrl(donation.voucher_path)}`} target="_blank" rel="noreferrer" className="text-sm font-semibold text-brand-600 underline">
                       Ver comprobante
                     </a>
                   )}
@@ -98,3 +97,5 @@ export default function AccountDonationsPage() {
     </section>
   );
 }
+
+

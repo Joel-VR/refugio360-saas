@@ -71,7 +71,7 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Solicitud enviada a revisión.',
+            'message' => 'Solicitud enviada a revisiÃ³n.',
             'user' => $this->serializeUser($user),
             'shelter' => $shelter->loadCount(['animals', 'adoptions']),
         ], 201);
@@ -135,14 +135,14 @@ class AuthController extends Controller
 
         if (!Hash::check($validated['current_password'], $user->password)) {
             throw ValidationException::withMessages([
-                'current_password' => ['La contraseña actual no es correcta.'],
+                'current_password' => ['La contraseÃ±a actual no es correcta.'],
             ]);
         }
 
         $user->update(['password' => $validated['password']]);
 
         return response()->json([
-            'message' => 'Contraseña actualizada correctamente.',
+            'message' => 'ContraseÃ±a actualizada correctamente.',
         ]);
     }
 
@@ -155,10 +155,10 @@ class AuthController extends Controller
         ]);
 
         if ($user->profile_photo_path) {
-            Storage::disk('public')->delete($user->profile_photo_path);
+            $media->delete($user->profile_photo_path);
         }
 
-        $path = $validated['photo']->store('profile-photos', 'public');
+        $path = $media->upload($validated['photo'], 'profile-photos');
         $user->update(['profile_photo_path' => $path]);
 
         return response()->json([
@@ -192,9 +192,7 @@ class AuthController extends Controller
                 ]
                 : null,
             'profile_photo_path' => $user->profile_photo_path,
-            'profile_photo_url' => $user->profile_photo_path
-                ? Storage::disk('public')->url($user->profile_photo_path)
-                : null,
+            'profile_photo_url' => $user->profile_photo_path,
         ];
     }
 
@@ -212,3 +210,6 @@ class AuthController extends Controller
         return $slug;
     }
 }
+
+
+

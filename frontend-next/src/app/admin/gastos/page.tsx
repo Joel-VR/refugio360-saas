@@ -1,20 +1,19 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { authHeaders, pageInfoFrom, type PageInfo, API_BASE_URL as API } from '@/lib/api';
+import { mediaUrl } from '@/lib/media';
 import { Pagination } from '@/components/Pagination';
 
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? 'http://localhost:8000/storage';
-
 const CATEGORIES = [
-  { value: 'alimentacion',    label: 'Alimentación' },
+  { value: 'alimentacion',    label: 'AlimentaciÃ³n' },
   { value: 'veterinaria',     label: 'Veterinaria' },
   { value: 'infraestructura', label: 'Infraestructura' },
   { value: 'otros',           label: 'Otros' },
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
-  alimentacion:    'Alimentación',
+  alimentacion:    'AlimentaciÃ³n',
   veterinaria:     'Veterinaria',
   infraestructura: 'Infraestructura',
   otros:           'Otros',
@@ -44,9 +43,9 @@ function Toast({ message, type, onClose }: { message: string; type: 'success' | 
     <div className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-xl px-5 py-3 shadow-lg text-sm font-medium transition-all ${
       type === 'success' ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white'
     }`}>
-      <span>{type === 'success' ? '✓' : '✕'}</span>
+      <span>{type === 'success' ? 'âœ“' : 'âœ•'}</span>
       <span>{message}</span>
-      <button onClick={onClose} className="ml-2 opacity-70 hover:opacity-100">✕</button>
+      <button onClick={onClose} className="ml-2 opacity-70 hover:opacity-100">âœ•</button>
     </div>
   );
 }
@@ -61,15 +60,15 @@ function DeleteModal({ expense, onConfirm, onCancel }: {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-        <h3 className="text-lg font-semibold text-slate-900 mb-1">¿Eliminar este gasto?</h3>
-        <p className="text-sm text-slate-500 mb-4">Esta acción no se puede deshacer.</p>
+        <h3 className="text-lg font-semibold text-slate-900 mb-1">Â¿Eliminar este gasto?</h3>
+        <p className="text-sm text-slate-500 mb-4">Esta acciÃ³n no se puede deshacer.</p>
         <div className="rounded-lg bg-slate-50 p-3 mb-4 text-sm">
           <p className="font-semibold text-slate-800">{expense.description}</p>
-          <p className="text-slate-500 mt-1">{CATEGORY_LABELS[expense.category]} · {money(expense.amount)}</p>
+          <p className="text-slate-500 mt-1">{CATEGORY_LABELS[expense.category]} Â· {money(expense.amount)}</p>
         </div>
         <div className="mb-4">
           <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">
-            Motivo de eliminación <span className="text-rose-500">*</span>
+            Motivo de eliminaciÃ³n <span className="text-rose-500">*</span>
           </label>
           <textarea
             value={reason}
@@ -118,7 +117,7 @@ function EditModal({ expense, onConfirm, onCancel }: {
         <h3 className="text-lg font-semibold text-slate-900 mb-4">Editar gasto</h3>
         <div className="grid gap-3">
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">Descripción</label>
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">DescripciÃ³n</label>
             <input
               type="text"
               value={form.description}
@@ -139,7 +138,7 @@ function EditModal({ expense, onConfirm, onCancel }: {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">Categoría</label>
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">CategorÃ­a</label>
               <select
                 value={form.category}
                 onChange={e => setForm({ ...form, category: e.target.value })}
@@ -312,7 +311,7 @@ export default function AdminGastosPage() {
 
         {/* distribucion por categoria */}
         <div className="rounded-xl border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-slate-custom-900">Distribución por categoría</h2>
+          <h2 className="mb-4 text-lg font-semibold text-slate-custom-900">DistribuciÃ³n por categorÃ­a</h2>
           <div className="grid gap-3">
             {byCategory.map(cat => (
               <div key={cat.label}>
@@ -333,7 +332,7 @@ export default function AdminGastosPage() {
           <h2 className="mb-4 text-lg font-semibold text-slate-custom-900">Registrar nuevo gasto</h2>
           <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-custom-700">Descripción</label>
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-custom-700">DescripciÃ³n</label>
               <input type="text" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Ej. compra de alimento para perros" required className="w-full rounded-lg border border-slate-custom-50 bg-cream-100 px-3 py-2 text-sm text-slate-custom-900 placeholder-slate-custom-600 focus:outline-none focus:ring-2 focus:ring-brand-600" />
             </div>
             <div>
@@ -341,7 +340,7 @@ export default function AdminGastosPage() {
               <input type="number" step="0.01" min="0.01" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} required className="w-full rounded-lg border border-slate-custom-50 bg-cream-100 px-3 py-2 text-sm text-slate-custom-900 focus:outline-none focus:ring-2 focus:ring-brand-600" />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-custom-700">Categoría</label>
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-custom-700">CategorÃ­a</label>
               <select value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} className="w-full rounded-lg border border-slate-custom-50 bg-cream-100 px-3 py-2 text-sm text-slate-custom-900 focus:outline-none focus:ring-2 focus:ring-brand-600">
                 {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select>
@@ -368,7 +367,7 @@ export default function AdminGastosPage() {
           {loading ? (
             <p className="text-sm text-slate-custom-700">Cargando...</p>
           ) : expenses.length === 0 ? (
-            <p className="text-sm text-slate-custom-700">No hay gastos registrados aún</p>
+            <p className="text-sm text-slate-custom-700">No hay gastos registrados aÃºn</p>
           ) : (
             <>
               <div className="grid gap-3 mb-6">
@@ -377,10 +376,10 @@ export default function AdminGastosPage() {
                     <div>
                       <p className="font-semibold text-sm text-slate-custom-900">{expense.description}</p>
                       <p className="text-xs text-slate-custom-700 mt-1">
-                        {CATEGORY_LABELS[expense.category] ?? expense.category}{' · '}{new Date(expense.expense_date).toLocaleDateString('es-PE')}
+                        {CATEGORY_LABELS[expense.category] ?? expense.category}{' Â· '}{new Date(expense.expense_date).toLocaleDateString('es-PE')}
                       </p>
                       {expense.document_path && (
-                        <a href={`${STORAGE}/${expense.document_path}`} target="_blank" rel="noreferrer" className="mt-1 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700">
+                        <a href={`${mediaUrl(expense.document_path)}`} target="_blank" rel="noreferrer" className="mt-1 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700">
                           Ver comprobante
                         </a>
                       )}
@@ -409,3 +408,5 @@ export default function AdminGastosPage() {
     </main>
   );
 }
+
+

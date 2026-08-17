@@ -1,12 +1,11 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { SimplePage } from "@/lib/SimpleViews";
 import { API_BASE_URL as API } from "@/lib/api";
-
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
+import { mediaUrl } from "@/lib/media";
 
 type Transparency = {
   shelter: { name: string; slug: string; description: string | null };
@@ -17,7 +16,7 @@ type Transparency = {
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
-  alimentacion: "Alimentación",
+  alimentacion: "AlimentaciÃ³n",
   veterinaria: "Veterinaria",
   infraestructura: "Infraestructura",
   otros: "Otros",
@@ -52,7 +51,7 @@ export default function ShelterTransparencyPage() {
   useEffect(() => {
     fetch(`${API}/public/shelters/${slug}/transparency`, { headers: { Accept: "application/json" }, cache: "no-store" })
       .then((r) => {
-        if (!r.ok) throw new Error("No se pudo cargar la información de transparencia.");
+        if (!r.ok) throw new Error("No se pudo cargar la informaciÃ³n de transparencia.");
         return r.json();
       })
       .then(setData)
@@ -79,7 +78,7 @@ export default function ShelterTransparencyPage() {
 
   if (error || !data) {
     return (
-      <SimplePage title="Transparencia" description="Reporte público de refugio.">
+      <SimplePage title="Transparencia" description="Reporte pÃºblico de refugio.">
         <div className="space-y-4">
           <Link
             href="/transparencia"
@@ -89,7 +88,7 @@ export default function ShelterTransparencyPage() {
             Volver a transparencia global
           </Link>
           <p className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-sm text-rose-700">
-            {error || "No encontramos información para este refugio."}
+            {error || "No encontramos informaciÃ³n para este refugio."}
           </p>
         </div>
       </SimplePage>
@@ -102,7 +101,7 @@ export default function ShelterTransparencyPage() {
       description={data.shelter.description || "Consulta ingresos aprobados, gastos registrados y balance detallado."}
     >
       <div className="-mt-2 space-y-6 text-slate-custom-900">
-        {/* Botón Volver */}
+        {/* BotÃ³n Volver */}
         <div>
           <Link
             href="/transparencia"
@@ -113,7 +112,7 @@ export default function ShelterTransparencyPage() {
           </Link>
         </div>
 
-        {/* Métricas Principales */}
+        {/* MÃ©tricas Principales */}
         <div className="grid gap-4 sm:grid-cols-3">
           <MetricCard
             label="Total ingresos"
@@ -138,10 +137,10 @@ export default function ShelterTransparencyPage() {
           />
         </div>
 
-        {/* Distribución de Gastos */}
+        {/* DistribuciÃ³n de Gastos */}
         <div className="rounded-2xl border border-slate-custom-50 bg-white p-6 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">Categorías</p>
-          <h2 className="mt-1 text-xl font-semibold text-slate-custom-900">Distribución de gastos</h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">CategorÃ­as</p>
+          <h2 className="mt-1 text-xl font-semibold text-slate-custom-900">DistribuciÃ³n de gastos</h2>
 
           <div className="mt-6 grid gap-4">
             {Object.entries(data.expense_categories).map(([key, value]) => {
@@ -176,7 +175,7 @@ export default function ShelterTransparencyPage() {
             </div>
 
             {data.donations.data.length === 0 ? (
-              <p className="mt-6 text-xs text-slate-custom-700">No hay donaciones registradas aún.</p>
+              <p className="mt-6 text-xs text-slate-custom-700">No hay donaciones registradas aÃºn.</p>
             ) : (
               <div className="mt-4 overflow-x-auto">
                 <table className="w-full text-left text-xs">
@@ -220,7 +219,7 @@ export default function ShelterTransparencyPage() {
             </div>
 
             {data.expenses.data.length === 0 ? (
-              <p className="mt-6 text-xs text-slate-custom-700">No hay gastos registrados aún.</p>
+              <p className="mt-6 text-xs text-slate-custom-700">No hay gastos registrados aÃºn.</p>
             ) : (
               <div className="mt-4 space-y-3">
                 {data.expenses.data.map((expense) => (
@@ -232,7 +231,7 @@ export default function ShelterTransparencyPage() {
                       <div>
                         <p className="text-xs font-semibold text-slate-custom-900">{expense.description}</p>
                         <p className="mt-0.5 text-[11px] text-slate-custom-700">
-                          {CATEGORY_LABELS[expense.category] ?? expense.category} ·{" "}
+                          {CATEGORY_LABELS[expense.category] ?? expense.category} Â·{" "}
                           {new Date(expense.expense_date).toLocaleDateString("es-PE")}
                         </p>
                       </div>
@@ -241,7 +240,7 @@ export default function ShelterTransparencyPage() {
 
                     {expense.document_path && (
                       <a
-                        href={`${STORAGE}/${expense.document_path}`}
+                        href={`${mediaUrl(expense.document_path)}`}
                         className="mt-3 inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-brand-600 transition hover:border-brand-600/40"
                         download
                       >
@@ -285,3 +284,5 @@ function MetricCard({
     </div>
   );
 }
+
+

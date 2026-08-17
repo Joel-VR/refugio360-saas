@@ -1,10 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { friendlyErrorMessage, updateSuperAdminLostFoundPostStatus } from "@/lib/api";
 import type { LostFoundPost } from "@/types/lostFoundPost";
-
-const STORAGE = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
 const STATUS_STYLES: Record<string, string> = {
   approved: "border-emerald-200 bg-emerald-50 text-emerald-700",
@@ -40,7 +38,7 @@ export function LostFoundReviewList({
       setPosts((current) => current.map((post) => (post.id === id ? updated : post)));
       onStatusChange?.(updated);
     } catch (err) {
-      setError(friendlyErrorMessage(err, "No se pudo actualizar la publicación."));
+      setError(friendlyErrorMessage(err, "No se pudo actualizar la publicaciÃ³n."));
     } finally {
       setBusyId(null);
     }
@@ -69,9 +67,9 @@ export function LostFoundReviewList({
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-cream-100 text-2xl">
                   {post.photo_path ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={`${STORAGE}/${post.photo_path}`} alt={post.pet_name ?? "Mascota"} className="h-full w-full object-cover" />
+                    <img src={`${mediaUrl(post.photo_path)}`} alt={post.pet_name ?? "Mascota"} className="h-full w-full object-cover" />
                   ) : (
-                    <span>🐾</span>
+                    <span>ðŸ¾</span>
                   )}
                 </div>
                 <div className="min-w-0">
@@ -81,7 +79,7 @@ export function LostFoundReviewList({
                       {statusLabel(post.status)}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-slate-custom-700">📍 {post.zone} · 📞 {post.contact_phone}</p>
+                  <p className="mt-1 text-sm text-slate-custom-700">ðŸ“ {post.zone} Â· ðŸ“ž {post.contact_phone}</p>
                   <p className="mt-2 text-sm leading-6 text-slate-custom-700">{post.description}</p>
                   <p className="mt-2 text-xs text-slate-400">Publicado por {post.user?.name ?? `usuario #${post.user_id}`}</p>
                 </div>
@@ -112,3 +110,4 @@ export function LostFoundReviewList({
     </div>
   );
 }
+

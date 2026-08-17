@@ -16,7 +16,7 @@ class DonationController extends Controller
     /**
      * POST /api/v1/donations
      */
-    public function store(Request $request)
+    public function store(Request $request, CloudinaryMedia $media)
     {
         $data = $request->validate([
             'shelter_id'          => ['required', 'integer', Rule::exists('shelters', 'id')->where('is_active', true)],
@@ -38,14 +38,14 @@ class DonationController extends Controller
         $methodOwner = $data['payment_method'] . '_owner';
         if (blank($shelter->$methodPhone) || blank($shelter->$methodOwner)) {
             throw ValidationException::withMessages([
-                'payment_method' => 'El albergue no tiene configurado este método de pago.',
+                'payment_method' => 'El albergue no tiene configurado este mÃ©todo de pago.',
             ]);
         }
 
         $isAnonymous = $request->boolean('is_anonymous');
         if (!$isAnonymous && blank($data['donor_name'] ?? null)) {
             throw ValidationException::withMessages([
-                'donor_name' => 'El nombre es obligatorio salvo que dones como anónimo.',
+                'donor_name' => 'El nombre es obligatorio salvo que dones como anÃ³nimo.',
             ]);
         }
 
@@ -70,7 +70,7 @@ class DonationController extends Controller
             $data['animal_id'] = null;
         }
 
-        $path = $request->file('voucher')->store('vouchers', 'public');
+        $path = $media->upload($request->file('voucher'), 'vouchers');
 
         $donation = Donation::create([
             'user_id'             => $request->user()->id,
@@ -176,7 +176,7 @@ class DonationController extends Controller
             foreach ($rows as $donation) {
                 fputcsv($out, [
                     optional($donation->created_at)->toDateTimeString(),
-                    $donation->is_anonymous ? 'Anónimo' : ($donation->donor_name ?: 'Anónimo'),
+                    $donation->is_anonymous ? 'AnÃ³nimo' : ($donation->donor_name ?: 'AnÃ³nimo'),
                     $donation->donor_email,
                     $donation->amount,
                     $donation->payment_method,
@@ -215,7 +215,9 @@ class DonationController extends Controller
             return;
         }
         if ((int) $user->shelter_id !== (int) $donation->shelter_id) {
-            abort(403, 'No puedes administrar esta donación.');
+            abort(403, 'No puedes administrar esta donaciÃ³n.');
         }
     }
 }
+
+

@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { RoleGate } from '@/lib/RoleGate';
 import { SiteHeader, type NavLink } from '@/components/SiteHeader';
 import { API_BASE_URL as API } from '@/lib/api';
+import { mediaUrl } from '@/lib/media';
 
 const DonationFlow = dynamic(() => import('./DonationFlow'), { ssr: false });
 
@@ -78,7 +79,7 @@ export default function ShelterDonarPage() {
         <main className="py-10 px-4">
           <div className="max-w-2xl mx-auto">
             
-            {/* Botón Volver */}
+            {/* BotÃ³n Volver */}
             <div className="mb-6">
               <Link
                 href={`/refugios/`}
@@ -93,13 +94,13 @@ export default function ShelterDonarPage() {
             <div className="bg-cream-50 rounded-2xl shadow p-6 mb-6 text-center">
               {shelter.logo_path ? (
                 <img
-                  src={`http://127.0.0.1:8000/storage/${shelter.logo_path}`}
+                  src={mediaUrl(shelter.logo_path)}
                   alt={shelter.name}
                   className="w-20 h-20 rounded-full object-cover mx-auto mb-3"
                 />
               ) : (
                 <div className="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center text-4xl mx-auto mb-3">
-                  🏠
+                  ðŸ 
                 </div>
               )}
               <h1 className="text-2xl font-bold text-gray-800">{shelter.name}</h1>
@@ -107,12 +108,12 @@ export default function ShelterDonarPage() {
                 <p className="text-gray-500 mt-2 text-sm">{shelter.description}</p>
               )}
               <div className="mt-4 bg-orange-50 border border-orange-200 rounded-xl p-4 text-sm text-orange-800 text-left">
-                <p className="font-semibold mb-1">¿Cómo funciona?</p>
+                <p className="font-semibold mb-1">Â¿CÃ³mo funciona?</p>
                 <p>Realiza tu transferencia por Yape o Plin, luego completa el formulario con tu comprobante. Todas las donaciones son verificadas por el equipo del albergue en 24-48 horas.</p>
               </div>
             </div>
 
-            {/* Formulario de donación */}
+            {/* Formulario de donaciÃ³n */}
             <DonationFlow shelter={shelter as never} />
           </div>
         </main>
@@ -120,3 +121,5 @@ export default function ShelterDonarPage() {
     </RoleGate>
   );
 }
+
+

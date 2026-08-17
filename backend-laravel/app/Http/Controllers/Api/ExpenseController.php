@@ -22,7 +22,7 @@ class ExpenseController extends Controller
         return response()->json($expenses);
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, CloudinaryMedia $media): JsonResponse
     {
         $data = $request->validate([
             'description'  => ['required', 'string', 'max:255'],
@@ -39,7 +39,7 @@ class ExpenseController extends Controller
 
         $path = null;
         if ($request->hasFile('document')) {
-            $path = $request->file('document')->store('expenses', 'public');
+            $path = $media->upload($request->file('document'), 'expenses');
         }
 
         $expense = Expense::create([
@@ -80,3 +80,5 @@ class ExpenseController extends Controller
         return response()->json(null, 204);
     }
 }
+
+

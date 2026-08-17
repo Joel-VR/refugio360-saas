@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class LostFoundPostController extends Controller
 {
     /**
-     * listado público de publicaciones aprobadas, filtrable por tipo.
+     * listado pÃºblico de publicaciones aprobadas, filtrable por tipo.
      */
     public function index(Request $request): JsonResponse
     {
@@ -50,7 +50,7 @@ class LostFoundPostController extends Controller
         return response()->json($post->load('user:id,name'));
     }
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, CloudinaryMedia $media): JsonResponse
     {
         $validated = $request->validate([
             'type' => ['required', 'in:perdida,encontrada'],
@@ -64,7 +64,7 @@ class LostFoundPostController extends Controller
 
         $photoPath = null;
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('lost-found', 'public');
+            $photoPath = $media->upload($request->file('photo'), 'lost-found');
         }
 
         $post = LostFoundPost::create([
@@ -82,7 +82,7 @@ class LostFoundPostController extends Controller
         $user = $request->user();
 
         if ($user->id !== $post->user_id && $user->role !== 'super_admin') {
-            abort(403, 'No puedes eliminar esta publicación.');
+            abort(403, 'No puedes eliminar esta publicaciÃ³n.');
         }
 
         $post->delete();
@@ -90,3 +90,5 @@ class LostFoundPostController extends Controller
         return response()->json(null, 204);
     }
 }
+
+

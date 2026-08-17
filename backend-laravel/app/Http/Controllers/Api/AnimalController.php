@@ -45,7 +45,7 @@ class AnimalController extends Controller
     }
 
 
-    public function store(Request $request): JsonResponse
+    public function store(Request $request, CloudinaryMedia $media): JsonResponse
     {
         $user = $request->user();
         $isSuperAdmin = $user->role === 'super_admin';
@@ -66,7 +66,7 @@ class AnimalController extends Controller
             $validated['shelter_id'] = $user->shelter_id;
         }
 
-        $animal = DB::transaction(function () use ($request, $validated) {
+        $animal = DB::transaction(function () use ($request, $validated, $media) {
             $animalData = collect($validated)->except('photos')->all();
             $animalData['lifecycle_status'] = $this->normalizeLifecycleStatus(
                 $animalData['lifecycle_status']
@@ -75,7 +75,7 @@ class AnimalController extends Controller
 
             if ($request->hasFile('photos')) {
                 foreach (array_slice($request->file('photos'), 0, 3) as $index => $photo) {
-                    $path = $photo->store('animals', 'public');
+                    $path = $media->upload($photo, 'animals');
 
                     AnimalPhoto::create([
                         'animal_id' => $animal->id,
@@ -135,3 +135,6 @@ class AnimalController extends Controller
         return $status === 'apto_adopcion' ? 'apto' : $status;
     }
 }
+
+
+
