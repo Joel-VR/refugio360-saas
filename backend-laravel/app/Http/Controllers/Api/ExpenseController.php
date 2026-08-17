@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Expense;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Services\CloudinaryMedia;
 
 class ExpenseController extends Controller
 {
@@ -73,12 +74,10 @@ class ExpenseController extends Controller
 
         return response()->json($expense);
     }
-    
+
     public function destroy(Expense $expense): JsonResponse
     {
         $expense->delete();
         return response()->json(null, 204);
     }
 }
-
-

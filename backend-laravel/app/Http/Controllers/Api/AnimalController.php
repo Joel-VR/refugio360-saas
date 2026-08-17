@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\AnimalPhoto;
 use App\Models\Animal;
+use App\Services\CloudinaryMedia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -135,6 +136,3 @@ class AnimalController extends Controller
         return $status === 'apto_adopcion' ? 'apto' : $status;
     }
 }
-
-
-

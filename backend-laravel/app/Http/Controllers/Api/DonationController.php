@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
+use App\Services\CloudinaryMedia;
 
 class DonationController extends Controller
 {
@@ -118,17 +119,17 @@ class DonationController extends Controller
     public function adminIndex(Request $request)
     {
         $donations = $this->adminDonationQuery($request)
-            ->when($request->shelter_id, fn ($q, $id) => $q->where('shelter_id', $id))
-            ->when($request->status, fn ($q, $status) => $q->where('status', $status))
-            ->when($request->payment_method, fn ($q, $method) => $q->where('payment_method', $method))
-            ->when($request->donation_type, fn ($q, $type) => $q->where('donation_type', $type))
-            ->when($request->date_from, fn ($q, $d) => $q->whereDate('created_at', '>=', $d))
-            ->when($request->date_to, fn ($q, $d) => $q->whereDate('created_at', '<=', $d))
+            ->when($request->shelter_id, fn($q, $id) => $q->where('shelter_id', $id))
+            ->when($request->status, fn($q, $status) => $q->where('status', $status))
+            ->when($request->payment_method, fn($q, $method) => $q->where('payment_method', $method))
+            ->when($request->donation_type, fn($q, $type) => $q->where('donation_type', $type))
+            ->when($request->date_from, fn($q, $d) => $q->whereDate('created_at', '>=', $d))
+            ->when($request->date_to, fn($q, $d) => $q->whereDate('created_at', '<=', $d))
             ->when($request->search, function ($q, $search) {
                 $q->where(function ($q2) use ($search) {
                     $q2->where('donor_name', 'like', "%{$search}%")
-                       ->orWhere('operation_reference', 'like', "%{$search}%")
-                       ->orWhere('amount', 'like', "%{$search}%");
+                        ->orWhere('operation_reference', 'like', "%{$search}%")
+                        ->orWhere('amount', 'like', "%{$search}%");
                 });
             })
             ->latest()
@@ -162,11 +163,11 @@ class DonationController extends Controller
     public function exportCsv(Request $request)
     {
         $rows = $this->adminDonationQuery($request)
-            ->when($request->status, fn ($q, $status) => $q->where('status', $status))
-            ->when($request->payment_method, fn ($q, $method) => $q->where('payment_method', $method))
-            ->when($request->donation_type, fn ($q, $type) => $q->where('donation_type', $type))
-            ->when($request->date_from, fn ($q, $d) => $q->whereDate('created_at', '>=', $d))
-            ->when($request->date_to, fn ($q, $d) => $q->whereDate('created_at', '<=', $d))
+            ->when($request->status, fn($q, $status) => $q->where('status', $status))
+            ->when($request->payment_method, fn($q, $method) => $q->where('payment_method', $method))
+            ->when($request->donation_type, fn($q, $type) => $q->where('donation_type', $type))
+            ->when($request->date_from, fn($q, $d) => $q->whereDate('created_at', '>=', $d))
+            ->when($request->date_to, fn($q, $d) => $q->whereDate('created_at', '<=', $d))
             ->latest()
             ->get();
 
@@ -219,5 +220,3 @@ class DonationController extends Controller
         }
     }
 }
-
-
