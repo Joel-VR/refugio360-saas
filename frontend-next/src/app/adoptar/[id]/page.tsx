@@ -2,40 +2,39 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAnimal } from "@/lib/api";
 import AdoptionForm from "./AdoptionForm";
-import type { Animal, AnimalPhoto } from "@/types/animal";
+import AnimalGallery from "./AnimalGallery";
+import { PublicShell } from "@/lib/SimpleViews";
+import type { Animal } from "@/types/animal";
+import BackButton from "./BackButton";
 
-const SPECIES_LABEL: Record<string, string> = {
-  perro: "Perro",
-  gato: "Gato",
-  otro: "Otro",
+const SPECIES_LABEL: Record<string, string> = { perro: "Perro", gato: "Gato", otro: "Otro" };
+
+const STATUS_INFO: Record<string, { label: string; className: string; description: string }> = {
+  apto: { label: "Disponible para adopción", className: "border-emerald-200 bg-emerald-50 text-emerald-700", description: "Este animal está listo para encontrar un hogar." },
+  cuarentena: { label: "En cuarentena", className: "border-amber-200 bg-amber-50 text-amber-700", description: "Aún no está disponible para adopción." },
+  tratamiento: { label: "En tratamiento", className: "border-orange-200 bg-orange-50 text-orange-700", description: "Está recibiendo atención veterinaria." },
+  adoptado: { label: "Adoptado", className: "border-slate-200 bg-slate-100 text-slate-600", description: "Ya tiene un hogar. ¡Gracias!" },
 };
 
-const STATUS_INFO: Record<string, { label: string; color: string; description: string }> = {
-  apto: {
-    label: "Disponible para adopción",
-    color: "text-emerald-300",
-    description: "Este animal está listo para encontrar un hogar.",
-  },
-  cuarentena: {
-    label: "En cuarentena",
-    color: "text-amber-300",
-    description: "Aún no está disponible para adopción.",
-  },
-  tratamiento: {
-    label: "En tratamiento",
-    color: "text-orange-300",
-    description: "Está recibiendo atención veterinaria.",
-  },
-  adoptado: {
-    label: "Adoptado",
-    color: "text-slate-400",
-    description: "Ya tiene un hogar. ¡Gracias!",
-  },
+function Icon({ path, className = "h-5 w-5" }: { path: string; className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.7">
+      <path strokeLinecap="round" strokeLinejoin="round" d={path} />
+    </svg>
+  );
+}
+
+const ICONS = {
+  back: "M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18",
+  cake: "M12 6.75a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM12 6.75V9m-6 3.75h12M4.5 21v-6.375c0-.621.504-1.125 1.125-1.125h12.75c.621 0 1.125.504 1.125 1.125V21M4.5 21h15M9 9.75c0-.98.79-1.808 1.5-2.598.71.79 1.5 1.618 1.5 2.598 0 .828-.672 1.5-1.5 1.5S9 10.578 9 9.75z",
+  scissors: "M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055",
+  heartPulse: "M20.25 8.511c0 4.5-8.25 10.239-8.25 10.239S3.75 13.011 3.75 8.511a4.739 4.739 0 019-2.03 4.739 4.739 0 019 2.03zM7.5 10.5h2.25l1.5-3 1.5 6 1.5-3h2.25",
+  species: "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z",
 };
 
-type Props = {
-  params: Promise<{ id: string }>;
-};
+
+
+type Props = { params: Promise<{ id: string }> };
 
 export default async function AnimalDetailPage({ params }: Props) {
   const { id } = await params;
@@ -47,120 +46,51 @@ export default async function AnimalDetailPage({ params }: Props) {
     notFound();
   }
 
-  const status = STATUS_INFO[animal.lifecycle_status] ?? {
-    label: animal.lifecycle_status,
-    color: "text-slate-300",
-    description: "",
-  };
-
+  const status = STATUS_INFO[animal.lifecycle_status] ?? { label: animal.lifecycle_status, className: "border-slate-200 bg-slate-100 text-slate-600", description: "" };
   const isAvailable = animal.lifecycle_status === "apto";
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,_#1f2937,_#0f172a_55%,_#020617)] px-6 py-16 text-slate-100">
-      <div className="mx-auto max-w-5xl">
-        {/* breadcrumb */}
-        <Link
-          href="/adoptar"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 transition"
-        >
-          ← Volver al catálogo
-        </Link>
+    <PublicShell>
+      <section className="mx-auto max-w-6xl px-6 py-12">
+        <div className="mb-6">
+          <BackButton fallbackHref="/adoptar" />
+        </div>
 
-        <div className="mt-6 grid gap-10 lg:grid-cols-2">
-          {/* ── galería ── */}
-          <div className="flex flex-col gap-4">
-            <div className="aspect-square overflow-hidden rounded-3xl border border-white/10 bg-slate-custom-900 flex items-center justify-center text-8xl">
-              {animal.photos && animal.photos.length > 0 ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={`${process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage"}/${animal.photos[0].photo_path}`}
-                  alt={animal.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span>
-                  {animal.species === "gato"
-                    ? "🐱"
-                    : animal.species === "perro"
-                    ? "🐶"
-                    : "🐾"}
-                </span>
-              )}
-            </div>
+        <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
+          {/* Galería */}
+          <AnimalGallery photos={animal.photos ?? []} animalName={animal.name} />
 
-            {/* fotos adicionales */}
-            {animal.photos && animal.photos.length > 1 && (
-              <div className="grid grid-cols-3 gap-3">
-                {animal.photos.slice(1).map((photo: AnimalPhoto) => (
-                  <div
-                    key={photo.id}
-                    className="aspect-square overflow-hidden rounded-xl border border-white/10 bg-slate-custom-900"
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={`${process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage"}/${photo.photo_path}`}
-                      alt={animal.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* ── info + formulario ── */}
-          <div className="flex flex-col gap-8">
-            <div>
-              <p className="text-sm uppercase tracking-widest text-slate-400">
+          {/* Info + formulario */}
+          <div className="flex flex-col gap-6">
+            {/* Encabezado */}
+            <div className="relative overflow-hidden rounded-3xl border border-slate-custom-50 bg-white p-7">
+              <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full bg-brand-600/5" />
+              <p className="relative text-sm font-semibold uppercase tracking-widest text-brand-600">
                 {SPECIES_LABEL[animal.species] ?? animal.species}
               </p>
-              <h1 className="mt-2 text-4xl font-bold tracking-tight">
-                {animal.name}
-              </h1>
-
-              <p className={`mt-3 text-sm font-medium ${status.color}`}>
+              <h1 className="relative mt-1 text-4xl font-semibold tracking-tight text-slate-custom-900">{animal.name}</h1>
+              <span className={`relative mt-3 inline-block rounded-full border px-3 py-1 text-xs font-semibold ${status.className}`}>
                 {status.label}
-              </p>
-              {status.description && (
-                <p className="mt-1 text-sm text-slate-500">
-                  {status.description}
-                </p>
+              </span>
+              {status.description && <p className="relative mt-2 text-sm leading-6 text-slate-custom-700">{status.description}</p>}
+            </div>
+
+            {/* Ficha en tarjetas */}
+            <div className="grid grid-cols-2 gap-3">
+              <InfoStat icon={ICONS.species} label="Especie" value={SPECIES_LABEL[animal.species] ?? animal.species} />
+              {animal.estimated_age != null && (
+                <InfoStat icon={ICONS.cake} label="Edad aprox." value={`${animal.estimated_age} meses`} />
+              )}
+              <InfoStat icon={ICONS.scissors} label="Esterilizado" value={animal.is_sterilized ? "Sí" : "No"} />
+              {animal.health_status && (
+                <InfoStat icon={ICONS.heartPulse} label="Salud" value={animal.health_status} span={animal.estimated_age == null} />
               )}
             </div>
 
-            {/* ficha */}
-            <div className="rounded-2xl border border-white/10 bg-slate-custom-900/60 p-6">
-              <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-slate-400">
-                Ficha del animal
-              </h2>
-              <dl className="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
-                <dt className="text-slate-500">Especie</dt>
-                <dd>{SPECIES_LABEL[animal.species] ?? animal.species}</dd>
-
-                {animal.estimated_age != null && (
-                  <>
-                    <dt className="text-slate-500">Edad aproximada</dt>
-                    <dd>{animal.estimated_age} meses</dd>
-                  </>
-                )}
-
-                <dt className="text-slate-500">Esterilizado</dt>
-                <dd>{animal.is_sterilized ? "Sí" : "No"}</dd>
-
-                {animal.health_status && (
-                  <>
-                    <dt className="text-slate-500">Estado de salud</dt>
-                    <dd className="col-span-1">{animal.health_status}</dd>
-                  </>
-                )}
-              </dl>
-            </div>
-
-            {/* formulario de adopción o mensaje */}
             {isAvailable ? (
               <AdoptionForm animalId={animal.id} shelterId={animal.shelter_id} />
             ) : (
-              <div className="rounded-2xl border border-dashed border-white/10 bg-cream-50/5 p-6 text-center text-sm text-slate-400">
+              <div className="rounded-2xl border border-dashed border-slate-custom-50 bg-cream-50 p-6 text-center text-sm text-slate-custom-700">
                 {animal.lifecycle_status === "adoptado"
                   ? "Este animal ya fue adoptado. ¡Gracias por tu interés!"
                   : "Este animal aún no está disponible para adopción. Vuelve pronto."}
@@ -168,7 +98,21 @@ export default async function AnimalDetailPage({ params }: Props) {
             )}
           </div>
         </div>
+      </section>
+    </PublicShell>
+  );
+}
+
+function InfoStat({ icon, label, value, span }: { icon: string; label: string; value: string; span?: boolean }) {
+  return (
+    <div className={`flex items-start gap-3 rounded-2xl border border-slate-custom-50 bg-white p-4 ${span ? "col-span-2" : ""}`}>
+      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-brand-600/10 text-brand-600">
+        <Icon path={icon} className="h-4.5 w-4.5" />
+      </span>
+      <div className="min-w-0">
+        <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
+        <p className="mt-0.5 truncate text-sm font-semibold text-slate-custom-900">{value}</p>
       </div>
-    </main>
+    </div>
   );
 }

@@ -160,13 +160,22 @@ export default function RefugioAnimalsPage() {
                     >
                       Ver ficha
                     </Link>
-                    <Link
-                      href={`/login?next=/adoptar/${animal.id}`}
-                      className="flex-1 inline-flex items-center justify-center gap-1 rounded-xl bg-brand-600 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"
-                    >
-                      Adoptar
-                      <Icon path={ICONS.arrowRight} className="h-3 w-3" />
-                    </Link>
+                    {animal.lifecycle_status === "apto" ? (
+                      <Link
+                        href={`/adoptar/${animal.id}`}
+                        className="flex-1 inline-flex items-center justify-center gap-1 rounded-xl bg-brand-600 py-2 text-xs font-semibold text-white transition hover:bg-brand-700"
+                      >
+                        Adoptar
+                        <Icon path={ICONS.arrowRight} className="h-3 w-3" />
+                      </Link>
+                    ) : (
+                      <span
+                        title="Este animal no está disponible para adopción en este momento."
+                        className="flex-1 inline-flex cursor-not-allowed items-center justify-center rounded-xl bg-slate-100 py-2 text-xs font-semibold text-slate-400"
+                      >
+                        No disponible
+                      </span>
+                    )}
                   </div>
                 </article>
               );

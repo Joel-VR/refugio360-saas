@@ -25,6 +25,25 @@ class AnimalController extends Controller
 
         return response()->json($query->latest()->paginate($perPage));
     }
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = Animal::with('photos');
+        $user = $request->user();
+
+        if ($user->role === 'shelter_admin') {
+            $query->where('shelter_id', $user->shelter_id);
+        }
+
+        if ($request->filled('status')) {
+            $status = $this->normalizeLifecycleStatus($request->string('status')->toString());
+            $query->where('lifecycle_status', $status);
+        }
+
+        $perPage = min($request->integer('per_page', 20), 100);
+
+        return response()->json($query->latest()->paginate($perPage));
+    }
+
 
     public function store(Request $request): JsonResponse
     {

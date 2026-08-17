@@ -175,14 +175,15 @@ export default function RefugioAnimalDetailPage() {
 
               {/* Botón Acción Principal */}
               <div className="mt-8 pt-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3">
-                <Link
-                  href={`/login?next=/adoptar/${animalId}`}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
-                >
-                  <Icon path={ICONS.heart} className="h-4 w-4" />
+                {animal.lifecycle_status === "apto" ? (
+                <Link href={`/adoptar/${animalId}`} className="mt-4 inline-block w-fit rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700">
                   Solicitar adopción
-                  <Icon path={ICONS.arrowRight} className="h-4 w-4 ml-auto sm:ml-0" />
                 </Link>
+              ) : (
+                <span className="mt-4 inline-block w-fit cursor-not-allowed rounded-md bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-400">
+                  No disponible para adopción
+                </span>
+              )}
               </div>
 
             </div>

@@ -21,6 +21,11 @@ class AdoptionController extends Controller
     {
         $query = Adoption::with(['animal.photos', 'shelter']);
 
+        $user = $request->user();
+        if ($user && $user->role === 'shelter_admin') {
+            $query->where('shelter_id', $user->shelter_id);
+        }
+
         if ($request->filled('status')) {
             $query->where('status', $request->string('status'));
         }
@@ -31,8 +36,6 @@ class AdoptionController extends Controller
 
         $perPage = min($request->integer('per_page', 20), 100);
 
-        // se retorna directamente (no envuelto en response()->json()) para que
-        // Laravel agregue el wrapper de paginación data/links/meta.
         return AdoptionResource::collection($query->latest()->paginate($perPage));
     }
 

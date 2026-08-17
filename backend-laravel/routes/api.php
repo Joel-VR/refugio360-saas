@@ -111,6 +111,7 @@ Route::prefix('v1')->group(function () {
 
 Route::prefix('v1/admin')->middleware(['auth:sanctum', 'admin.role'])->group(function () {
     Route::get('dashboard/stats',               [DashboardController::class, 'stats']);
+    Route::get('animals',                       [AnimalController::class, 'adminIndex']); // ← agrega esta línea
     Route::get('donations',                     [DonationController::class, 'adminIndex']);
     Route::get('donations/export.csv',          [DonationController::class, 'exportCsv']);
     Route::patch('donations/{donation}/status', [DonationController::class, 'updateStatus']);

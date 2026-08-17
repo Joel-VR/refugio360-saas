@@ -544,3 +544,20 @@ export async function updateSuperAdminLostFoundPostStatus(
     body: JSON.stringify({ status }),
   });
 }
+
+export async function getAdminAnimalsPage(
+  params: { status?: string; per_page?: number; page?: number } = {},
+  extraHeaders: HeadersInit = {}
+): Promise<{ items: Animal[]; page: PageInfo }> {
+  const url = new URL(`${API_BASE_URL}/admin/animals`);
+  if (params.status) url.searchParams.set("status", params.status);
+  url.searchParams.set("per_page", String(params.per_page ?? 24));
+  if (params.page) url.searchParams.set("page", String(params.page));
+  const res = await fetch(url.toString(), {
+    cache: "no-store",
+    headers: { Accept: "application/json", ...authHeaders(), ...extraHeaders },
+  });
+  if (!res.ok) throw new Error(`Error al cargar animales: ${res.status}`);
+  const body = await res.json();
+  return { items: body.data ?? body, page: pageInfoFrom(body) };
+}

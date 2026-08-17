@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getAnimalsPage } from "@/lib/api";
 import { AnimalStatusDropdown } from './AnimalStatusDropdown';
+import { getAdminAnimalsPage } from "@/lib/api";
+import { getServerAuthHeaders } from "@/lib/server-auth";
 
 const STORAGE_URL = process.env.NEXT_PUBLIC_STORAGE_URL ?? "http://localhost:8000/storage";
 
@@ -24,10 +26,10 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
   const params = await searchParams;
   const activeStatus = params?.status ?? "";
   const currentPage = Number(params?.page ?? "1") || 1;
-  const { items: animals, page } = await getAnimalsPage({
-    ...(activeStatus ? { status: activeStatus } : {}),
-    page: currentPage,
-  });
+  const { items: animals, page } = await getAdminAnimalsPage(
+    { ...(activeStatus ? { status: activeStatus } : {}), page: currentPage },
+    await getServerAuthHeaders()
+  );
 
   return (
     <main className="px-6 py-10">
