@@ -7,7 +7,7 @@ return [
 
     'allowed_origins' => [
         'http://localhost:3000',
-        'https://refugio360-saas.vercel.app',
+        'https://refugio360-saas-kfos.vercel.app'
     ],
 
     'allowed_origins_patterns' => [],
