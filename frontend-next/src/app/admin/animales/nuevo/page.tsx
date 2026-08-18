@@ -54,28 +54,40 @@ export default function NewAnimalPage() {
   }
 
   return (
-    <main className="px-6 py-10">
+    <main className="px-4 py-6 sm:px-6 sm:py-10">
       <section className="mx-auto w-full max-w-4xl">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-brand-600">Nuevo registro</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-slate-custom-900">Crear animal</h1>
+            <p className="text-xs uppercase tracking-[0.3em] text-brand-600 sm:text-sm">Nuevo registro</p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-custom-900 sm:text-4xl">Crear animal</h1>
           </div>
-          <Link href="/admin/animales" className="rounded-full border border-slate-custom-50 px-4 py-2 text-sm text-slate-custom-700 transition hover:bg-slate-custom-50">
+          <Link
+            href="/admin/animales"
+            className="self-start rounded-full border border-slate-custom-50 px-4 py-2 text-sm text-slate-custom-700 transition hover:bg-slate-custom-50 sm:self-auto"
+          >
             Volver
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid gap-6 rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
-          <div className="grid gap-5 md:grid-cols-2">
+        <form onSubmit={handleSubmit} className="grid gap-6 rounded-2xl border border-slate-custom-50 bg-cream-50 p-4 shadow-sm sm:rounded-3xl sm:p-8">
+          <div className="grid gap-5 sm:grid-cols-2">
             <label className="grid gap-2">
               <span className="text-sm text-slate-custom-700">Nombre *</span>
-              <input name="name" required className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600" placeholder="Firulais" />
+              <input
+                name="name"
+                required
+                className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
+                placeholder="Firulais"
+              />
             </label>
 
             <label className="grid gap-2">
               <span className="text-sm text-slate-custom-700">Especie *</span>
-              <select name="species" required className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600">
+              <select
+                name="species"
+                required
+                className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600"
+              >
                 <option value="perro">Perro</option>
                 <option value="gato">Gato</option>
                 <option value="otro">Otro</option>
@@ -84,12 +96,22 @@ export default function NewAnimalPage() {
 
             <label className="grid gap-2">
               <span className="text-sm text-slate-custom-700">Edad estimada (meses)</span>
-              <input name="estimated_age" type="number" min="0" className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600" placeholder="12" />
+              <input
+                name="estimated_age"
+                type="number"
+                min="0"
+                className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
+                placeholder="12"
+              />
             </label>
 
             <label className="grid gap-2">
               <span className="text-sm text-slate-custom-700">Estado *</span>
-              <select name="lifecycle_status" required className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600">
+              <select
+                name="lifecycle_status"
+                required
+                className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600"
+              >
                 <option value="cuarentena">Cuarentena</option>
                 <option value="tratamiento">Tratamiento</option>
                 <option value="apto">Apto para adopción</option>
@@ -100,12 +122,23 @@ export default function NewAnimalPage() {
 
           <label className="grid gap-2">
             <span className="text-sm text-slate-custom-700">Estado de salud</span>
-            <textarea name="health_status" rows={4} className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600" placeholder="Descripción general..." />
+            <textarea
+              name="health_status"
+              rows={4}
+              className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
+              placeholder="Descripción general..."
+            />
           </label>
 
           <label className="grid gap-2">
             <span className="text-sm text-slate-custom-700">Fotos (máx. 3)</span>
-            <input name="photos" type="file" multiple accept="image/jpg,image/jpeg,image/png,image/webp" className="rounded-2xl border border-dashed border-slate-custom-50 bg-cream-100 px-4 py-5 text-sm text-slate-custom-700 file:mr-4 file:rounded-full file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:font-semibold file:text-white" />
+            <input
+              name="photos"
+              type="file"
+              multiple
+              accept="image/jpg,image/jpeg,image/png,image/webp"
+              className="w-full rounded-2xl border border-dashed border-slate-custom-50 bg-cream-100 px-3 py-4 text-xs text-slate-custom-700 file:mr-3 file:rounded-full file:border-0 file:bg-brand-600 file:px-3 file:py-2 file:text-xs file:font-semibold file:text-white sm:px-4 sm:py-5 sm:text-sm sm:file:mr-4 sm:file:px-4 sm:file:text-sm"
+            />
           </label>
 
           {error && (
@@ -115,7 +148,10 @@ export default function NewAnimalPage() {
           )}
 
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <Link href="/admin/animales" className="rounded-full border border-slate-custom-50 px-5 py-3 text-center text-sm font-medium text-slate-custom-700 transition hover:bg-slate-custom-50">
+            <Link
+              href="/admin/animales"
+              className="rounded-full border border-slate-custom-50 px-5 py-3 text-center text-sm font-medium text-slate-custom-700 transition hover:bg-slate-custom-50"
+            >
               Cancelar
             </Link>
             <button

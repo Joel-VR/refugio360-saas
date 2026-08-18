@@ -12,6 +12,8 @@ import {
   type AuthUser,
 } from "@/lib/api";
 import { PublicShell } from "@/lib/SimpleViews";
+import { PaymentMethodsPanel } from "../admin/configuracion/PaymentMethodsPanel";
+import { ShelterProfileForm } from "../admin/configuracion/ShelterProfileForm";
 
 function Icon({ path, className = "h-5 w-5" }: { path: string; className?: string }) {
   return (
@@ -143,8 +145,7 @@ export default function ProfilePage() {
 
   const initial = (user?.name || user?.email || "U").trim().charAt(0).toUpperCase();
   const tone = ROLE_TONES[user?.role ?? ""] ?? { badge: "bg-slate-100 text-slate-600", ring: "ring-slate-200" };
-
-  return (
+return (
     <PublicShell>
       <section className="mx-auto grid max-w-4xl gap-6 px-6 py-10">
         <div>
@@ -268,11 +269,24 @@ export default function ProfilePage() {
                 {loadingPassword ? "Actualizando..." : "Actualizar contraseña"}
               </button>
             </form>
+
+            {/* SI EL USUARIO ES UN ALBERGUE, SE MUESTRAN SUS CONFIGURACIONES */}
+            {user?.role === "shelter_admin" && (
+              <div className="grid gap-6 pt-2">
+                <div className="rounded-2xl border border-slate-custom-50 bg-white p-6 shadow-sm">
+                  <ShelterProfileForm shelter={(user as any)?.shelter} />
+                </div>
+                <div className="rounded-2xl border border-slate-custom-50 bg-white p-6 shadow-sm">
+                  <PaymentMethodsPanel shelter={(user as any)?.shelter} />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
     </PublicShell>
   );
+
 }
 
 function readInitialUser() {
@@ -321,4 +335,7 @@ function EyeIcon() {
       <circle cx="12" cy="12" r="3" />
     </svg>
   );
+
+  
+    
 }

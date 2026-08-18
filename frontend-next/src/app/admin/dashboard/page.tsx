@@ -22,9 +22,9 @@ function StatCard({
   color: string;
 }) {
   return (
-    <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm">
+    <div className="rounded-2xl border border-slate-custom-50 bg-cream-50 p-4 shadow-sm sm:rounded-3xl sm:p-6">
       <p className={`text-xs font-semibold uppercase tracking-widest ${color}`}>{label}</p>
-      <p className="mt-2 text-4xl font-bold text-slate-custom-900">{value}</p>
+      <p className="mt-2 text-3xl font-bold text-slate-custom-900 sm:text-4xl">{value}</p>
       {sub && <p className="mt-1 text-sm text-slate-custom-700">{sub}</p>}
     </div>
   );
@@ -71,7 +71,7 @@ export default async function DashboardPage() {
         <p className="max-w-md text-sm text-slate-custom-700">
           {errorMsg}
         </p>
-        <div className="mt-4 rounded-2xl border border-slate-custom-50 bg-slate-custom-50/20 p-4 text-left text-xs text-slate-custom-700 font-mono w-full max-w-md">
+        <div className="mt-4 rounded-2xl border border-slate-custom-50 bg-slate-custom-50/20 p-4 text-left text-xs text-slate-custom-700 font-mono w-full max-w-md overflow-x-auto">
           <p className="text-slate-custom-700 mb-1 font-semibold">Verifica:</p>
           <p>1. Laravel corriendo: <span className="text-brand-600">php artisan serve</span></p>
           <p>2. URL en <span className="text-brand-600">.env.local</span>: <span className="text-slate-custom-900">NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1</span></p>
@@ -85,14 +85,14 @@ export default async function DashboardPage() {
   const { animals, adoptions, recent_adoptions } = stats;
 
   return (
-    <div className="px-6 py-10">
-      <section className="mx-auto w-full max-w-6xl flex flex-col gap-8">
+    <div className="px-4 py-6 sm:px-6 sm:py-10">
+      <section className="mx-auto w-full max-w-6xl flex flex-col gap-6 sm:gap-8">
 
         {/* Header */}
-        <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-brand-600">Refugio</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-slate-custom-900">Dashboard</h1>
+            <p className="text-xs uppercase tracking-[0.3em] text-brand-600 sm:text-sm">Refugio</p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-custom-900 sm:text-4xl">Dashboard</h1>
           </div>
           <Link
             href="/admin/animales/nuevo"
@@ -103,7 +103,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* KPI Cards */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           <StatCard label="Animales totales" value={animals.total} color="text-brand-600" />
           <StatCard
             label="Disponibles"
@@ -115,9 +115,9 @@ export default async function DashboardPage() {
         </div>
 
         {/* Charts row */}
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
           {/* Animales por estado */}
-          <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm">
+          <div className="rounded-2xl border border-slate-custom-50 bg-cream-50 p-4 shadow-sm sm:rounded-3xl sm:p-6">
             <h2 className="mb-5 text-xs font-semibold uppercase tracking-widest text-slate-custom-700">
               Animales por estado
             </h2>
@@ -144,7 +144,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Adopciones por estado */}
-          <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm">
+          <div className="rounded-2xl border border-slate-custom-50 bg-cream-50 p-4 shadow-sm sm:rounded-3xl sm:p-6">
             <h2 className="mb-5 text-xs font-semibold uppercase tracking-widest text-slate-custom-700">
               Solicitudes por estado
             </h2>
@@ -173,14 +173,14 @@ export default async function DashboardPage() {
         </div>
 
         {/* Actividad reciente */}
-        <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm">
-          <div className="mb-5 flex items-center justify-between">
+        <div className="rounded-2xl border border-slate-custom-50 bg-cream-50 p-4 shadow-sm sm:rounded-3xl sm:p-6">
+          <div className="mb-5 flex items-center justify-between gap-3">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-slate-custom-700">
               Adopciones recientes
             </h2>
             <Link
               href="/admin/adopciones"
-              className="text-xs text-brand-600 hover:text-brand-700 transition"
+              className="shrink-0 text-xs text-brand-600 hover:text-brand-700 transition"
             >
               Ver todas →
             </Link>
@@ -200,13 +200,13 @@ export default async function DashboardPage() {
                 return (
                   <div
                     key={a.id}
-                    className="flex items-center justify-between rounded-2xl border border-slate-custom-50 bg-slate-custom-50/30 px-4 py-3"
+                    className="flex flex-col gap-2 rounded-2xl border border-slate-custom-50 bg-slate-custom-50/30 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
                   >
-                    <div className="flex flex-col gap-0.5">
-                      <p className="text-sm font-medium text-slate-custom-900">
+                    <div className="flex flex-col gap-0.5 min-w-0">
+                      <p className="text-sm font-medium text-slate-custom-900 truncate">
                         {a.applicant_name}
                       </p>
-                      <p className="text-xs text-slate-custom-700">
+                      <p className="text-xs text-slate-custom-700 truncate">
                         {a.animal?.name
                           ? `${a.animal.name} (${a.animal.species})`
                           : `Animal #${a.animal_id}`}{" "}
@@ -214,7 +214,7 @@ export default async function DashboardPage() {
                       </p>
                     </div>
                     <span
-                      className={`rounded-full border px-3 py-1 text-xs font-medium ${badge.cls}`}
+                      className={`self-start rounded-full border px-3 py-1 text-xs font-medium sm:self-auto ${badge.cls}`}
                     >
                       {badge.label}
                     </span>
@@ -226,7 +226,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick links */}
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
           {[
             {
               href: "/admin/adopciones",
@@ -244,7 +244,7 @@ export default async function DashboardPage() {
             <Link
               key={l.href}
               href={l.href}
-              className="flex flex-col gap-2 rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm transition hover:border-brand-600"
+              className="flex flex-col gap-2 rounded-2xl border border-slate-custom-50 bg-cream-50 p-4 shadow-sm transition hover:border-brand-600 sm:rounded-3xl sm:p-6"
             >
               <span className="text-2xl">{l.icon}</span>
               <p className="font-medium text-slate-custom-900">{l.label}</p>

@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
+import Link from "next/link";
+import { headers as nextHeaders } from "next/headers";
 import { RoleGate } from "@/lib/RoleGate";
 import { ProfileMenu } from "@/components/ProfileMenu";
+import { AdminMobileNav } from "./AdminNav";
 import { getServerAuthHeaders } from "@/lib/server-auth";
-import { AdminDesktopNav, AdminMobileNav } from "./AdminNav";
 import { ThemeProvider } from "@/lib/ThemeProvider";
 import { getCurrentUser, API_BASE_URL as API } from "@/lib/api";
 
@@ -31,55 +32,71 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   const shelter = currentUser?.user?.shelter;
 
   const NAV_LINKS = [
-    { href: "/admin/dashboard",       label: "Dashboard",       icon: "📊" },
-    { href: "/admin/animales",        label: "Animales",        icon: "🐾" },
-    { href: "/admin/adopciones",      label: "Adopciones",      icon: "📋" },
-    { href: "/admin/donaciones",      label: "Donaciones",      icon: "💰", badge: pendingCount },
-    { href: "/admin/gastos",          label: "Gastos",          icon: "💸" },
-    { href: "/admin/configuracion",   label: "Configuración",   icon: "⚙️" },
-    { href: "/admin/documentacion",   label: "Guías",           icon: "📘" },
-    { href: "/adoptar",               label: "Vista pública",   icon: "🌐", external: true },
-  ];
+  { href: "/admin/dashboard", label: "Dashboard" },
+  { href: "/admin/animales", label: "Animales" },
+  { href: "/admin/adopciones", label: "Adopciones" },
+  { href: "/admin/donaciones", label: "Donaciones", badge: pendingCount },
+  { href: "/admin/gastos", label: "Gastos" },
+  { href: "/admin/documentacion", label: "Guías" },
+
+];
 
   return (
     <ThemeProvider>
       <RoleGate allow={["shelter_admin"]}>
-        <div className="admin-shell relative flex h-screen overflow-hidden text-slate-custom-900">
-          <aside className="hidden w-60 flex-shrink-0 flex-col overflow-y-auto border-r border-slate-custom-50 bg-cream-50 px-4 py-8 md:flex">
-            <div className="mb-8 flex items-center gap-3 px-2">
-              {shelter?.name ? (
-                <>
-                  <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-brand-600/10 text-brand-600">
-                    <span className="text-sm font-bold">{shelter.name.charAt(0).toUpperCase()}</span>
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-brand-600">Refugio360</p>
-                    <p className="truncate text-sm font-semibold text-slate-custom-900">{shelter.name}</p>
-                  </div>
-                </>
-              ) : (
-                <div>
-                  <p className="text-xs uppercase tracking-[0.3em] text-brand-600">Refugio360</p>
-                  <p className="mt-1 text-lg font-semibold text-slate-custom-900">Admin Panel</p>
-                </div>
-              )}
+        <div className="min-h-screen bg-cream-100 text-slate-custom-900">
+          {/* Barra de navegación superior fija idéntica a la de Super Admin */}
+          <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/95 shadow-sm backdrop-blur-md relative">
+            <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-4">
+
+              {/* Logo / Nombre del albergue a la izquierda */}
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-brand-600">
+                  {shelter?.name ?? "Refugio360"}
+                </span>
+              </div>
+
+              {/* Enlaces de navegación horizontales para Desktop */}
+              <nav className="hidden md:flex flex-wrap items-center gap-6 text-sm font-medium">
+                {NAV_LINKS.map((link) => {
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="relative py-1 text-slate-600 hover:text-brand-600 transition-colors duration-200"
+                    >
+                      {link.label}
+                      {link.badge ? (
+                        <span className="absolute -top-2 -right-3 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[9px] font-bold text-white">
+                          {link.badge}
+                        </span>
+                      ) : null}
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              {/* Acciones de la derecha (Volver al inicio + Menú de Perfil + Hamburguesa móvil) */}
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/"
+                  className="hidden sm:flex items-center gap-2 rounded-md border border-slate-custom-50 px-3 py-2 text-sm font-medium text-slate-custom-700 transition hover:border-brand-600/30 hover:text-brand-600"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="h-4 w-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                  </svg>
+                  Volver al inicio
+                </Link>
+                <ProfileMenu variant="light" />
+
+                {/* Hamburguesa solo en móvil */}
+                <AdminMobileNav links={NAV_LINKS} />
+              </div>
             </div>
-            <AdminDesktopNav links={NAV_LINKS} />
-          </aside>
+          </header>
 
-          <div className="fixed left-0 right-0 top-0 z-10 flex items-center justify-between border-b border-slate-custom-50 bg-cream-50 px-4 py-3 md:hidden">
-            <p className="truncate text-sm font-semibold text-brand-600">{shelter?.name ?? "Refugio360 Admin"}</p>
-            <div className="flex items-center gap-2">
-              <AdminMobileNav links={NAV_LINKS} />
-              <ProfileMenu variant="light" />
-            </div>
-          </div>
-
-          <div className="absolute right-6 top-4 z-20 hidden md:block">
-            <ProfileMenu variant="light" />
-          </div>
-
-          <main className="flex-1 overflow-y-auto pt-14 md:pt-0">{children}</main>
+          {/* Contenido Principal */}
+          <main className="mx-auto max-w-7xl px-6 py-6">{children}</main>
         </div>
       </RoleGate>
     </ThemeProvider>

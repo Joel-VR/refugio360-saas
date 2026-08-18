@@ -34,7 +34,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
     const form = e.currentTarget;
     const data = new FormData();
 
-    // Agregamos los campos del formulario (se envÃ­an todos, incluso si no cambiaron)
+    // Agregamos los campos del formulario (se envían todos, incluso si no cambiaron)
     data.append("name", (form.elements.namedItem("name") as HTMLInputElement).value);
     data.append("species", (form.elements.namedItem("species") as HTMLSelectElement).value);
     data.append("lifecycle_status", (form.elements.namedItem("lifecycle_status") as HTMLSelectElement).value);
@@ -45,7 +45,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
     const health = (form.elements.namedItem("health_status") as HTMLTextAreaElement).value;
     if (health) data.append("health_status", health);
 
-    // FotografÃ­as: si se seleccionan nuevas, se envÃ­an y la API deberÃ­a reemplazar todas las anteriores
+    // Fotografías: si se seleccionan nuevas, se envían y la API debería reemplazar todas las anteriores
     const files = (form.elements.namedItem("photos") as HTMLInputElement).files;
     if (files && files.length > 0) {
       Array.from(files).slice(0, 3).forEach((file) => data.append("photos[]", file));
@@ -53,7 +53,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
 
     try {
       const res = await fetch(`${API_BASE_URL}/animals/${animal.id}`, {
-        method: "PUT", // o "PATCH" segÃºn tu API
+        method: "PUT", // o "PATCH" según tu API
         headers: { Accept: "application/json", ...authHeaders() },
         body: data,
       });
@@ -73,15 +73,15 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-6 rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
-      <div className="grid gap-5 md:grid-cols-2">
+    <form onSubmit={handleSubmit} className="grid gap-6 rounded-2xl border border-slate-custom-50 bg-cream-50 p-4 shadow-sm sm:rounded-3xl sm:p-8">
+      <div className="grid gap-5 sm:grid-cols-2">
         <label className="grid gap-2">
           <span className="text-sm text-slate-custom-700">Nombre *</span>
           <input
             name="name"
             required
             defaultValue={animal.name}
-            className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
+            className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
             placeholder="Firulais"
           />
         </label>
@@ -92,7 +92,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
             name="species"
             required
             defaultValue={animal.species}
-            className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600"
+            className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600"
           >
             <option value="perro">Perro</option>
             <option value="gato">Gato</option>
@@ -107,7 +107,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
             type="number"
             min="0"
             defaultValue={animal.estimated_age ?? ""}
-            className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
+            className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
             placeholder="12"
           />
         </label>
@@ -118,11 +118,11 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
             name="lifecycle_status"
             required
             defaultValue={animal.lifecycle_status}
-            className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600"
+            className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition focus:border-brand-600"
           >
             <option value="cuarentena">Cuarentena</option>
             <option value="tratamiento">Tratamiento</option>
-            <option value="apto">Apto para adopciÃ³n</option>
+            <option value="apto">Apto para adopción</option>
             <option value="adoptado">Adoptado</option>
           </select>
         </label>
@@ -134,12 +134,12 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
           name="health_status"
           rows={4}
           defaultValue={animal.health_status ?? ""}
-          className="rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
-          placeholder="DescripciÃ³n general..."
+          className="w-full rounded-2xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none transition placeholder:text-slate-custom-400 focus:border-brand-600"
+          placeholder="Descripción general..."
         />
       </label>
 
-      {/* VisualizaciÃ³n de fotos actuales */}
+      {/* Visualización de fotos actuales */}
       {currentPhotos.length > 0 && (
         <div className="grid gap-2">
           <span className="text-sm text-slate-custom-700">Fotos actuales</span>
@@ -149,7 +149,7 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
                 key={idx}
                 src={`${mediaUrl(photo.photo_path)}`}
                 alt={`Foto ${idx + 1}`}
-                className="h-20 w-20 rounded-2xl object-cover"
+                className="h-16 w-16 rounded-2xl object-cover sm:h-20 sm:w-20"
               />
             ))}
           </div>
@@ -158,14 +158,14 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
 
       <label className="grid gap-2">
         <span className="text-sm text-slate-custom-700">
-          {currentPhotos.length > 0 ? "Reemplazar fotos (mÃ¡x. 3)" : "Subir fotos (mÃ¡x. 3)"}
+          {currentPhotos.length > 0 ? "Reemplazar fotos (máx. 3)" : "Subir fotos (máx. 3)"}
         </span>
         <input
           name="photos"
           type="file"
           multiple
           accept="image/jpg,image/jpeg,image/png,image/webp"
-          className="rounded-2xl border border-dashed border-slate-custom-50 bg-cream-100 px-4 py-5 text-sm text-slate-custom-700 file:mr-4 file:rounded-full file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:font-semibold file:text-white"
+          className="w-full rounded-2xl border border-dashed border-slate-custom-50 bg-cream-100 px-3 py-4 text-xs text-slate-custom-700 file:mr-3 file:rounded-full file:border-0 file:bg-brand-600 file:px-3 file:py-2 file:text-xs file:font-semibold file:text-white sm:px-4 sm:py-5 sm:text-sm sm:file:mr-4 sm:file:px-4 sm:file:text-sm"
         />
       </label>
 
@@ -187,11 +187,9 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
           disabled={loading}
           className="rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
         >
-          {loading ? "Guardandoâ€¦" : "Actualizar animal"}
+          {loading ? "Guardando…" : "Actualizar animal"}
         </button>
       </div>
     </form>
   );
 }
-
-

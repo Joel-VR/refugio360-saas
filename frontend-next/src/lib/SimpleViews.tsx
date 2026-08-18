@@ -11,12 +11,12 @@ const GUEST_NAV_LINKS: NavLink[] = [
 ];
 
 const NATURAL_PERSON_NAV_LINKS: NavLink[] = [
-  { href: "/cuenta", label: "Mi cuenta", exact: true },
-  { href: "/refugios", label: "Refugios" },
-  { href: "/cuenta/adopciones", label: "Adopciones" },
+  { href: "/refugios", label: "Refugios", exact: true  },
+  { href: "/cuenta/adopciones", label: "Mi Adopción" },
   { href: "/cuenta/donaciones", label: "Donaciones" },
   { href: "/cuenta/mascotas-perdidas", label: "Mascotas perdidas" },
   { href: "/cuenta/mascotas-encontradas", label: "Mascotas encontradas" },
+  { href: "/cuenta", label: "Mi cuenta"},
 ];
 
 function useNavLinksByRole(): NavLink[] {

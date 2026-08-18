@@ -45,7 +45,7 @@ export default function AccountAdoptionsPage() {
   return (
     <section className="mx-auto grid max-w-5xl gap-5 px-6 py-10">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-3xl font-semibold">Mis solicitudes de adopciÃ³n</h1>
+        <h1 className="text-3xl font-semibold">Mi solicitud de adopción</h1>
         <Link
           href="/adoptar"
           className="inline-flex w-fit items-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
@@ -67,7 +67,7 @@ export default function AccountAdoptionsPage() {
 
       {!loading && adoptions.length === 0 && (
         <div className="rounded-lg border border-dashed border-slate-custom-50 bg-cream-50 p-8 text-center">
-          <p className="text-sm text-slate-custom-700">TodavÃ­a no has solicitado ninguna adopciÃ³n.</p>
+          <p className="text-sm text-slate-custom-700">Todaví­a no has solicitado ninguna adopción.</p>
         </div>
       )}
 

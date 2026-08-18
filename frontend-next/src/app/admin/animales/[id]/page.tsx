@@ -12,16 +12,16 @@ export default async function AnimalDetailPage({ params }: Props) {
   const animal = await getAnimal(id);
 
   return (
-    <main className="px-6 py-10">
+    <main className="px-4 py-6 sm:px-6 sm:py-10">
       <section className="mx-auto w-full max-w-4xl">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm uppercase tracking-[0.3em] text-brand-600">Detalle / Edición</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight text-slate-custom-900">Editar animal</h1>
+            <p className="text-xs uppercase tracking-[0.3em] text-brand-600 sm:text-sm">Detalle / Edición</p>
+            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-custom-900 sm:text-4xl">Editar animal</h1>
           </div>
           <Link
             href="/admin/animales"
-            className="rounded-full border border-slate-custom-50 px-4 py-2 text-sm text-slate-custom-700 transition hover:bg-slate-custom-50"
+            className="self-start rounded-full border border-slate-custom-50 px-4 py-2 text-sm text-slate-custom-700 transition hover:bg-slate-custom-50 sm:self-auto"
           >
             Volver al listado
           </Link>

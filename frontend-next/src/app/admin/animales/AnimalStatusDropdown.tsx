@@ -38,7 +38,7 @@ export function AnimalStatusDropdown({ animalId, current }: { animalId: number; 
   }
 
   return (
-    <div className="mt-2 flex items-center gap-2">
+    <div className="mt-2 flex flex-wrap items-center gap-2">
       <select
         value={status}
         onChange={e => handleChange(e.target.value)}
