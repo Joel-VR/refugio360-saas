@@ -38,9 +38,7 @@ export function MyLostFoundList({ type, newHref }: { type: LostFoundPostType; ne
   }
 
   return (
-    <div className="grid gap-5">
-      
-
+    <div className="grid w-full min-w-0 gap-5">
       {error && <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 
       {loading && (
@@ -58,22 +56,31 @@ export function MyLostFoundList({ type, newHref }: { type: LostFoundPostType; ne
       )}
 
       {!loading && posts.length > 0 && (
-        <div className="grid gap-3">
+        <div className="grid w-full min-w-0 gap-3">
           {posts.map((post) => {
             const status = STATUS_LABEL[post.status] ?? { label: post.status, className: "border-slate-300 bg-slate-100 text-slate-600" };
             return (
-              <article key={post.id} className="flex items-center justify-between gap-4 rounded-lg border border-slate-custom-50 bg-cream-50 p-4">
-                <div className="min-w-0">
-                  <p className="truncate font-semibold">{post.pet_name || post.zone}</p>
-                  <p className="truncate text-sm text-slate-custom-700">📍 {post.zone} — {post.description}</p>
+              <article 
+                key={post.id} 
+                className="flex flex-col gap-3 rounded-lg border border-slate-custom-50 bg-cream-50 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-semibold text-slate-custom-900">
+                    {post.pet_name || post.zone}
+                  </p>
+                  <p className="truncate text-sm text-slate-custom-700">
+                    📍 {post.zone} — {post.description}
+                  </p>
                 </div>
-                <div className="flex shrink-0 items-center gap-3">
-                  <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${status.className}`}>{status.label}</span>
+                <div className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-200/60 pt-2 sm:justify-end sm:border-0 sm:pt-0">
+                  <span className={`inline-block shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${status.className}`}>
+                    {status.label}
+                  </span>
                   <button
                     type="button"
                     disabled={busyId === post.id}
                     onClick={() => handleDelete(post.id)}
-                    className="text-sm font-semibold text-rose-600 hover:underline disabled:opacity-50"
+                    className="shrink-0 text-sm font-semibold text-rose-600 hover:underline disabled:opacity-50"
                   >
                     Eliminar
                   </button>
