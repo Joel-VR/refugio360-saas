@@ -142,7 +142,6 @@ function ActionCard({
       href={href}
       className="group flex flex-col justify-between gap-4 rounded-2xl border border-slate-custom-50 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-600 hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-600/20"
     >
-      {/* Ícono con contenedor dinámico al hacer hover */}
       <span
         className={`flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-200 ${t.badge} group-hover:bg-white/20 group-hover:text-white`}
       >
@@ -150,11 +149,9 @@ function ActionCard({
       </span>
 
       <div>
-        {/* Título: pasa a blanco en hover */}
         <p className="font-semibold text-slate-custom-900 transition-colors duration-200 group-hover:text-white">
           {title}
         </p>
-        {/* Descripción: pasa a un blanco translúcido para mantener legibilidad */}
         <p className="mt-1 text-xs leading-5 text-slate-custom-700 transition-colors duration-200 group-hover:text-white/90">
           {description}
         </p>
