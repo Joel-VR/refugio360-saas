@@ -6,14 +6,14 @@ import { mediaUrl } from '@/lib/media';
 import { Pagination } from '@/components/Pagination';
 
 const CATEGORIES = [
-  { value: 'alimentacion',    label: 'AlimentaciÃ³n' },
+  { value: 'alimentacion',    label: 'Alimentación' },
   { value: 'veterinaria',     label: 'Veterinaria' },
   { value: 'infraestructura', label: 'Infraestructura' },
   { value: 'otros',           label: 'Otros' },
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
-  alimentacion:    'AlimentaciÃ³n',
+  alimentacion:    'Alimentación',
   veterinaria:     'Veterinaria',
   infraestructura: 'Infraestructura',
   otros:           'Otros',
@@ -117,7 +117,7 @@ function EditModal({ expense, onConfirm, onCancel }: {
         <h3 className="text-lg font-semibold text-slate-900 mb-4">Editar gasto</h3>
         <div className="grid gap-3">
           <div>
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">DescripciÃ³n</label>
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">Descripción</label>
             <input
               type="text"
               value={form.description}
@@ -138,7 +138,7 @@ function EditModal({ expense, onConfirm, onCancel }: {
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">CategorÃ­a</label>
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">Categoría</label>
               <select
                 value={form.category}
                 onChange={e => setForm({ ...form, category: e.target.value })}
@@ -311,7 +311,7 @@ export default function AdminGastosPage() {
 
         {/* distribucion por categoria */}
         <div className="rounded-xl border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-slate-custom-900">DistribuciÃ³n por categorÃ­a</h2>
+          <h2 className="mb-4 text-lg font-semibold text-slate-custom-900">Distribución por categorÃ­a</h2>
           <div className="grid gap-3">
             {byCategory.map(cat => (
               <div key={cat.label}>
@@ -332,7 +332,7 @@ export default function AdminGastosPage() {
           <h2 className="mb-4 text-lg font-semibold text-slate-custom-900">Registrar nuevo gasto</h2>
           <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-custom-700">DescripciÃ³n</label>
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-custom-700">Descripción</label>
               <input type="text" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} placeholder="Ej. compra de alimento para perros" required className="w-full rounded-lg border border-slate-custom-50 bg-cream-100 px-3 py-2 text-sm text-slate-custom-900 placeholder-slate-custom-600 focus:outline-none focus:ring-2 focus:ring-brand-600" />
             </div>
             <div>
@@ -340,7 +340,7 @@ export default function AdminGastosPage() {
               <input type="number" step="0.01" min="0.01" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} required className="w-full rounded-lg border border-slate-custom-50 bg-cream-100 px-3 py-2 text-sm text-slate-custom-900 focus:outline-none focus:ring-2 focus:ring-brand-600" />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-custom-700">CategorÃ­a</label>
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-custom-700">Categoría</label>
               <select value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} className="w-full rounded-lg border border-slate-custom-50 bg-cream-100 px-3 py-2 text-sm text-slate-custom-900 focus:outline-none focus:ring-2 focus:ring-brand-600">
                 {CATEGORIES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
               </select>
@@ -367,7 +367,7 @@ export default function AdminGastosPage() {
           {loading ? (
             <p className="text-sm text-slate-custom-700">Cargando...</p>
           ) : expenses.length === 0 ? (
-            <p className="text-sm text-slate-custom-700">No hay gastos registrados aÃºn</p>
+            <p className="text-sm text-slate-custom-700">No hay gastos registrados aún</p>
           ) : (
             <>
               <div className="grid gap-3 mb-6">

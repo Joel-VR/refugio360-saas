@@ -80,7 +80,7 @@ export default function ShelterDonarPage() {
         <main className="py-10 px-4">
           <div className="max-w-2xl mx-auto">
             
-            {/* BotÃ³n Volver */}
+            {/* Botón Volver */}
             <div className="mb-6">
               <Link
                 href={`/refugios/`}
@@ -109,12 +109,12 @@ export default function ShelterDonarPage() {
                 <p className="text-gray-500 mt-2 text-sm">{shelter.description}</p>
               )}
               <div className="mt-4 bg-orange-50 border border-orange-200 rounded-xl p-4 text-sm text-orange-800 text-left">
-                <p className="font-semibold mb-1">Â¿CÃ³mo funciona?</p>
+                <p className="font-semibold mb-1">¿Cómo funciona?</p>
                 <p>Realiza tu transferencia por Yape o Plin, luego completa el formulario con tu comprobante. Todas las donaciones son verificadas por el equipo del albergue en 24-48 horas.</p>
               </div>
             </div>
 
-            {/* Formulario de donaciÃ³n */}
+            {/* Formulario de donación */}
             <DonationFlow shelter={shelter as never} />
           </div>
         </main>

@@ -41,7 +41,7 @@ export default function AccountDonationsPage() {
           className="inline-flex w-fit items-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"
         >
           <GiftIcon />
-          Nueva donaciÃ³n
+          Nueva donación
         </Link>
       </div>
 
@@ -57,7 +57,7 @@ export default function AccountDonationsPage() {
 
       {!loading && donations.length === 0 && (
         <div className="rounded-lg border border-dashed border-slate-custom-50 bg-cream-50 p-8 text-center">
-          <p className="text-sm text-slate-custom-700">TodavÃ­a no has hecho ninguna donaciÃ³n.</p>
+          <p className="text-sm text-slate-custom-700">Todavía no has hecho ninguna donación.</p>
           <Link
             href="/refugios"
             className="mt-3 inline-flex items-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-700"

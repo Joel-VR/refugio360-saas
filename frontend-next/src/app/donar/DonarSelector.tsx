@@ -43,7 +43,7 @@ export default function DonarSelector() {
             <div>
               <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl">Elige el albergue que quieres apoyar</h1>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-custom-700">
-                Cada refugio configura sus propios datos de Yape y Plin. Tu comprobante quedarÃ¡ pendiente de verificaciÃ³n por el equipo del albergue.
+                Cada refugio configura sus propios datos de Yape y Plin. Tu comprobante quedará pendiente de verificaciÃ³n por el equipo del albergue.
               </p>
             </div>
             <Link href="/transparencia" className="w-fit rounded-full border border-slate-300 px-4 py-2 text-sm font-medium text-slate-custom-700 hover:bg-cream-50">
@@ -102,7 +102,7 @@ export default function DonarSelector() {
         </div>
 
         {!loading && !error && shelters.length === 0 && (
-          <p className="rounded-xl border border-slate-custom-50 bg-cream-50 px-5 py-4 text-sm text-slate-500">AÃºn no hay albergues activos para recibir donaciones.</p>
+          <p className="rounded-xl border border-slate-custom-50 bg-cream-50 px-5 py-4 text-sm text-slate-500">Aún no hay albergues activos para recibir donaciones.</p>
         )}
       </section>
     </main>

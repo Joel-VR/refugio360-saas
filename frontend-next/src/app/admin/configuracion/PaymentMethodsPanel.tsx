@@ -47,7 +47,7 @@ export function PaymentMethodsPanel({ shelter: initialShelter }: { shelter: Shel
       setCurrent(body);
       setYapeQr(null);
       setPlinQr(null);
-      setMessage("MÃ©todos de pago actualizados.");
+      setMessage("Métodos de pago actualizados.");
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo guardar.");
     } finally {
@@ -74,9 +74,9 @@ export function PaymentMethodsPanel({ shelter: initialShelter }: { shelter: Shel
   return (
     <form onSubmit={submit} className="grid gap-6 rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
       <div>
-        <p className="text-sm uppercase tracking-[0.24em] text-brand-600">MÃ©todos de Pago</p>
+        <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Métodos de Pago</p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-custom-900">Yape y Plin del albergue</h2>
-        <p className="mt-2 text-sm text-slate-custom-700">Configura al menos un mÃ©todo con nÃºmero de 9 dÃ­gitos y titular.</p>
+        <p className="mt-2 text-sm text-slate-custom-700">Configura al menos un mÃ©todo con número de 9 dígitos y titular.</p>
       </div>
 
       <PaymentSection
@@ -135,7 +135,7 @@ function PaymentSection({
       <h3 className="text-lg font-semibold text-slate-custom-900">{title}</h3>
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="grid gap-2 text-sm text-slate-custom-700">
-          NÃºmero celular
+          Número celular
           <input
             name={phoneName}
             value={phone}

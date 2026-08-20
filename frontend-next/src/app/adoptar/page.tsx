@@ -60,7 +60,7 @@ function AnimalCard({ animal }: { animal: Animal }) {
             </>
           )}
           <dt className="text-slate-500">Esterilizado</dt>
-          <dd>{animal.is_sterilized ? "SÃ­" : "No"}</dd>
+          <dd>{animal.is_sterilized ? "Sí" : "No"}</dd>
         </dl>
 
         {animal.health_status && <p className="text-sm text-slate-custom-700 line-clamp-2">{animal.health_status}</p>}
@@ -91,16 +91,16 @@ export default async function AdoptarPage() {
       <section className="mx-auto max-w-6xl px-6 py-16">
         <div className="mb-12 text-center">
           <p className="text-sm uppercase tracking-[0.3em] text-brand-600">Refugio360</p>
-          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-custom-900 sm:text-5xl">Encuentra a tu compaÃ±ero</h1>
+          <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-custom-900 sm:text-5xl">Encuentra a tu compañero</h1>
           <p className="mx-auto mt-4 max-w-xl text-base text-slate-custom-700">
-            Cada animal aquÃ­ espera un hogar. Revisa su ficha y envÃ­a tu postulaciÃ³n en minutos.
+            Cada animal aquí espera un hogar. Revisa su ficha y envía tu postulación en minutos.
           </p>
         </div>
 
         {disponibles.length > 0 && (
           <>
             <h2 className="mb-6 text-sm font-semibold uppercase tracking-widest text-brand-600">
-              Disponibles para adopciÃ³n ({disponibles.length})
+              Disponibles para adopción ({disponibles.length})
             </h2>
             <div className="mb-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {disponibles.map((a) => <AnimalCard key={a.id} animal={a} />)}
@@ -120,7 +120,7 @@ export default async function AdoptarPage() {
         {animals.length === 0 && (
           <div className="rounded-2xl border border-dashed border-slate-custom-50 bg-cream-50 p-16 text-center">
             <PawIcon className="mx-auto h-10 w-10 text-slate-300" />
-            <p className="mt-4 text-slate-custom-700">No hay animales registrados aÃºn.</p>
+            <p className="mt-4 text-slate-custom-700">No hay animales registrados aún.</p>
           </div>
         )}
       </section>

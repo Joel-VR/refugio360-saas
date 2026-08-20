@@ -39,7 +39,7 @@ export function LostFoundReviewList({
       setPosts(current => current.map(post => (post.id === id ? updated : post)))
       onStatusChange?.(updated)
     } catch (err) {
-      setError(friendlyErrorMessage(err, 'No se pudo actualizar la publicaciÃ³n.'))
+      setError(friendlyErrorMessage(err, 'No se pudo actualizar la publicación.'))
     } finally {
       setBusyId(null)
     }

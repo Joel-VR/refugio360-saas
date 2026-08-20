@@ -8,7 +8,7 @@ import type { Adoption } from "@/types/adoption";
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   pendiente: { label: "Pendiente", className: "border-amber-300 bg-amber-50 text-amber-700" },
-  evaluacion: { label: "En evaluaciÃ³n", className: "border-blue-300 bg-blue-50 text-blue-700" },
+  evaluacion: { label: "En evaluación", className: "border-blue-300 bg-blue-50 text-blue-700" },
   aprobado: { label: "Aprobado", className: "border-emerald-300 bg-emerald-50 text-emerald-700" },
   rechazado: { label: "Rechazado", className: "border-rose-300 bg-rose-50 text-rose-700" },
   adoptado: { label: "Adoptado", className: "border-violet-300 bg-violet-50 text-violet-700" },

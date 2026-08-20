@@ -48,7 +48,7 @@ export function LostFoundPublicList({
 
       {!loading && !error && posts.length === 0 && (
         <div className="rounded-lg border border-dashed border-slate-custom-50 bg-cream-50 p-8 text-center text-sm text-slate-custom-700">
-          TodavÃ­a no hay publicaciones aprobadas de este tipo.
+          Todavía no hay publicaciones aprobadas de este tipo.
         </div>
       )}
 

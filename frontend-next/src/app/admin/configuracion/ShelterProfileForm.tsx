@@ -118,7 +118,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
       {/* Profile form */}
       <form onSubmit={submitProfile} className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
         <div className="mb-6">
-          <p className="text-sm uppercase tracking-[0.24em] text-brand-600">InformaciÃ³n del Albergue</p>
+          <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Información del Albergue</p>
           <h3 className="mt-2 text-xl font-semibold text-slate-custom-900">Datos principales</h3>
         </div>
 
@@ -135,7 +135,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-custom-900 mb-2">DescripciÃ³n</label>
+            <label className="block text-sm font-medium text-slate-custom-900 mb-2">Descripción</label>
             <textarea
               name="description"
               value={form.description}
@@ -157,7 +157,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-custom-900 mb-2">TelÃ©fono</label>
+              <label className="block text-sm font-medium text-slate-custom-900 mb-2">Teléfono</label>
               <input
                 type="tel"
                 name="phone"
@@ -169,7 +169,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-custom-900 mb-2">DirecciÃ³n</label>
+            <label className="block text-sm font-medium text-slate-custom-900 mb-2">Dirección</label>
             <input
               type="text"
               name="address"

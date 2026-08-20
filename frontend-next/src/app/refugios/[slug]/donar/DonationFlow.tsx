@@ -97,15 +97,15 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
   function validate(targetStep: Step) {
     const next: Record<string, string> = {}
     if (targetStep >= 2) {
-      if (!isAnonymous && !donorName.trim()) next.donorName = 'Ingresa tu nombre o marca donaciÃ³n anÃ³nima.'
+      if (!isAnonymous && !donorName.trim()) next.donorName = 'Ingresa tu nombre o marca donación anónima.'
       if (donorEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(donorEmail))
-        next.donorEmail = 'Ingresa un email vÃ¡lido.'
+        next.donorEmail = 'Ingresa un email válido.'
       if (donationType === 'specific' && !animalId) next.animalId = 'Selecciona un animal del albergue.'
     }
     if (targetStep >= 3 && !method) next.method = 'Selecciona Yape o Plin.'
     if (targetStep >= 4) {
       if (!amount || Number(amount) <= 0) next.amount = 'El monto debe ser mayor a 0.'
-      if (!operationReference.trim()) next.operationReference = 'El cÃ³digo de operaciÃ³n es obligatorio.'
+      if (!operationReference.trim()) next.operationReference = 'El código de operaciÃ³n es obligatorio.'
       if (!file) next.file = 'Sube una imagen del comprobante.'
     }
     setErrors(next)
@@ -150,7 +150,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
       setDonationId(body.id ?? null)
       setStep(4)
     } catch (err) {
-      setErrors({ submit: friendlyErrorMessage(err, 'No se pudo registrar la donaciÃ³n.') })
+      setErrors({ submit: friendlyErrorMessage(err, 'No se pudo registrar la donación.') })
     } finally {
       setLoading(false)
     }
@@ -159,7 +159,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
   if (!shelter.accepts_donations) {
     return (
       <div className='rounded-lg border border-amber-200 bg-amber-50 p-6 text-amber-900'>
-        Este albergue aÃºn no tiene Yape o Plin configurado. Vuelve pronto o revisa otro albergue.
+        Este albergue aún no tiene Yape o Plin configurado. Vuelve pronto o revisa otro albergue.
       </div>
     )
   }
@@ -168,14 +168,14 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
     return (
       <div className='rounded-lg border border-emerald-200 bg-cream-50 p-8 text-center shadow-sm'>
         <p className='text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700'>
-          DonaciÃ³n recibida exitosamente
+          Donación recibida exitosamente
         </p>
         <h2 className='mt-3 text-3xl font-semibold text-slate-custom-900'>Gracias por apoyar a {shelter.name}</h2>
         <p className='mt-3 text-sm text-slate-custom-700'>
           Referencia: <span className='font-mono font-semibold'>#{donationId}</span>
         </p>
         <p className='mx-auto mt-4 max-w-md text-sm leading-6 text-slate-custom-700'>
-          SerÃ¡ verificada en 24-48 horas. El equipo revisarÃ¡ el comprobante y actualizarÃ¡ el estado.
+          Será verificada en 24-48 horas. El equipo revisará el comprobante y actualizará el estado.
         </p>
         <div className='mt-6 flex justify-center gap-3'>
           <Link
@@ -203,7 +203,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
         <div className='mt-5 grid gap-4'>
           <label className='flex items-center gap-3 text-sm font-medium text-slate-custom-700'>
             <input type='checkbox' checked={isAnonymous} onChange={e => setIsAnonymous(e.target.checked)} />
-            Donar como anÃ³nimo
+            Donar como anónimo
           </label>
           <div className='grid gap-4 sm:grid-cols-2'>
             <label className='grid gap-1.5 text-sm'>
@@ -236,7 +236,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
               }}
               className={`rounded-md border px-4 py-3 text-left ${donationType === 'general' ? 'border-teal-600 bg-teal-50' : 'border-slate-custom-50'}`}
             >
-              <span className='block font-semibold'>DonaciÃ³n general</span>
+              <span className='block font-semibold'>Donación general</span>
               <span className='text-sm text-slate-custom-700'>Apoya las necesidades del albergue.</span>
             </button>
             <button
@@ -292,7 +292,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
       {step >= 2 && (
         <section className='rounded-lg border border-slate-custom-50 bg-cream-50 p-5 shadow-sm'>
           <p className='text-xs font-semibold uppercase tracking-[0.2em] text-brand-600'>Paso 2</p>
-          <h2 className='mt-1 text-xl font-semibold'>MÃ©todo de pago</h2>
+          <h2 className='mt-1 text-xl font-semibold'>Método de pago</h2>
           <div className='mt-5 grid gap-3 sm:grid-cols-2'>
             {enabledMethods.map(option => {
               const data = shelter.payment_methods[option]
@@ -314,14 +314,14 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
             <div className='mt-4 rounded-md border border-slate-custom-50 bg-cream-100 p-4'>
               <div className='flex flex-wrap items-center justify-between gap-3'>
                 <p className='text-sm text-slate-custom-700'>
-                  Escanea el QR o envÃ­a al nÃºmero, luego sube comprobante.
+                  Escanea el QR o envía al número, luego sube comprobante.
                 </p>
                 <button
                   type='button'
                   onClick={() => navigator.clipboard.writeText(selectedMethod.phone ?? '')}
                   className='rounded-md border border-slate-300 px-3 py-2 text-xs font-semibold'
                 >
-                  Copiar nÃºmero
+                  Copiar número
                 </button>
               </div>
               {selectedMethod.qr_path && (
@@ -362,7 +362,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
               {errors.amount && <span className='text-xs text-rose-600'>{errors.amount}</span>}
             </label>
             <label className='grid gap-1.5 text-sm'>
-              CÃ³digo/nÃºmero de operaciÃ³n
+              Código/número de operaciÃ³n
               <input
                 value={operationReference}
                 onChange={e => setOperationReference(e.target.value)}
@@ -394,7 +394,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
                 onClick={() => fileRef.current?.click()}
                 className='cursor-pointer rounded-md border-2 border-dashed border-slate-300 bg-cream-100 px-6 py-8 text-center text-sm text-slate-custom-700'
               >
-                Arrastra el voucher aquÃ­ o selecciona archivo. JPG, PNG o GIF, mÃ¡ximo 5MB.
+                Arrastra el voucher aquí o selecciona archivo. JPG, PNG o GIF, máximo 5MB.
               </div>
             ) : (
               <div className='rounded-md border border-slate-custom-50 p-3'>
@@ -440,7 +440,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
             disabled={loading}
             className='mt-5 rounded-md bg-brand-600 px-5 py-3 text-sm font-semibold text-white disabled:opacity-50'
           >
-            {loading ? 'Enviando...' : 'Enviar DonaciÃ³n'}
+            {loading ? 'Enviando...' : 'Enviar Donación'}
           </button>
         </section>
       )}
