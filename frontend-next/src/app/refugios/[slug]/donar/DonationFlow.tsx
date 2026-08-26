@@ -105,7 +105,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
     if (targetStep >= 3 && !method) next.method = 'Selecciona Yape o Plin.'
     if (targetStep >= 4) {
       if (!amount || Number(amount) <= 0) next.amount = 'El monto debe ser mayor a 0.'
-      if (!operationReference.trim()) next.operationReference = 'El código de operaciÃ³n es obligatorio.'
+      if (!operationReference.trim()) next.operationReference = 'El código de operación es obligatorio.'
       if (!file) next.file = 'Sube una imagen del comprobante.'
     }
     setErrors(next)
@@ -277,7 +277,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
           )}
           <label className='flex items-center gap-3 text-sm font-medium text-slate-custom-700'>
             <input type='checkbox' checked={isRecurring} onChange={e => setIsRecurring(e.target.checked)} />
-            Â¿Deseas que sea un padrinazgo mensual?
+            ¿Deseas que sea un padrinazgo mensual?
           </label>
           <button
             type='button'
@@ -362,7 +362,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
               {errors.amount && <span className='text-xs text-rose-600'>{errors.amount}</span>}
             </label>
             <label className='grid gap-1.5 text-sm'>
-              Código/número de operaciÃ³n
+              Código/número de operación
               <input
                 value={operationReference}
                 onChange={e => setOperationReference(e.target.value)}
@@ -403,7 +403,7 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
                 )}
                 <div className='mt-3 flex items-center justify-between gap-3 text-sm'>
                   <span className='truncate'>
-                    {file.name} Â· {bytes(file.size)}
+                    {file.name} · {bytes(file.size)}
                   </span>
                   <button
                     type='button'

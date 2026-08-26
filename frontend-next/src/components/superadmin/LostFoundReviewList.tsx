@@ -85,7 +85,7 @@ export function LostFoundReviewList({
                     </span>
                   </div>
                   <p className='mt-1 text-sm text-slate-custom-700'>
-                    ðŸ“ {post.zone} Â· ðŸ“ž {post.contact_phone}
+                    ðŸ“ {post.zone} · ðŸ“ž {post.contact_phone}
                   </p>
                   <p className='mt-2 text-sm leading-6 text-slate-custom-700'>{post.description}</p>
                   <p className='mt-2 text-xs text-slate-400'>

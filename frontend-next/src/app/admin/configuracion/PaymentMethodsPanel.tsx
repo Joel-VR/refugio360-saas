@@ -76,7 +76,7 @@ export function PaymentMethodsPanel({ shelter: initialShelter }: { shelter: Shel
       <div>
         <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Métodos de Pago</p>
         <h2 className="mt-2 text-2xl font-semibold text-slate-custom-900">Yape y Plin del albergue</h2>
-        <p className="mt-2 text-sm text-slate-custom-700">Configura al menos un mÃ©todo con número de 9 dígitos y titular.</p>
+        <p className="mt-2 text-sm text-slate-custom-700">Configura al menos un método con número de 9 dígitos y titular.</p>
       </div>
 
       <PaymentSection
@@ -109,7 +109,7 @@ export function PaymentMethodsPanel({ shelter: initialShelter }: { shelter: Shel
       {error && <p className="rounded-xl border border-rose-300/30 bg-rose-50 px-4 py-3 text-sm text-rose-700">{error}</p>}
 
       <button disabled={loading} className="w-fit rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50">
-        {loading ? "Guardando..." : "Guardar mÃ©todos de pago"}
+        {loading ? "Guardando..." : "Guardar métodos de pago"}
       </button>
     </form>
   );

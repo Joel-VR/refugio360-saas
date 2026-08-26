@@ -231,7 +231,7 @@ export default function ShelterTransparencyPage() {
                       <div>
                         <p className="text-xs font-semibold text-slate-custom-900">{expense.description}</p>
                         <p className="mt-0.5 text-[11px] text-slate-custom-700">
-                          {CATEGORY_LABELS[expense.category] ?? expense.category} Â·{" "}
+                          {CATEGORY_LABELS[expense.category] ?? expense.category} ·{" "}
                           {new Date(expense.expense_date).toLocaleDateString("es-PE")}
                         </p>
                       </div>

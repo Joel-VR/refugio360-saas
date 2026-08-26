@@ -15,7 +15,7 @@ const TABS: { key: DonationStatus; label: string; activeClass: string; badgeClas
 const METHOD_LABEL: Record<string, string> = { yape: "Yape", plin: "Plin", paypal: "PayPal", efectivo: "Efectivo" };
 
 const REJECT_REASONS = [
-  "Código de operaciÃ³n inválido",
+  "Código de operación inválido",
   "Monto no coincide",
   "Comprobante ilegible",
   "Otros (especificar)",
@@ -156,12 +156,12 @@ export default function DonacionesPage() {
           ))}
         </div>
 
-        {/* BÃºsqueda + filtro de fechas */}
+        {/* Búsqueda + filtro de fechas */}
         <div className="flex flex-col gap-4 rounded-3xl border border-slate-custom-50 bg-cream-50 p-6 shadow-sm md:flex-row md:items-center md:justify-between">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar por donante, código de operaciÃ³n o monto..."
+            placeholder="Buscar por donante, código de operación o monto..."
             className="w-full max-w-sm rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-2.5 text-sm text-slate-custom-900 placeholder-slate-custom-400 outline-none focus:border-brand-600"
           />
           <div className="flex flex-wrap items-center gap-2">

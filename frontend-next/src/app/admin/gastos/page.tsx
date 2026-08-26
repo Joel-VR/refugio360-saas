@@ -60,15 +60,15 @@ function DeleteModal({ expense, onConfirm, onCancel }: {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
       <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-        <h3 className="text-lg font-semibold text-slate-900 mb-1">Â¿Eliminar este gasto?</h3>
-        <p className="text-sm text-slate-500 mb-4">Esta acciÃ³n no se puede deshacer.</p>
+        <h3 className="text-lg font-semibold text-slate-900 mb-1">¿Eliminar este gasto?</h3>
+        <p className="text-sm text-slate-500 mb-4">Esta acción no se puede deshacer.</p>
         <div className="rounded-lg bg-slate-50 p-3 mb-4 text-sm">
           <p className="font-semibold text-slate-800">{expense.description}</p>
-          <p className="text-slate-500 mt-1">{CATEGORY_LABELS[expense.category]} Â· {money(expense.amount)}</p>
+          <p className="text-slate-500 mt-1">{CATEGORY_LABELS[expense.category]} · {money(expense.amount)}</p>
         </div>
         <div className="mb-4">
           <label className="mb-1 block text-xs font-semibold uppercase tracking-wider text-slate-600">
-            Motivo de eliminaciÃ³n <span className="text-rose-500">*</span>
+            Motivo de eliminación <span className="text-rose-500">*</span>
           </label>
           <textarea
             value={reason}
@@ -311,7 +311,7 @@ export default function AdminGastosPage() {
 
         {/* distribucion por categoria */}
         <div className="rounded-xl border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-slate-custom-900">Distribución por categorÃ­a</h2>
+          <h2 className="mb-4 text-lg font-semibold text-slate-custom-900">Distribución por categoría</h2>
           <div className="grid gap-3">
             {byCategory.map(cat => (
               <div key={cat.label}>
@@ -376,7 +376,7 @@ export default function AdminGastosPage() {
                     <div>
                       <p className="font-semibold text-sm text-slate-custom-900">{expense.description}</p>
                       <p className="text-xs text-slate-custom-700 mt-1">
-                        {CATEGORY_LABELS[expense.category] ?? expense.category}{' Â· '}{new Date(expense.expense_date).toLocaleDateString('es-PE')}
+                        {CATEGORY_LABELS[expense.category] ?? expense.category}{' · '}{new Date(expense.expense_date).toLocaleDateString('es-PE')}
                       </p>
                       {expense.document_path && (
                         <a href={`${mediaUrl(expense.document_path)}`} target="_blank" rel="noreferrer" className="mt-1 inline-block text-xs font-semibold text-brand-600 hover:text-brand-700">

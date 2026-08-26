@@ -75,10 +75,10 @@ export default function AccountDonationsPage() {
             return (
               <article key={donation.id} className="flex items-center justify-between gap-4 rounded-lg border border-slate-custom-50 bg-cream-50 p-4">
                 <div className="min-w-0">
-                  <p className="font-semibold">S/. {Number(donation.amount ?? 0).toFixed(2)} Â· {donation.shelter?.name ?? `Albergue #${donation.shelter_id}`}</p>
+                  <p className="font-semibold">S/. {Number(donation.amount ?? 0).toFixed(2)} · {donation.shelter?.name ?? `Albergue #${donation.shelter_id}`}</p>
                   <p className="mt-1 text-sm text-slate-custom-700">
-                    {donation.payment_method.toUpperCase()} Â· {new Date(donation.created_at).toLocaleDateString("es-PE")}
-                    {donation.animal ? ` Â· Apadrinando a ${donation.animal.name}` : ""}
+                    {donation.payment_method.toUpperCase()} · {new Date(donation.created_at).toLocaleDateString("es-PE")}
+                    {donation.animal ? ` · Apadrinando a ${donation.animal.name}` : ""}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-3">
