@@ -29,7 +29,7 @@ class PublicShelterController extends Controller
                 ->map(fn (Shelter $shelter) => $this->publicShelter($shelter));
         });
 
-        return response()->json($shelters)->header('Cache-Control', 'public, max-age=' . self::CACHE_TTL);
+        return response()->json($shelters);
     }
 
     public function show(string $slug): JsonResponse
@@ -40,7 +40,7 @@ class PublicShelterController extends Controller
             return $this->publicShelter($shelter);
         });
 
-        return response()->json($data)->header('Cache-Control', 'public, max-age=' . self::CACHE_TTL);
+        return response()->json($data);
     }
 
     public function animals(string $slug): JsonResponse
@@ -56,7 +56,7 @@ class PublicShelterController extends Controller
                 ->get();
         });
 
-        return response()->json($animals)->header('Cache-Control', 'public, max-age=' . self::CACHE_TTL);
+        return response()->json($animals);
     }
 
     public function transparency(Request $request, string $slug): JsonResponse
@@ -67,7 +67,7 @@ class PublicShelterController extends Controller
             return $this->buildTransparencyPayload($request, $slug);
         });
 
-        return response()->json($payload)->header('Cache-Control', 'public, max-age=' . self::CACHE_TTL);
+        return response()->json($payload);
     }
 
     private function buildTransparencyPayload(Request $request, string $slug): array
