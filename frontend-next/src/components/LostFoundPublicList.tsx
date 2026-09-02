@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { friendlyErrorMessage, getLostFoundPosts, getStoredToken } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 import type { LostFoundPost, LostFoundPostType } from "@/types/lostFoundPost";
@@ -56,10 +57,15 @@ export function LostFoundPublicList({
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <article key={post.id} className="flex flex-col overflow-hidden rounded-lg border border-slate-custom-50 bg-cream-50 shadow-sm">
-              <div className="flex h-40 items-center justify-center bg-slate-100 text-5xl">
+              <div className="relative flex h-40 items-center justify-center bg-slate-100 text-5xl">
                 {post.photo_path ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={`${mediaUrl(post.photo_path)}`} alt={post.pet_name ?? "Mascota"} className="h-full w-full object-cover" />
+                  <Image
+                    src={`${mediaUrl(post.photo_path)}`}
+                    alt={post.pet_name ?? "Mascota"}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                  />
                 ) : (
                   <span>ðŸ¾</span>
                 )}

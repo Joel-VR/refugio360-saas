@@ -95,15 +95,24 @@ export class ApiAuthError extends Error {}
 
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const { headers, ...fetchOptions } = options ?? {};
+  const mergedHeaders = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+    ...authHeaders(),
+    ...headers,
+  };
+
+  // Peticiones autenticadas o de escritura nunca se cachean: pueden traer
+  // datos por-usuario o mutar estado. Las lecturas públicas (GET sin token)
+  // sí pueden cachearse — respetan el Cache-Control que envía el backend.
+  const method = (fetchOptions.method ?? "GET").toUpperCase();
+  const isAuthenticated = "Authorization" in mergedHeaders;
+  const mustBypassCache = method !== "GET" || isAuthenticated;
+
   const res = await fetch(`${API_BASE_URL}${path}`, {
-    cache: "no-store",
+    ...(mustBypassCache ? { cache: "no-store" as const } : {}),
     ...fetchOptions,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...authHeaders(),
-      ...headers,
-    },
+    headers: mergedHeaders,
   });
 
   if (!res.ok) {

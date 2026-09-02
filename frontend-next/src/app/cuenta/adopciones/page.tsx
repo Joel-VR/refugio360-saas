@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { friendlyErrorMessage, getMyAdoptions } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 import type { Adoption } from "@/types/adoption";
@@ -79,10 +80,9 @@ export default function AccountAdoptionsPage() {
 
             return (
               <article key={adoption.id} className="flex items-center gap-4 rounded-lg border border-slate-custom-50 bg-cream-50 p-4">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-100 text-slate-300">
+                <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-slate-100 text-slate-300">
                   {photo ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={`${mediaUrl(photo.photo_path)}`} alt={adoption.animal?.name ?? "Animal"} className="h-full w-full object-cover" />
+                    <Image src={`${mediaUrl(photo.photo_path)}`} alt={adoption.animal?.name ?? "Animal"} fill sizes="64px" className="object-cover" />
                   ) : (
                     <PawIcon className="h-7 w-7" />
                   )}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { clearSession, getCurrentUser, getStoredToken, getStoredUser, logout, storeAuthUser, ApiAuthError, type AuthUser } from "@/lib/api";
 
@@ -71,12 +72,12 @@ export function ProfileMenu({ variant = "light" }: { variant?: "light" | "dark" 
         aria-label="Abrir menú de perfil"
         title="Perfil"
         onClick={() => setOpen((value) => !value)}
-        className={`grid h-10 w-10 place-items-center overflow-hidden rounded-full border text-sm font-semibold shadow-sm transition ${
+        className={`relative grid h-10 w-10 place-items-center overflow-hidden rounded-full border text-sm font-semibold shadow-sm transition ${
           isDark ? "border-white/15 bg-slate-custom-900 text-cyan-200 hover:bg-cream-50/10" : "border-slate-custom-50 bg-cream-50 text-brand-600 hover:bg-cream-100"
         }`}
       >
         {user.profile_photo_url ? (
-          <img src={user.profile_photo_url} alt="Foto de perfil" className="h-full w-full object-cover" />
+          <Image src={user.profile_photo_url} alt="Foto de perfil" fill sizes="40px" className="object-cover" />
         ) : (
           <span>{initial}</span>
         )}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { SimplePage } from "@/lib/SimpleViews";
 import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
@@ -122,11 +123,12 @@ export default function RefugioAnimalsPage() {
                     {/* Imagen / Badge */}
                     <div className="relative h-48 w-full overflow-hidden bg-slate-100 text-slate-300">
                       {photo ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
+                        <Image
                           src={`${mediaUrl(photo.photo_path)}`}
                           alt={animal.name}
-                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                          className="object-cover transition duration-300 group-hover:scale-105"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center bg-cream-50 text-slate-custom-300">

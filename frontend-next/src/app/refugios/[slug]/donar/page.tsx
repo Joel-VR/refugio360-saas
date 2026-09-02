@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { RoleGate } from '@/lib/RoleGate';
 import { SiteHeader, type NavLink } from '@/components/SiteHeader';
@@ -94,11 +95,15 @@ export default function ShelterDonarPage() {
             {/* Mensaje de bienvenida */}
             <div className="bg-cream-50 rounded-2xl shadow p-6 mb-6 text-center">
               {shelter.logo_path ? (
-                <img
-                  src={mediaUrl(shelter.logo_path)}
-                  alt={shelter.name}
-                  className="w-20 h-20 rounded-full object-cover mx-auto mb-3"
-                />
+                <div className="relative w-20 h-20 rounded-full overflow-hidden mx-auto mb-3">
+                  <Image
+                    src={mediaUrl(shelter.logo_path)}
+                    alt={shelter.name}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                </div>
               ) : (
                 <div className="w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center text-4xl mx-auto mb-3">
                   ðŸ 

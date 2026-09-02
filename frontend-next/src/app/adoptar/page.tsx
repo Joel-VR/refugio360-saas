@@ -1,4 +1,5 @@
 ﻿import Link from "next/link";
+import Image from "next/image";
 import { getAnimals } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 import type { Animal } from "@/types/animal";
@@ -30,11 +31,12 @@ function AnimalCard({ animal }: { animal: Animal }) {
     <article className="group flex flex-col overflow-hidden rounded-2xl border border-slate-custom-50 bg-white transition hover:-translate-y-0.5 hover:border-brand-600/30 hover:shadow-md hover:shadow-brand-600/5">
       <div className="relative h-48 w-full overflow-hidden bg-slate-100 text-slate-300">
         {photo ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={mediaUrl(photo.photo_path)}
             alt={animal.name}
-            className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+            className="object-cover transition duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center bg-cream-50">

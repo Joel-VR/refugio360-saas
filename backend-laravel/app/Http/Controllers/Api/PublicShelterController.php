@@ -9,45 +9,68 @@ use App\Models\Expense;
 use App\Models\Shelter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class PublicShelterController extends Controller
 {
+    /** Segundos que se cachean las lecturas públicas (bajo tráfico, dato tolera algo de retraso). */
+    private const CACHE_TTL = 60;
+
     public function index(): JsonResponse
     {
-        $shelters = Shelter::query()
-            ->where('is_active', true)
-            ->where('approval_status', 'approved')
-            ->withCount(['animals'])
-            ->latest()
-            ->get()
-            ->map(fn (Shelter $shelter) => $this->publicShelter($shelter));
+        $shelters = Cache::remember('public_shelters_index', self::CACHE_TTL, function () {
+            return Shelter::query()
+                ->where('is_active', true)
+                ->where('approval_status', 'approved')
+                ->withCount(['animals'])
+                ->latest()
+                ->get()
+                ->map(fn (Shelter $shelter) => $this->publicShelter($shelter));
+        });
 
-        return response()->json($shelters);
+        return response()->json($shelters)->header('Cache-Control', 'public, max-age=' . self::CACHE_TTL);
     }
 
     public function show(string $slug): JsonResponse
     {
-        $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')->firstOrFail();
+        $data = Cache::remember("public_shelter_show_{$slug}", self::CACHE_TTL, function () use ($slug) {
+            $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')->firstOrFail();
 
-        return response()->json($this->publicShelter($shelter));
+            return $this->publicShelter($shelter);
+        });
+
+        return response()->json($data)->header('Cache-Control', 'public, max-age=' . self::CACHE_TTL);
     }
 
     public function animals(string $slug): JsonResponse
     {
-        $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')->firstOrFail();
+        $animals = Cache::remember("public_shelter_animals_{$slug}", self::CACHE_TTL, function () use ($slug) {
+            $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')->firstOrFail();
 
-        $animals = Animal::withoutGlobalScopes()
-            ->with('photos')
-            ->where('shelter_id', $shelter->id)
-            ->whereIn('lifecycle_status', ['apto', 'tratamiento'])
-            ->latest()
-            ->get();
+            return Animal::withoutGlobalScopes()
+                ->with('photos')
+                ->where('shelter_id', $shelter->id)
+                ->whereIn('lifecycle_status', ['apto', 'tratamiento'])
+                ->latest()
+                ->get();
+        });
 
-        return response()->json($animals);
+        return response()->json($animals)->header('Cache-Control', 'public, max-age=' . self::CACHE_TTL);
     }
 
     public function transparency(Request $request, string $slug): JsonResponse
+    {
+        $cacheKey = 'public_shelter_transparency_' . $slug . '_' . http_build_query($request->query());
+
+        $payload = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request, $slug) {
+            return $this->buildTransparencyPayload($request, $slug);
+        });
+
+        return response()->json($payload)->header('Cache-Control', 'public, max-age=' . self::CACHE_TTL);
+    }
+
+    private function buildTransparencyPayload(Request $request, string $slug): array
     {
         $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')->firstOrFail();
 
@@ -88,7 +111,7 @@ class PublicShelterController extends Controller
             'created_at' => $donation->created_at,
         ]);
 
-        return response()->json([
+        return [
             'shelter' => $this->publicShelter($shelter),
             'summary' => [
                 'total_income' => round((float) $income, 2),
@@ -103,7 +126,7 @@ class PublicShelterController extends Controller
             ],
             'donations' => $donations,
             'expenses' => $expensesList,
-        ]);
+        ];
     }
 
     private function publicShelter(Shelter $shelter): array

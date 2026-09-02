@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { authHeaders, API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 import type { Shelter } from "@/types/shelter";
@@ -158,7 +159,16 @@ function PaymentSection({
       </div>
       <div className="flex flex-wrap items-center gap-4">
         {(preview || qrPath) && (
-          <img src={preview ?? `${mediaUrl(qrPath)}`} alt={`QR ${title}`} className="h-28 w-28 rounded-xl border border-slate-custom-50 bg-cream-100 object-contain p-1" />
+          <div className="relative h-28 w-28 rounded-xl border border-slate-custom-50 bg-cream-100 p-1">
+            <Image
+              src={preview ?? `${mediaUrl(qrPath)}`}
+              alt={`QR ${title}`}
+              fill
+              sizes="112px"
+              unoptimized={Boolean(preview)}
+              className="object-contain"
+            />
+          </div>
         )}
         <label className="cursor-pointer rounded-full border border-slate-custom-50 px-4 py-2 text-sm font-medium text-slate-custom-700 hover:bg-slate-custom-50">
           Subir QR

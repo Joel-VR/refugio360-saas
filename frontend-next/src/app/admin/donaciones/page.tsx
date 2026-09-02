@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import type { Donation, DonationStatus, PaginatedDonations } from "@/types/donation";
 import { adminFetch } from "@/lib/adminAuth";
 import { API_BASE_URL as API } from "@/lib/api";
@@ -303,13 +304,19 @@ function DonationModal({
             <p className="mb-2 text-xs uppercase tracking-widest text-slate-custom-400">Comprobante</p>
             {voucherUrl && !imgError ? (
               <div className="space-y-3">
-                <img
-                  src={voucherUrl}
-                  alt="Comprobante"
-                  onError={() => setImgError(true)}
+                <div
                   onClick={() => setZoom(true)}
-                  className="max-h-72 w-full cursor-zoom-in rounded-2xl border border-slate-custom-50 object-contain bg-black"
-                />
+                  className="relative h-72 w-full cursor-zoom-in rounded-2xl border border-slate-custom-50 bg-black"
+                >
+                  <Image
+                    src={voucherUrl}
+                    alt="Comprobante"
+                    onError={() => setImgError(true)}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 640px"
+                    className="object-contain"
+                  />
+                </div>
                 <a
                   href={voucherUrl}
                   download
@@ -381,7 +388,13 @@ function DonationModal({
 
       {zoom && voucherUrl && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-6" onClick={() => setZoom(false)}>
-          <img src={voucherUrl} alt="Comprobante ampliado" className="max-h-full max-w-full rounded-xl object-contain" />
+          <Image
+            src={voucherUrl}
+            alt="Comprobante ampliado"
+            width={1200}
+            height={900}
+            className="max-h-full max-w-full rounded-xl object-contain"
+          />
         </div>
       )}
     </>

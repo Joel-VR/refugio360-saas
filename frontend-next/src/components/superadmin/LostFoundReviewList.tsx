@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { friendlyErrorMessage, updateSuperAdminLostFoundPostStatus } from '@/lib/api'
 import { mediaUrl } from '@/lib/media'
 import type { LostFoundPost } from '@/types/lostFoundPost'
@@ -63,13 +64,14 @@ export function LostFoundReviewList({
           <article key={post.id} className='rounded-lg border border-slate-custom-50 bg-white p-5 shadow-sm'>
             <div className='flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between'>
               <div className='flex min-w-0 gap-4'>
-                <div className='flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-cream-100 text-2xl'>
+                <div className='relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-cream-100 text-2xl'>
                   {post.photo_path ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
+                    <Image
                       src={`${mediaUrl(post.photo_path)}`}
                       alt={post.pet_name ?? 'Mascota'}
-                      className='h-full w-full object-cover'
+                      fill
+                      sizes='64px'
+                      className='object-cover'
                     />
                   ) : (
                     <span>ðŸ¾</span>

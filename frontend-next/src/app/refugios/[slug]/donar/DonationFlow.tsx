@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { authHeaders, friendlyErrorMessage, API_BASE_URL as API } from '@/lib/api'
 import { mediaUrl } from '@/lib/media'
 
@@ -257,12 +258,14 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
                   onClick={() => setAnimalId(animal.id)}
                   className={`flex items-center gap-3 rounded-md border p-3 text-left ${animalId === animal.id ? 'border-teal-600 bg-teal-50' : 'border-slate-custom-50'}`}
                 >
-                  <div className='h-12 w-12 overflow-hidden rounded-md bg-slate-100'>
+                  <div className='relative h-12 w-12 overflow-hidden rounded-md bg-slate-100'>
                     {animal.photos?.[0] && (
-                      <img
+                      <Image
                         src={`${mediaUrl(animal.photos[0].photo_path)}`}
                         alt={animal.name}
-                        className='h-full w-full object-cover'
+                        fill
+                        sizes='48px'
+                        className='object-cover'
                       />
                     )}
                   </div>
@@ -325,11 +328,15 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
                 </button>
               </div>
               {selectedMethod.qr_path && (
-                <img
-                  src={`${mediaUrl(selectedMethod.qr_path)}`}
-                  alt='QR de pago'
-                  className='mt-4 h-40 w-40 rounded-md border bg-cream-50 object-contain p-1'
-                />
+                <div className='relative mt-4 h-40 w-40 rounded-md border bg-cream-50 p-1'>
+                  <Image
+                    src={`${mediaUrl(selectedMethod.qr_path)}`}
+                    alt='QR de pago'
+                    fill
+                    sizes='160px'
+                    className='object-contain'
+                  />
+                </div>
               )}
             </div>
           )}
@@ -399,7 +406,14 @@ export default function DonationFlow({ shelter }: { shelter: Shelter }) {
             ) : (
               <div className='rounded-md border border-slate-custom-50 p-3'>
                 {preview && (
-                  <img src={preview} alt='Vista previa comprobante' className='max-h-64 w-full object-contain' />
+                  <Image
+                    src={preview}
+                    alt='Vista previa comprobante'
+                    width={800}
+                    height={256}
+                    unoptimized
+                    className='max-h-64 w-full object-contain'
+                  />
                 )}
                 <div className='mt-3 flex items-center justify-between gap-3 text-sm'>
                   <span className='truncate'>

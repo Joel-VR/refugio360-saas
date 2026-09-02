@@ -1,4 +1,5 @@
 ﻿import Link from "next/link";
+import Image from "next/image";
 import { getAnimalsPage } from "@/lib/api";
 import { AnimalStatusDropdown } from './AnimalStatusDropdown';
 import { getAdminAnimalsPage } from "@/lib/api";
@@ -84,11 +85,12 @@ export default async function AnimalsPage({ searchParams }: AnimalsPageProps) {
                 <Link href={`/admin/animales/${animal.id}`} className="block">
                   <div className="relative h-40 sm:h-48 bg-slate-200 flex items-center justify-center text-5xl">
                     {photo ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
+                      <Image
                         src={`${mediaUrl(photo.photo_path)}`}
                         alt={animal.name}
-                        className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                        className="object-cover"
                       />
                     ) : (
                       <span>{animal.species === "gato" ? "🐱" : animal.species === "perro" ? "🐶" : "🐾"}</span>

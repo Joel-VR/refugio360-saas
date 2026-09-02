@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { updateShelterProfile, updateShelterLogo } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 import type { Shelter } from "@/types/shelter";
@@ -81,11 +82,16 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
           <div className="flex flex-col gap-3">
             {logoPreview || shelter.logo_path ? (
-              <img
-                src={logoPreview ?? `${mediaUrl(shelter.logo_path)}`}
-                alt="Logo del albergue"
-                className="h-32 w-32 rounded-xl border border-slate-custom-50 bg-cream-100 object-contain p-2"
-              />
+              <div className="relative h-32 w-32 rounded-xl border border-slate-custom-50 bg-cream-100 p-2">
+                <Image
+                  src={logoPreview ?? `${mediaUrl(shelter.logo_path)}`}
+                  alt="Logo del albergue"
+                  fill
+                  sizes="128px"
+                  unoptimized={Boolean(logoPreview)}
+                  className="object-contain"
+                />
+              </div>
             ) : (
               <div className="h-32 w-32 rounded-xl border-2 border-dashed border-slate-custom-50 bg-slate-custom-50/30 flex items-center justify-center text-4xl">
                 ðŸ 

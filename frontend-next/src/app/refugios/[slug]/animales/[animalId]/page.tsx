@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { SimplePage } from "@/lib/SimpleViews";
 import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
@@ -104,11 +105,12 @@ export default function RefugioAnimalDetailPage() {
             {/* Foto del Animal */}
             <div className="relative md:col-span-5 bg-slate-100 min-h-[260px] md:min-h-[380px]">
               {photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={`${mediaUrl(photo.photo_path)}`}
                   alt={animal.name}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 42vw"
+                  className="object-cover"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-cream-50 text-slate-custom-300">

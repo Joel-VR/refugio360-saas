@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import type { AnimalPhoto } from '@/types/animal'
 import { mediaUrl } from '@/lib/media'
 
@@ -21,13 +22,14 @@ export default function AnimalGallery({ photos, animalName }: { photos: AnimalPh
 
   return (
     <div className='flex flex-col gap-4'>
-      <div className='flex aspect-square items-center justify-center overflow-hidden rounded-3xl border border-slate-custom-50 bg-cream-50'>
+      <div className='relative flex aspect-square items-center justify-center overflow-hidden rounded-3xl border border-slate-custom-50 bg-cream-50'>
         {photos.length > 0 ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={mediaUrl(photos[active].photo_path)}
             alt={animalName}
-            className='h-full w-full object-cover transition'
+            fill
+            sizes='(max-width: 768px) 100vw, 50vw'
+            className='object-cover transition'
           />
         ) : (
           <PawIcon className='h-24 w-24 text-slate-300' />
@@ -41,12 +43,11 @@ export default function AnimalGallery({ photos, animalName }: { photos: AnimalPh
               key={photo.id}
               type='button'
               onClick={() => setActive(i)}
-              className={`aspect-square overflow-hidden rounded-xl border-2 bg-cream-50 transition ${
+              className={`relative aspect-square overflow-hidden rounded-xl border-2 bg-cream-50 transition ${
                 i === active ? 'border-brand-600' : 'border-slate-custom-50 opacity-70 hover:opacity-100'
               }`}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`${mediaUrl(photo.photo_path)}`} alt={animalName} className='h-full w-full object-cover' />
+              <Image src={`${mediaUrl(photo.photo_path)}`} alt={animalName} fill sizes='120px' className='object-cover' />
             </button>
           ))}
         </div>

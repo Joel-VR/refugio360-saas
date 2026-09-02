@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { createLostFoundPost, friendlyErrorMessage } from "@/lib/api";
 import type { LostFoundPostType } from "@/types/lostFoundPost";
 
@@ -140,8 +141,14 @@ export function LostFoundForm({ type, backHref }: { type: LostFoundPostType; bac
         ) : (
           <div className="rounded-md border border-slate-custom-50 bg-white p-3">
             {preview && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={preview} alt="Vista previa" className="max-h-56 w-full rounded-md object-contain" />
+              <Image
+                src={preview}
+                alt="Vista previa"
+                width={800}
+                height={224}
+                unoptimized
+                className="max-h-56 w-full rounded-md object-contain"
+              />
             )}
             <div className="mt-3 flex items-center justify-between gap-3 text-sm font-normal">
               <span className="truncate text-slate-custom-700">{photo.name} · {bytes(photo.size)}</span>

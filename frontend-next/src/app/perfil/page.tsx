@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import {
   getCurrentUser,
   getStoredToken,
@@ -166,9 +167,9 @@ return (
           {/* Tarjeta de identidad */}
           <section className="grid h-fit gap-4 rounded-2xl border border-slate-custom-50 bg-white p-6 text-center shadow-sm">
             <div className="relative mx-auto">
-              <div className={`grid h-28 w-28 place-items-center overflow-hidden rounded-full bg-cream-100 text-3xl font-semibold text-brand-600 ring-4 ${tone.ring}`}>
+              <div className={`relative grid h-28 w-28 place-items-center overflow-hidden rounded-full bg-cream-100 text-3xl font-semibold text-brand-600 ring-4 ${tone.ring}`}>
                 {user?.profile_photo_url ? (
-                  <img src={user.profile_photo_url} alt="Foto de perfil" className="h-full w-full object-cover" />
+                  <Image src={user.profile_photo_url} alt="Foto de perfil" fill sizes="112px" className="object-cover" />
                 ) : (
                   <span>{initial}</span>
                 )}

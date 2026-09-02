@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 
@@ -59,9 +60,9 @@ export default function DonarSelector() {
           {shelters.map((shelter) => (
             <article key={shelter.id} className="flex min-h-72 flex-col justify-between rounded-lg border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
               <div className="flex gap-4">
-                <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-custom-50 bg-slate-100">
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-slate-custom-50 bg-slate-100">
                   {shelter.logo_path ? (
-                    <img src={`${mediaUrl(shelter.logo_path)}`} alt={shelter.name} className="h-full w-full object-cover" />
+                    <Image src={`${mediaUrl(shelter.logo_path)}`} alt={shelter.name} fill sizes="64px" className="object-cover" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-xl font-bold text-brand-600">{shelter.name.slice(0, 1)}</div>
                   )}

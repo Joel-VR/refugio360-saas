@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { authHeaders, friendlyErrorMessage, API_BASE_URL } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 
@@ -145,12 +146,15 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
           <span className="text-sm text-slate-custom-700">Fotos actuales</span>
           <div className="flex flex-wrap gap-3">
             {currentPhotos.map((photo, idx) => (
-              <img
-                key={idx}
-                src={`${mediaUrl(photo.photo_path)}`}
-                alt={`Foto ${idx + 1}`}
-                className="h-16 w-16 rounded-2xl object-cover sm:h-20 sm:w-20"
-              />
+              <div key={idx} className="relative h-16 w-16 rounded-2xl sm:h-20 sm:w-20">
+                <Image
+                  src={`${mediaUrl(photo.photo_path)}`}
+                  alt={`Foto ${idx + 1}`}
+                  fill
+                  sizes="80px"
+                  className="rounded-2xl object-cover"
+                />
+              </div>
             ))}
           </div>
         </div>
