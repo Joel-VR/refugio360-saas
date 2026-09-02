@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 class Animal extends Model
 {
@@ -59,5 +60,17 @@ class Animal extends Model
                 $builder->where('shelter_id', auth()->user()->shelter_id);
             }
         });
+
+        // Altas/bajas/cambios de estado cambian el animals_count y la lista
+        // pública cacheados en PublicShelterController — sin esto quedan
+        // desactualizados hasta que expire el Cache::remember (hasta 60s).
+        $forgetPublicCache = function (Animal $animal) {
+            Cache::forget('public_shelters_index');
+            if ($slug = $animal->shelter?->slug) {
+                Cache::forget("public_shelter_animals_{$slug}");
+            }
+        };
+        static::saved($forgetPublicCache);
+        static::deleted($forgetPublicCache);
     }
 }
