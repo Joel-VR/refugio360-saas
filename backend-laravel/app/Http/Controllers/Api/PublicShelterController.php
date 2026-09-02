@@ -26,7 +26,8 @@ class PublicShelterController extends Controller
                 ->withCount(['animals'])
                 ->latest()
                 ->get()
-                ->map(fn (Shelter $shelter) => $this->publicShelter($shelter));
+                ->map(fn (Shelter $shelter) => $this->publicShelter($shelter))
+                ->all();
         });
 
         return response()->json($shelters);
@@ -35,7 +36,9 @@ class PublicShelterController extends Controller
     public function show(string $slug): JsonResponse
     {
         $data = Cache::remember("public_shelter_show_{$slug}", self::CACHE_TTL, function () use ($slug) {
-            $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')->firstOrFail();
+            $shelter = Shelter::where('slug', $slug)->where('is_active', true)->where('approval_status', 'approved')
+                ->with('sponsors')
+                ->firstOrFail();
 
             return $this->publicShelter($shelter);
         });
@@ -53,7 +56,8 @@ class PublicShelterController extends Controller
                 ->where('shelter_id', $shelter->id)
                 ->whereIn('lifecycle_status', ['apto', 'tratamiento'])
                 ->latest()
-                ->get();
+                ->get()
+                ->toArray();
         });
 
         return response()->json($animals);
@@ -124,8 +128,8 @@ class PublicShelterController extends Controller
                 'infraestructura' => round((float) ($expenseCategories['infraestructura'] ?? 0), 2),
                 'otros' => round((float) ($expenseCategories['otros'] ?? 0), 2),
             ],
-            'donations' => $donations,
-            'expenses' => $expensesList,
+            'donations' => $donations->toArray(),
+            'expenses' => $expensesList->toArray(),
         ];
     }
 
@@ -157,6 +161,14 @@ class PublicShelterController extends Controller
                 ],
             ],
             'animals_count' => $shelter->animals_count ?? null,
+            'sponsors' => $shelter->relationLoaded('sponsors')
+                ? $shelter->sponsors->map(fn ($sponsor) => [
+                    'id' => $sponsor->id,
+                    'name' => $sponsor->name,
+                    'logo_path' => $sponsor->logo_path,
+                    'url' => $sponsor->url,
+                ])->all()
+                : [],
         ];
     }
 }

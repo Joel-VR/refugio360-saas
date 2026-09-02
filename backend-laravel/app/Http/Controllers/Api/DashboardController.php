@@ -40,7 +40,8 @@ class DashboardController extends Controller
                 ])
                 ->latest()
                 ->limit(5)
-                ->get(['id', 'shelter_id', 'animal_id', 'applicant_name', 'status', 'created_at']);
+                ->get(['id', 'shelter_id', 'animal_id', 'applicant_name', 'status', 'created_at'])
+                ->toArray();
 
             return [
                 'animals' => [

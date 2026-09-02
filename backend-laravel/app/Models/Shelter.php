@@ -80,6 +80,11 @@ class Shelter extends Model
         return $this->hasMany(Expense::class);
     }
 
+    public function sponsors()
+    {
+        return $this->hasMany(ShelterSponsor::class)->orderBy('order');
+    }
+
     // MÃ©todo para obtener QR de Yape o Plin
     public function getQrUrl(string $method): ?string
     {

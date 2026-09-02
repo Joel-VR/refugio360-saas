@@ -2,6 +2,7 @@ import { getCurrentUser, getShelter } from "@/lib/api";
 import { getServerAuthHeaders } from "@/lib/server-auth";
 import { ShelterProfileForm } from "./ShelterProfileForm";
 import { PaymentMethodsPanel } from "./PaymentMethodsPanel";
+import { SponsorsPanel } from "./SponsorsPanel";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export default async function AdminConfiguracionPage() {
@@ -43,6 +44,9 @@ export default async function AdminConfiguracionPage() {
 
         {/* Métodos de pago */}
         <PaymentMethodsPanel shelter={shelter} />
+
+        {/* Insignias de aliados */}
+        <SponsorsPanel shelter={shelter} />
       </section>
     </main>
   );

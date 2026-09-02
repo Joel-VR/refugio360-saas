@@ -57,7 +57,7 @@ class ShelterController extends Controller
      */
     public function show(Shelter $shelter): JsonResponse
     {
-        $shelter->loadCount(['animals', 'adoptions']);
+        $shelter->loadCount(['animals', 'adoptions'])->load('sponsors');
 
         // Conteos por estado â€” consultas directas a la BD sin pasar por scopes
         $animalStats = DB::table('animals')

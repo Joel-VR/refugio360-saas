@@ -333,6 +333,33 @@ export async function deleteShelter(id: number): Promise<void> {
   await apiFetch(`/shelters/${id}`, { method: "DELETE" });
 }
 
+export async function addShelterSponsor(
+  shelterId: number,
+  payload: { name: string; url?: string; logo: File }
+): Promise<Shelter> {
+  const fd = new FormData();
+  fd.append("name", payload.name);
+  if (payload.url) fd.append("url", payload.url);
+  fd.append("logo", payload.logo);
+
+  const res = await fetch(`${API_BASE_URL}/admin/shelters/${shelterId}/sponsors`, {
+    method: "POST",
+    headers: { Accept: "application/json", ...authHeaders() },
+    body: fd,
+  });
+
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    const firstValidationError = body?.errors ? Object.values(body.errors).flat()[0] : null;
+    throw new Error(String(firstValidationError ?? body?.message ?? "No se pudo agregar la insignia."));
+  }
+  return body;
+}
+
+export async function deleteShelterSponsor(shelterId: number, sponsorId: number): Promise<Shelter> {
+  return apiFetch(`/admin/shelters/${shelterId}/sponsors/${sponsorId}`, { method: "DELETE" });
+}
+
 // ─── Dashboard ───────────────────────────────────────────────────────────────
 
 export async function getDashboardStats(extraHeaders: HeadersInit = {}): Promise<DashboardStats> {

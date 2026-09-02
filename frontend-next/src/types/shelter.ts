@@ -1,3 +1,10 @@
+export type ShelterSponsor = {
+  id: number;
+  name: string;
+  logo_path: string;
+  url: string | null;
+};
+
 export type Shelter = {
   id: number;
   name: string;
@@ -30,6 +37,7 @@ export type Shelter = {
   };
   animals_count?: number;
   adoptions_count?: number;
+  sponsors?: ShelterSponsor[];
   stats?: {
     animals_apto: number;
     animals_cuarentena: number;

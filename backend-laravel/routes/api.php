@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\DonationController;
 use App\Http\Controllers\Api\LostFoundPostController;
 use App\Http\Controllers\Api\PublicShelterController;
 use App\Http\Controllers\Api\AdminPaymentMethodController;
+use App\Http\Controllers\Api\AdminShelterSponsorController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SuperAdminController;
 use Illuminate\Support\Facades\Route;
@@ -119,7 +120,9 @@ Route::prefix('v1/admin')->middleware(['auth:sanctum', 'admin.role'])->group(fun
     Route::post('shelters/{shelter}/logo',      [ShelterController::class, 'updateLogo']);
     Route::post('shelters/{shelter}/payment-methods', [AdminPaymentMethodController::class, 'update']);
     Route::delete('shelters/{shelter}/payment-methods/{method}/qr', [AdminPaymentMethodController::class, 'destroyQr']);
-    
+    Route::post('shelters/{shelter}/sponsors', [AdminShelterSponsorController::class, 'store']);
+    Route::delete('shelters/{shelter}/sponsors/{sponsor}', [AdminShelterSponsorController::class, 'destroy']);
+
 });
 
 // ── Gastos ────────────────────────────────────────────────────────────────

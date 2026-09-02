@@ -3,10 +3,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { SimplePage } from "@/lib/SimpleViews";
 import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
+import { mediaUrl } from "@/lib/media";
 
-type Shelter = { id: number; name: string; slug: string; description: string | null };
+type Sponsor = { id: number; name: string; logo_path: string; url: string | null };
+type Shelter = { id: number; name: string; slug: string; description: string | null; sponsors?: Sponsor[] };
 
 function Icon({ path, className = "h-5 w-5" }: { path: string; className?: string }) {
   return (
@@ -118,6 +121,46 @@ export default function RefugioProfilePage() {
             description="Revisa el historial de ingresos y gastos registrados de este refugio."
           />
         </div>
+
+        {/* Insignias de instituciones aliadas */}
+        {shelter.sponsors && shelter.sponsors.length > 0 && (
+          <div className="space-y-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-custom-500">
+              Con el apoyo de
+            </p>
+            <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 lg:grid-cols-8">
+              {shelter.sponsors.map((sponsor) => {
+                const badge = (
+                  <div className="relative h-14 w-14 rounded-xl border border-slate-custom-50 bg-white p-2 transition hover:border-brand-600/40">
+                    <Image
+                      src={mediaUrl(sponsor.logo_path)}
+                      alt={sponsor.name}
+                      fill
+                      sizes="56px"
+                      className="object-contain p-1.5"
+                    />
+                  </div>
+                );
+
+                return sponsor.url ? (
+                  <a
+                    key={sponsor.id}
+                    href={sponsor.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title={sponsor.name}
+                  >
+                    {badge}
+                  </a>
+                ) : (
+                  <div key={sponsor.id} title={sponsor.name}>
+                    {badge}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </SimplePage>
   );
