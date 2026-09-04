@@ -101,6 +101,8 @@ const RAW_BACKEND_MESSAGE_PATTERNS = [
   /call to a member function/i,
   /class ["'][^"']+["'] not found/i,
   /sqlstate/i,
+  /mime_content_type/i,
+  /unable to create temporary file/i,
 ];
 
 export function sanitizeErrorMessage(

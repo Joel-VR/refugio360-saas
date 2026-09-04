@@ -6,6 +6,7 @@ import {
   getCurrentUser,
   getStoredToken,
   getStoredUser,
+  sanitizeErrorMessage,
   storeAuthUser,
   updatePassword,
   updateProfile,
@@ -14,8 +15,7 @@ import {
 } from "@/lib/api";
 import { PublicShell } from "@/lib/SimpleViews";
 import { compressImage } from "@/lib/imageCompression";
-import { PaymentMethodsPanel } from "../admin/configuracion/PaymentMethodsPanel";
-import { ShelterProfileForm } from "../admin/configuracion/ShelterProfileForm";
+import { HelpToggle } from "@/components/HelpToggle";
 
 function Icon({ path, className = "h-5 w-5" }: { path: string; className?: string }) {
   return (
@@ -46,12 +46,13 @@ export default function ProfilePage() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [showPasswords, setShowPasswords] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [loadingPassword, setLoadingPassword] = useState(false);
   const [loadingPhoto, setLoadingPhoto] = useState(false);
+  const [photoError, setPhotoError] = useState("");
+  const [photoMessage, setPhotoMessage] = useState("");
 
   function hydrateUser(nextUser: AuthUser) {
     setUser(nextUser);
@@ -130,16 +131,16 @@ export default function ProfilePage() {
   async function savePhoto(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
-    setMessage("");
-    setError("");
+    setPhotoError("");
+    setPhotoMessage("");
     setLoadingPhoto(true);
     try {
       const compressed = await compressImage(file);
       const response = await updateProfilePhoto(compressed);
       syncUser(response.user);
-      setMessage(response.message);
+      setPhotoMessage(response.message);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo subir la foto.");
+      setPhotoError(sanitizeErrorMessage(err instanceof Error ? err.message : "No se pudo cargar la imagen :(", "No se pudo cargar la imagen :("));
     } finally {
       setLoadingPhoto(false);
       event.target.value = "";
@@ -150,11 +151,15 @@ export default function ProfilePage() {
   const tone = ROLE_TONES[user?.role ?? ""] ?? { badge: "bg-slate-100 text-slate-600", ring: "ring-slate-200" };
 return (
     <PublicShell>
-      <section className="mx-auto grid max-w-4xl gap-6 px-6 py-10">
+      <section className="grid w-full gap-6 px-6 py-10">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">Cuenta</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight">Perfil</h1>
-          <p className="mt-2 text-sm text-slate-custom-700">Administra tus datos de cuenta, contraseña y foto de perfil.</p>
+          <div className="mt-2 flex items-center gap-2">
+            <h1 className="text-3xl font-semibold tracking-tight">Perfil</h1>
+            <HelpToggle label="Ayuda sobre esta página">
+              Administra tus datos de cuenta, contraseña y foto de perfil.
+            </HelpToggle>
+          </div>
         </div>
 
         {message && (
@@ -183,6 +188,8 @@ return (
             </div>
 
             {loadingPhoto && <p className="text-xs text-slate-500">Subiendo foto...</p>}
+            {photoMessage && <p className="text-xs text-emerald-700">{photoMessage}</p>}
+            {photoError && <p className="text-xs text-red-700">{photoError}</p>}
 
             <div>
               <p className="font-semibold text-slate-custom-900">{user?.name}</p>
@@ -193,7 +200,7 @@ return (
             </div>
           </section>
 
-          <div className="grid gap-6">
+          <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
             {/* Datos personales */}
             <form onSubmit={saveProfile} className="grid gap-4 rounded-2xl border border-slate-custom-50 bg-white p-6 shadow-sm">
               <div className="flex items-center gap-3">
@@ -239,27 +246,16 @@ return (
 
             {/* Contraseña */}
             <form onSubmit={savePassword} className="grid gap-4 rounded-2xl border border-slate-custom-50 bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600/10 text-brand-600">
-                    <Icon path={ICONS.lock} className="h-4.5 w-4.5" />
-                  </span>
-                  <h2 className="text-lg font-semibold text-slate-custom-900">Cambiar contraseña</h2>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowPasswords((value) => !value)}
-                  className="grid h-9 w-9 place-items-center rounded-md border border-slate-custom-50 text-slate-custom-700 transition hover:bg-cream-50"
-                  title={showPasswords ? "Ocultar contraseñas" : "Ver contraseñas"}
-                  aria-label={showPasswords ? "Ocultar contraseñas" : "Ver contraseñas"}
-                >
-                  <EyeIcon />
-                </button>
+              <div className="flex items-center gap-3">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600/10 text-brand-600">
+                  <Icon path={ICONS.lock} className="h-4.5 w-4.5" />
+                </span>
+                <h2 className="text-lg font-semibold text-slate-custom-900">Cambiar contraseña</h2>
               </div>
 
-              <PasswordInput label="Contraseña actual" value={currentPassword} show={showPasswords} onChange={setCurrentPassword} autoComplete="current-password" />
-              <PasswordInput label="Nueva contraseña" value={password} show={showPasswords} onChange={setPassword} autoComplete="new-password" />
-              <PasswordInput label="Repetir nueva contraseña" value={passwordConfirmation} show={showPasswords} onChange={setPasswordConfirmation} autoComplete="new-password" />
+              <PasswordInput label="Contraseña actual" value={currentPassword} onChange={setCurrentPassword} autoComplete="current-password" />
+              <PasswordInput label="Nueva contraseña" value={password} onChange={setPassword} autoComplete="new-password" />
+              <PasswordInput label="Repetir nueva contraseña" value={passwordConfirmation} onChange={setPasswordConfirmation} autoComplete="new-password" />
 
               <p className="rounded-lg bg-cream-50 px-3 py-2.5 text-xs leading-5 text-slate-custom-700">
                 La contraseña debe tener mínimo 8 caracteres, mayúscula, minúscula, número y símbolo.
@@ -272,18 +268,6 @@ return (
                 {loadingPassword ? "Actualizando..." : "Actualizar contraseña"}
               </button>
             </form>
-
-            {/* SI EL USUARIO ES UN ALBERGUE, SE MUESTRAN SUS CONFIGURACIONES */}
-            {user?.role === "shelter_admin" && (
-              <div className="grid gap-6 pt-2">
-                <div className="rounded-2xl border border-slate-custom-50 bg-white p-6 shadow-sm">
-                  <ShelterProfileForm shelter={(user as any)?.shelter} />
-                </div>
-                <div className="rounded-2xl border border-slate-custom-50 bg-white p-6 shadow-sm">
-                  <PaymentMethodsPanel shelter={(user as any)?.shelter} />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -299,27 +283,38 @@ function readInitialUser() {
 function PasswordInput({
   label,
   value,
-  show,
   autoComplete,
   onChange,
 }: {
   label: string;
   value: string;
-  show: boolean;
   autoComplete: string;
   onChange: (value: string) => void;
 }) {
+  const [show, setShow] = useState(false);
+
   return (
     <label className="grid gap-1.5 text-sm font-medium text-slate-custom-700">
       {label}
-      <input
-        required
-        type={show ? "text" : "password"}
-        autoComplete={autoComplete}
-        className="rounded-lg border border-slate-custom-50 bg-cream-50 px-3 py-2.5 font-normal outline-none transition focus:border-brand-600/50 focus:ring-1 focus:ring-brand-600/10"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-      />
+      <div className="relative">
+        <input
+          required
+          type={show ? "text" : "password"}
+          autoComplete={autoComplete}
+          className="w-full rounded-lg border border-slate-custom-50 bg-cream-50 py-2.5 pl-3 pr-10 font-normal outline-none transition focus:border-brand-600/50 focus:ring-1 focus:ring-brand-600/10"
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+        />
+        <button
+          type="button"
+          onClick={() => setShow((v) => !v)}
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-custom-400 transition hover:text-slate-custom-700"
+          title={show ? "Ocultar contraseña" : "Ver contraseña"}
+          aria-label={show ? "Ocultar contraseña" : "Ver contraseña"}
+        >
+          <EyeIcon />
+        </button>
+      </div>
     </label>
   );
 }
@@ -333,12 +328,9 @@ function roleLabel(role?: string) {
 
 function EyeIcon() {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
       <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z" />
       <circle cx="12" cy="12" r="3" />
     </svg>
   );
-
-  
-    
 }

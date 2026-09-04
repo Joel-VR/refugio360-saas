@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Shelter;
 use App\Models\User;
+use App\Services\CloudinaryMedia;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -146,7 +147,7 @@ class AuthController extends Controller
         ]);
     }
 
-    public function updatePhoto(Request $request): JsonResponse
+    public function updatePhoto(Request $request, CloudinaryMedia $media): JsonResponse
     {
         $user = $request->user();
 
