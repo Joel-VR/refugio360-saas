@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { API_BASE_URL as API } from "@/lib/api";
+import { DonarModal } from "@/components/DonarModal";
 
 type Shelter = { id: number; name: string; slug: string; description: string | null; accepts_donations: boolean };
 
 export default function TransparenciaPage() {
   const [shelters, setShelters] = useState<Shelter[]>([]);
   const [loading, setLoading] = useState(true);
+  const [donarSlug, setDonarSlug] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`${API}/public/shelters`, { headers: { Accept: "application/json" }, cache: "no-store" })
@@ -35,12 +37,22 @@ export default function TransparenciaPage() {
               <p className="mt-2 line-clamp-3 text-sm leading-6 text-slate-custom-700">{shelter.description || "Albergue registrado en Refugio360."}</p>
               <div className="mt-5 flex gap-2">
                 <Link href={`/refugios/${shelter.slug}/transparencia`} className="rounded-md bg-brand-600 px-4 py-2 text-sm font-semibold text-white">Ver reporte</Link>
-                {shelter.accepts_donations && <Link href={`/refugios/${shelter.slug}/donar`} className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-custom-700">Donar</Link>}
+                {shelter.accepts_donations && (
+                  <button
+                    type="button"
+                    onClick={() => setDonarSlug(shelter.slug)}
+                    className="rounded-md border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-custom-700"
+                  >
+                    Donar
+                  </button>
+                )}
               </div>
             </article>
           ))}
         </div>
       </section>
+
+      {donarSlug && <DonarModal slug={donarSlug} onClose={() => setDonarSlug(null)} />}
     </main>
   );
 }

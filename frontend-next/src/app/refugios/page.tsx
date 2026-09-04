@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { SimplePage } from "@/lib/SimpleViews";
 import { friendlyErrorMessage, getStoredToken, API_BASE_URL as API } from "@/lib/api";
+import { DonarModal } from "@/components/DonarModal";
 
 type Shelter = { id: number; name: string; slug: string; description: string | null; accepts_donations: boolean };
 
@@ -27,6 +28,7 @@ export default function RefugiosPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [donarSlug, setDonarSlug] = useState<string | null>(null);
 
   useEffect(() => {
     setIsLoggedIn(Boolean(getStoredToken()));
@@ -137,18 +139,21 @@ export default function RefugiosPage() {
                   Ver perfil
                   <Icon path={ICONS.arrowRight} className="h-3.5 w-3.5" />
                 </Link>
-                <Link
-                  href={`/refugios/${shelter.slug}/donar`}
+                <button
+                  type="button"
+                  onClick={() => setDonarSlug(shelter.slug)}
                   className="inline-flex items-center justify-center gap-1 rounded-xl border border-sky-200 bg-sky-50 px-3 py-2 text-xs font-semibold text-sky-700 transition-colors duration-200 hover:border-sky-600 hover:bg-sky-600 hover:text-white"
                 >
                   <Icon path={ICONS.gift} className="h-3.5 w-3.5" />
                   Donar
-                </Link>
+                </button>
               </div>
             </article>
           ))}
         </div>
       )}
+
+      {donarSlug && <DonarModal slug={donarSlug} onClose={() => setDonarSlug(null)} />}
     </SimplePage>
   );
 }

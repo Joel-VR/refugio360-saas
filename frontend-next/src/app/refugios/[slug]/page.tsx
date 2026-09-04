@@ -7,6 +7,7 @@ import Image from "next/image";
 import { SimplePage } from "@/lib/SimpleViews";
 import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { DonarModal } from "@/components/DonarModal";
 
 type Sponsor = { id: number; name: string; logo_path: string; url: string | null };
 type Shelter = { id: number; name: string; slug: string; description: string | null; sponsors?: Sponsor[] };
@@ -37,6 +38,7 @@ export default function RefugioProfilePage() {
   const [shelter, setShelter] = useState<Shelter | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showDonar, setShowDonar] = useState(false);
 
   useEffect(() => {
     fetch(`${API}/public/shelters/${slug}`, { headers: { Accept: "application/json" } })
@@ -109,7 +111,7 @@ export default function RefugioProfilePage() {
           <ActionCard
             tone="sky"
             icon={ICONS.gift}
-            href={`/refugios/${slug}/donar`}
+            onClick={() => setShowDonar(true)}
             title="Donar"
             description="Apoya a este refugio con donaciones monetarias directamente."
           />
@@ -162,6 +164,8 @@ export default function RefugioProfilePage() {
           </div>
         )}
       </div>
+
+      {showDonar && <DonarModal slug={String(slug)} onClose={() => setShowDonar(false)} />}
     </SimplePage>
   );
 }
@@ -170,21 +174,20 @@ function ActionCard({
   tone,
   icon,
   href,
+  onClick,
   title,
   description,
 }: {
   tone: keyof typeof TONES;
   icon: string;
-  href: string;
+  href?: string;
+  onClick?: () => void;
   title: string;
   description: string;
 }) {
   const t = TONES[tone];
-  return (
-    <Link
-      href={href}
-      className="group flex flex-col justify-between gap-4 rounded-2xl border border-slate-custom-50 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-600 hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-600/20"
-    >
+  const content = (
+    <>
       <span
         className={`flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-200 ${t.badge} group-hover:bg-white/20 group-hover:text-white`}
       >
@@ -199,6 +202,22 @@ function ActionCard({
           {description}
         </p>
       </div>
+    </>
+  );
+  const className =
+    "group flex flex-col justify-between gap-4 rounded-2xl border border-slate-custom-50 bg-white p-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-brand-600 hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-600/20";
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={className}>
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <Link href={href!} className={className}>
+      {content}
     </Link>
   );
 }

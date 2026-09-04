@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { DonarModal } from "@/components/DonarModal";
 
 type PublicShelter = {
   id: number;
@@ -23,6 +24,7 @@ export default function DonarSelector() {
   const [shelters, setShelters] = useState<PublicShelter[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [donarSlug, setDonarSlug] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`${API}/public/shelters`, { headers: { Accept: "application/json" }, cache: "no-store" })
@@ -84,15 +86,16 @@ export default function DonarSelector() {
                 </div>
 
                 <div className="flex gap-2">
-                  <Link
-                    href={`/refugios/${shelter.slug}/donar`}
-                    aria-disabled={!shelter.accepts_donations}
+                  <button
+                    type="button"
+                    disabled={!shelter.accepts_donations}
+                    onClick={() => setDonarSlug(shelter.slug)}
                     className={`flex-1 rounded-md px-4 py-3 text-center text-sm font-semibold ${
                       shelter.accepts_donations ? "bg-brand-600 text-white hover:bg-teal-800" : "pointer-events-none bg-slate-200 text-slate-500"
                     }`}
                   >
                     Donar
-                  </Link>
+                  </button>
                   <Link href={`/refugios/${shelter.slug}/transparencia`} className="rounded-md border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-custom-700 hover:bg-cream-100">
                     Transparencia
                   </Link>
@@ -106,6 +109,8 @@ export default function DonarSelector() {
           <p className="rounded-xl border border-slate-custom-50 bg-cream-50 px-5 py-4 text-sm text-slate-500">Aún no hay albergues activos para recibir donaciones.</p>
         )}
       </section>
+
+      {donarSlug && <DonarModal slug={donarSlug} onClose={() => setDonarSlug(null)} />}
     </main>
   );
 }
