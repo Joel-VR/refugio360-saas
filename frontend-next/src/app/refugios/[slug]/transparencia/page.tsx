@@ -6,6 +6,7 @@ import Link from "next/link";
 import { SimplePage } from "@/lib/SimpleViews";
 import { API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { SpinnerOverlay } from "@/components/Spinner";
 
 type Transparency = {
   shelter: { name: string; slug: string; description: string | null };
@@ -64,14 +65,7 @@ export default function ShelterTransparencyPage() {
   if (loading) {
     return (
       <SimplePage title="Transparencia" description="Cargando informe financiero...">
-        <div className="space-y-6">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <div className="h-28 animate-pulse rounded-2xl border border-slate-custom-50 bg-white" />
-            <div className="h-28 animate-pulse rounded-2xl border border-slate-custom-50 bg-white" />
-            <div className="h-28 animate-pulse rounded-2xl border border-slate-custom-50 bg-white" />
-          </div>
-          <div className="h-48 animate-pulse rounded-2xl border border-slate-custom-50 bg-white" />
-        </div>
+        <SpinnerOverlay />
       </SimplePage>
     );
   }
