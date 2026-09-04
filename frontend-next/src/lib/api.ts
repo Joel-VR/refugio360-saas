@@ -131,7 +131,10 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
     if (res.status === 401 || res.status === 403) {
       throw new ApiAuthError(message);
     }
-    throw new Error(`${message} — ${API_BASE_URL}${path}`);
+    if (process.env.NODE_ENV !== "production") {
+      console.error(`API ${res.status} — ${API_BASE_URL}${path}`);
+    }
+    throw new Error(message);
   }
 
   if (res.status === 204) return null as T;

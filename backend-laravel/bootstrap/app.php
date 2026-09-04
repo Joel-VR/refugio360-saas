@@ -26,4 +26,23 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn(Request $request) => $request->is('api/*'),
         );
+
+        // En producción no exponemos file/line/trace del servidor aunque
+        // APP_DEBUG quede mal configurado: solo mensaje genérico.
+        $exceptions->render(function (\Throwable $e, Request $request) {
+            if (!$request->is('api/*') || !app()->environment('production')) {
+                return null;
+            }
+
+            if ($e instanceof \Illuminate\Validation\ValidationException
+                || $e instanceof \Illuminate\Auth\AuthenticationException
+                || $e instanceof \Illuminate\Auth\Access\AuthorizationException
+                || $e instanceof \Symfony\Component\HttpKernel\Exception\HttpExceptionInterface) {
+                return null;
+            }
+
+            return response()->json([
+                'message' => 'Ocurrió un error inesperado. Inténtalo de nuevo más tarde.',
+            ], 500);
+        });
     })->create();

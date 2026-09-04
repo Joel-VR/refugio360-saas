@@ -64,20 +64,23 @@ export default async function DashboardPage() {
   }
 
   if (errorMsg || !stats) {
+    const isDev = process.env.NODE_ENV !== "production";
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 px-6 text-center">
         <p className="text-4xl">⚠️</p>
-        <p className="text-lg font-semibold text-rose-700">No se pudo conectar con la API</p>
+        <p className="text-lg font-semibold text-rose-700">No se pudo cargar el panel</p>
         <p className="max-w-md text-sm text-slate-custom-700">
-          {errorMsg}
+          Intenta de nuevo en unos minutos. Si el problema continúa, contacta al equipo de soporte.
         </p>
-        <div className="mt-4 rounded-2xl border border-slate-custom-50 bg-slate-custom-50/20 p-4 text-left text-xs text-slate-custom-700 font-mono w-full max-w-md overflow-x-auto">
-          <p className="text-slate-custom-700 mb-1 font-semibold">Verifica:</p>
-          <p>1. Laravel corriendo: <span className="text-brand-600">php artisan serve</span></p>
-          <p>2. URL en <span className="text-brand-600">.env.local</span>: <span className="text-slate-custom-900">NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1</span></p>
-          <p>3. Migración: <span className="text-brand-600">php artisan migrate</span></p>
-          <p>4. CORS activo en Laravel</p>
-        </div>
+        {isDev && (
+          <div className="mt-4 rounded-2xl border border-slate-custom-50 bg-slate-custom-50/20 p-4 text-left text-xs text-slate-custom-700 font-mono w-full max-w-md overflow-x-auto">
+            <p className="text-slate-custom-700 mb-1 font-semibold">Detalle (solo desarrollo): {errorMsg}</p>
+            <p>1. Laravel corriendo: <span className="text-brand-600">php artisan serve</span></p>
+            <p>2. URL en <span className="text-brand-600">.env.local</span>: <span className="text-slate-custom-900">NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1</span></p>
+            <p>3. Migración: <span className="text-brand-600">php artisan migrate</span></p>
+            <p>4. CORS activo en Laravel</p>
+          </div>
+        )}
       </div>
     );
   }
