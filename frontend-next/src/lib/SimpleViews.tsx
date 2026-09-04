@@ -45,11 +45,22 @@ function useNavLinksByRole(): NavLink[] {
   return links;
 }
 
-export function PublicShell({ children }: { children: React.ReactNode }) {
+export function PublicShell({
+  children,
+  fullHeight = false,
+}: {
+  children: React.ReactNode;
+  /** En pantallas lg+, ocupa exactamente el alto de la ventana sin scroll de página (el contenido interno decide su propio scroll). */
+  fullHeight?: boolean;
+}) {
   const navLinks = useNavLinksByRole();
 
   return (
-    <main className="min-h-screen bg-cream-100 text-slate-custom-900">
+    <main
+      className={`min-h-screen bg-cream-100 text-slate-custom-900 ${
+        fullHeight ? "lg:flex lg:h-dvh lg:flex-col lg:overflow-hidden" : ""
+      }`}
+    >
       <SiteHeader navLinks={navLinks} />
       {children}
     </main>

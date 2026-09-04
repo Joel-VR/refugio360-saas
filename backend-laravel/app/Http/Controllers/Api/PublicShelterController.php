@@ -144,6 +144,9 @@ class PublicShelterController extends Controller
             'slug' => $shelter->slug,
             'description' => $shelter->description,
             'logo_path' => $shelter->logo_path,
+            'address' => $shelter->address,
+            'latitude' => $shelter->latitude !== null ? (float) $shelter->latitude : null,
+            'longitude' => $shelter->longitude !== null ? (float) $shelter->longitude : null,
             'is_active' => $shelter->is_active,
             'accepts_donations' => $hasYape || $hasPlin,
             'payment_methods' => [

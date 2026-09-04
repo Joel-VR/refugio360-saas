@@ -39,6 +39,8 @@ class Shelter extends Model
         'email',
         'phone',
         'address',
+        'latitude',
+        'longitude',
         'logo_path',
         'is_active',
         'approval_status',

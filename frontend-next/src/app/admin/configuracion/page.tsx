@@ -3,6 +3,7 @@ import { getServerAuthHeaders } from "@/lib/server-auth";
 import { ShelterProfileForm } from "./ShelterProfileForm";
 import { PaymentMethodsPanel } from "./PaymentMethodsPanel";
 import { SponsorsPanel } from "./SponsorsPanel";
+import { LocationPanel } from "./LocationPanel";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { HelpToggle } from "@/components/HelpToggle";
 
@@ -45,6 +46,9 @@ export default async function AdminConfiguracionPage() {
 
           {/* Perfil del albergue (logo + datos) */}
           <ShelterProfileForm shelter={shelter} />
+
+          {/* Ubicación en el mapa */}
+          <LocationPanel shelter={shelter} />
 
           {/* Métodos de pago */}
           <PaymentMethodsPanel shelter={shelter} />

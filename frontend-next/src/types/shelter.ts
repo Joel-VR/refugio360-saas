@@ -13,6 +13,8 @@ export type Shelter = {
   email: string | null;
   phone: string | null;
   address?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   logo_path: string | null;
   is_active: boolean;
   approval_status?: "pending_review" | "approved" | "rejected";

@@ -318,7 +318,15 @@ export async function updateShelter(
 
 export async function updateShelterProfile(
   id: number,
-  payload: { name?: string; description?: string; email?: string; phone?: string; address?: string }
+  payload: {
+    name?: string;
+    description?: string;
+    email?: string;
+    phone?: string;
+    address?: string;
+    latitude?: number | null;
+    longitude?: number | null;
+  }
 ): Promise<Shelter> {
   return apiFetch(`/admin/shelters/${id}/profile`, {
     method: "PUT",

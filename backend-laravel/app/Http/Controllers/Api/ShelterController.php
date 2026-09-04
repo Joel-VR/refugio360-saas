@@ -142,6 +142,8 @@ class ShelterController extends Controller
             'email'       => ['nullable', 'email', 'max:255'],
             'phone'       => ['nullable', 'string', 'max:20'],
             'address'     => ['nullable', 'string', 'max:500'],
+            'latitude'    => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude'   => ['nullable', 'numeric', 'between:-180,180'],
         ]);
 
         $shelter->update($validated);
