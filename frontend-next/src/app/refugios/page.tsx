@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import { PublicShell } from "@/lib/SimpleViews";
 import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
+import { mediaUrl } from "@/lib/media";
 import { DonarModal } from "@/components/DonarModal";
 import { HelpToggle } from "@/components/HelpToggle";
 import { Spinner } from "@/components/Spinner";
@@ -23,6 +25,7 @@ type Shelter = {
   name: string;
   slug: string;
   description: string | null;
+  logo_path: string | null;
   accepts_donations: boolean;
   latitude: number | null;
   longitude: number | null;
@@ -110,9 +113,20 @@ export default function RefugiosPage() {
                   className="group rounded-2xl border border-slate-custom-50 bg-white p-4 transition hover:border-brand-600/30 hover:shadow-md hover:shadow-brand-600/5"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <h2 className="text-sm font-semibold text-slate-custom-900 transition group-hover:text-brand-600">
-                      {shelter.name}
-                    </h2>
+                    <div className="flex min-w-0 items-center gap-2">
+                      {shelter.logo_path ? (
+                        <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-lg border border-slate-custom-50 bg-white">
+                          <Image src={mediaUrl(shelter.logo_path)} alt={shelter.name} fill sizes="32px" className="object-contain p-0.5" />
+                        </div>
+                      ) : (
+                        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-cream-100 text-slate-custom-300">
+                          <Icon path={ICONS.building} className="h-4 w-4" />
+                        </div>
+                      )}
+                      <h2 className="truncate text-sm font-semibold text-slate-custom-900 transition group-hover:text-brand-600">
+                        {shelter.name}
+                      </h2>
+                    </div>
                     {shelter.accepts_donations && (
                       <span className="inline-flex flex-shrink-0 items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-medium text-emerald-700">
                         <Icon path={ICONS.gift} className="h-3 w-3" />

@@ -18,6 +18,7 @@ type Shelter = {
   name: string;
   slug: string;
   description: string | null;
+  logo_path: string | null;
   sponsors?: Sponsor[];
   social_links?: SocialLinks;
 };
@@ -88,11 +89,18 @@ export default function RefugioProfilePage() {
   return (
     <PublicShell>
       <section className="grid w-full gap-6 px-6 py-12">
-        <div>
-          <h1 className="text-4xl font-semibold tracking-tight">{shelter.name}</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-custom-700">
-            {shelter.description || "Albergue registrado en Refugio360."}
-          </p>
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-semibold tracking-tight">{shelter.name}</h1>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-custom-700">
+              {shelter.description || "Albergue registrado en Refugio360."}
+            </p>
+          </div>
+          {shelter.logo_path && (
+            <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-2xl border border-slate-custom-50 bg-white">
+              <Image src={mediaUrl(shelter.logo_path)} alt={shelter.name} fill sizes="64px" className="object-contain p-1.5" />
+            </div>
+          )}
         </div>
 
         <div className="grid gap-6 lg:grid-cols-6">
