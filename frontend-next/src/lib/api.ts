@@ -93,6 +93,23 @@ export function friendlyErrorMessage(
 
 export class ApiAuthError extends Error {}
 
+// Algunos endpoints de subida de archivos devuelven mensajes internos de PHP
+// (p. ej. "Undefined variable $media") cuando algo falla en el servidor.
+// Los reemplazamos por un texto entendible sin tocar la causa raíz.
+const RAW_BACKEND_MESSAGE_PATTERNS = [
+  /undefined variable/i,
+  /call to a member function/i,
+  /class ["'][^"']+["'] not found/i,
+  /sqlstate/i,
+];
+
+export function sanitizeErrorMessage(
+  message: string,
+  fallback = "No se pudo procesar tu solicitud. Inténtalo de nuevo en unos minutos."
+): string {
+  return RAW_BACKEND_MESSAGE_PATTERNS.some((pattern) => pattern.test(message)) ? fallback : message;
+}
+
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const { headers, ...fetchOptions } = options ?? {};
   const mergedHeaders = {
@@ -322,7 +339,8 @@ export async function updateShelterLogo(id: number, file: File): Promise<Shelter
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     const firstValidationError = body?.errors ? Object.values(body.errors).flat()[0] : null;
-    throw new Error(String(firstValidationError ?? body?.message ?? "No se pudo actualizar el logo."));
+    const message = String(firstValidationError ?? body?.message ?? "No se pudo actualizar el logo.");
+    throw new Error(sanitizeErrorMessage(message, "No se pudo actualizar el logo. Inténtalo de nuevo en unos minutos."));
   }
 
   return res.json();

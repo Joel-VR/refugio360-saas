@@ -4,6 +4,7 @@ import { ShelterProfileForm } from "./ShelterProfileForm";
 import { PaymentMethodsPanel } from "./PaymentMethodsPanel";
 import { SponsorsPanel } from "./SponsorsPanel";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { HelpToggle } from "@/components/HelpToggle";
 
 export default async function AdminConfiguracionPage() {
   const { user } = await getCurrentUser(await getServerAuthHeaders());
@@ -23,30 +24,34 @@ export default async function AdminConfiguracionPage() {
   }
 
   return (
-    <main className="px-6 py-10">
-      <section className="mx-auto grid max-w-4xl gap-8">
-        <div>
-          <h1 className="text-4xl font-semibold text-slate-custom-900">Configuración</h1>
-          <p className="mt-2 text-slate-custom-700">Administra los datos de tu albergue, métodos de pago y preferencias.</p>
+    <main className="px-6 py-8">
+      <section className="grid w-full gap-6">
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-semibold text-slate-custom-900">Configuración</h1>
+          <HelpToggle label="Ayuda sobre esta página">
+            Administra los datos de tu albergue, métodos de pago y preferencias.
+          </HelpToggle>
         </div>
 
-        {/* Tema */}
-        <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
-          <div className="mb-6">
-            <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Apariencia</p>
-            <h3 className="mt-2 text-xl font-semibold text-slate-custom-900">Tema de la interfaz</h3>
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* Tema */}
+          <div className="flex h-full flex-col rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
+            <div className="mb-6">
+              <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Apariencia</p>
+              <h3 className="mt-2 text-xl font-semibold text-slate-custom-900">Tema de la interfaz</h3>
+            </div>
+            <ThemeToggle />
           </div>
-          <ThemeToggle />
+
+          {/* Perfil del albergue (logo + datos) */}
+          <ShelterProfileForm shelter={shelter} />
+
+          {/* Métodos de pago */}
+          <PaymentMethodsPanel shelter={shelter} />
+
+          {/* Insignias de aliados */}
+          <SponsorsPanel shelter={shelter} />
         </div>
-
-        {/* Perfil del albergue */}
-        <ShelterProfileForm shelter={shelter} />
-
-        {/* Métodos de pago */}
-        <PaymentMethodsPanel shelter={shelter} />
-
-        {/* Insignias de aliados */}
-        <SponsorsPanel shelter={shelter} />
       </section>
     </main>
   );

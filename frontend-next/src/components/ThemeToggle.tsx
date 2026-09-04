@@ -6,9 +6,9 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex items-center gap-4">
-      <span className="text-sm font-medium">Tema:</span>
-      <div className="flex gap-2">
+    <div className="flex flex-nowrap items-center gap-4">
+      <span className="whitespace-nowrap text-sm font-medium">Tema:</span>
+      <div className="flex flex-nowrap gap-2">
         <button
           type="button"
           onClick={() => setTheme("light")}

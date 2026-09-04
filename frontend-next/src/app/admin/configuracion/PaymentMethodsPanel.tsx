@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { authHeaders, API_BASE_URL as API } from "@/lib/api";
+import { authHeaders, sanitizeErrorMessage, API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 import type { Shelter } from "@/types/shelter";
 
@@ -43,7 +43,7 @@ export function PaymentMethodsPanel({ shelter: initialShelter }: { shelter: Shel
       const body = await res.json().catch(() => ({}));
       if (!res.ok) {
         const firstError = body?.errors ? Object.values(body.errors).flat()[0] : body?.message;
-        throw new Error(String(firstError ?? `Error ${res.status}`));
+        throw new Error(sanitizeErrorMessage(String(firstError ?? `Error ${res.status}`), "No se pudo guardar. Inténtalo de nuevo en unos minutos."));
       }
       setCurrent(body);
       setYapeQr(null);
@@ -65,7 +65,7 @@ export function PaymentMethodsPanel({ shelter: initialShelter }: { shelter: Shel
     });
     const body = await res.json().catch(() => ({}));
     if (!res.ok) {
-      setError(body?.message ?? "No se pudo eliminar el QR.");
+      setError(sanitizeErrorMessage(String(body?.message ?? "No se pudo eliminar el QR."), "No se pudo eliminar el QR. Inténtalo de nuevo en unos minutos."));
       return;
     }
     setCurrent(body);

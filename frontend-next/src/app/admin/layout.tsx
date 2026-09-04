@@ -96,7 +96,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
           </header>
 
           {/* Contenido Principal */}
-          <main className="mx-auto max-w-7xl px-6 py-6">{children}</main>
+          <main className="w-full px-6 py-6">{children}</main>
         </div>
       </RoleGate>
     </ThemeProvider>

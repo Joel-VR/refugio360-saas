@@ -71,15 +71,15 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
   }
 
   return (
-    <div className="grid gap-6">
+    <>
       {/* Logo section */}
-      <div className="rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
+      <div className="flex h-full flex-col rounded-3xl border border-slate-custom-50 bg-cream-50 p-8 shadow-sm">
         <div className="mb-6">
           <p className="text-sm uppercase tracking-[0.24em] text-brand-600">Logo del Albergue</p>
           <h3 className="mt-2 text-xl font-semibold text-slate-custom-900">Imagen representativa</h3>
         </div>
 
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+        <div className="flex flex-row flex-nowrap items-start gap-6">
           <div className="flex flex-col gap-3">
             {logoPreview || shelter.logo_path ? (
               <div className="relative h-32 w-32 rounded-xl border border-slate-custom-50 bg-cream-100 p-2">
@@ -196,7 +196,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
           {loading ? "Guardando..." : "Guardar cambios"}
         </button>
       </form>
-    </div>
+    </>
   );
 }
 
