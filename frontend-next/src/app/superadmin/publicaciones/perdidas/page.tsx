@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSuperAdminLostFoundPosts, friendlyErrorMessage } from "@/lib/api";
 import { LostFoundReviewList } from "@/components/superadmin/LostFoundReviewList";
+import { SpinnerOverlay } from "@/components/Spinner";
 import type { LostFoundPost } from "@/types/lostFoundPost";
 
 export default function SuperAdminLostPostsPage() {
@@ -32,9 +33,7 @@ export default function SuperAdminLostPostsPage() {
       )}
 
       {loading ? (
-        <p className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 text-sm text-slate-custom-700">
-          Cargando publicaciones...
-        </p>
+        <SpinnerOverlay label="Cargando publicaciones..." />
       ) : (
         <LostFoundReviewList
           initialPosts={posts}

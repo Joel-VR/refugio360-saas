@@ -6,6 +6,7 @@ import type { Donation, DonationStatus, PaginatedDonations } from "@/types/donat
 import { adminFetch } from "@/lib/adminAuth";
 import { API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { Spinner } from "@/components/Spinner";
 
 const TABS: { key: DonationStatus; label: string; activeClass: string; badgeClass: string }[] = [
   { key: "pending",  label: "Pendientes", activeClass: "bg-rose-500 text-white",    badgeClass: "bg-rose-500/20 text-rose-700" },
@@ -193,7 +194,7 @@ export default function DonacionesPage() {
             </thead>
             <tbody>
               {loading && (
-                <tr><td colSpan={6} className="px-5 py-8 text-center text-slate-custom-400">Cargando...</td></tr>
+                <tr><td colSpan={6} className="px-5 py-8"><div className="flex justify-center"><Spinner size="sm" /></div></td></tr>
               )}
               {!loading && donations.length === 0 && (
                 <tr><td colSpan={6} className="px-5 py-8 text-center text-slate-custom-400">No hay donaciones para este filtro.</td></tr>

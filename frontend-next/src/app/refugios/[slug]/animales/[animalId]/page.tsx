@@ -31,6 +31,10 @@ const ICONS = {
   calendar: "M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5",
   heartPulse: "M20.25 8.511c0 4.5-8.25 10.239-8.25 10.239S3.75 13.011 3.75 8.511a4.739 4.739 0 019-2.03 4.739 4.739 0 019 2.03zM7.5 10.5h2.25l1.5-3 1.5 6 1.5-3h2.25",
   arrowRight: "M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3",
+  eye: "M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z M12 15a3 3 0 100-6 3 3 0 000 6z",
+  close: "M6 18L18 6M6 6l12 12",
+  chevronLeft: "M15.75 19.5L8.25 12l7.5-7.5",
+  chevronRight: "M8.25 4.5l7.5 7.5-7.5 7.5",
 };
 
 export default function RefugioAnimalDetailPage() {
@@ -38,6 +42,8 @@ export default function RefugioAnimalDetailPage() {
   const [animal, setAnimal] = useState<Animal | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showPhoto, setShowPhoto] = useState(false);
+  const [photoIndex, setPhotoIndex] = useState(0);
 
   useEffect(() => {
     fetch(`${API}/animals/${animalId}`, { headers: { Accept: "application/json" } })
@@ -80,7 +86,9 @@ export default function RefugioAnimalDetailPage() {
     );
   }
 
-  const photo = animal.photos?.[0];
+  const photos = animal.photos ?? [];
+  const photo = photos[0];
+  const activePhoto = photos[photoIndex];
   const badge = STATUS_BADGE[animal.lifecycle_status] ?? {
     label: animal.lifecycle_status,
     className: "border-slate-200 bg-slate-100 text-slate-600",
@@ -122,6 +130,19 @@ export default function RefugioAnimalDetailPage() {
               >
                 {badge.label}
               </span>
+              {photo && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPhotoIndex(0);
+                    setShowPhoto(true);
+                  }}
+                  aria-label="Ver imagen completa"
+                  className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full border border-white/40 bg-black/40 text-white backdrop-blur-md transition hover:bg-black/60"
+                >
+                  <Icon path={ICONS.eye} className="h-4 w-4" />
+                </button>
+              )}
             </div>
 
             {/* Detalles del Animal */}
@@ -190,6 +211,58 @@ export default function RefugioAnimalDetailPage() {
           </div>
         </div>
       </div>
+
+      {showPhoto && activePhoto && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6"
+          onClick={() => setShowPhoto(false)}
+        >
+          <div
+            className="relative flex max-h-[70vh] w-full max-w-2xl items-center justify-center rounded-2xl bg-black/90 p-3 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setShowPhoto(false)}
+              aria-label="Cerrar"
+              className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+            >
+              <Icon path={ICONS.close} className="h-5 w-5" />
+            </button>
+
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={mediaUrl(activePhoto.photo_path)}
+              alt={animal.name}
+              className="max-h-[64vh] max-w-full rounded-lg object-contain"
+            />
+
+            {photos.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setPhotoIndex((i) => (i - 1 + photos.length) % photos.length)}
+                  aria-label="Imagen anterior"
+                  className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+                >
+                  <Icon path={ICONS.chevronLeft} className="h-5 w-5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPhotoIndex((i) => (i + 1) % photos.length)}
+                  aria-label="Imagen siguiente"
+                  className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20"
+                >
+                  <Icon path={ICONS.chevronRight} className="h-5 w-5" />
+                </button>
+                <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-2.5 py-1 text-xs text-white">
+                  {photoIndex + 1} / {photos.length}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </SimplePage>
   );
 }

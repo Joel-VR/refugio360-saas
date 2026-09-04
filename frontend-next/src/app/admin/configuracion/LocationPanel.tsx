@@ -4,10 +4,15 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import { updateShelterProfile, sanitizeErrorMessage } from "@/lib/api";
 import type { Shelter } from "@/types/shelter";
+import { Spinner } from "@/components/Spinner";
 
 const LocationPicker = dynamic(() => import("@/components/LocationPicker").then((m) => m.LocationPicker), {
   ssr: false,
-  loading: () => <div className="h-96 w-full animate-pulse rounded-xl bg-slate-custom-50/40" />,
+  loading: () => (
+    <div className="flex h-96 w-full items-center justify-center rounded-xl bg-slate-custom-50/40">
+      <Spinner />
+    </div>
+  ),
 });
 
 type SearchResult = { display_name: string; lat: string; lon: string };

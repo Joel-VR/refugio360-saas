@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSuperAdminShelters } from "@/lib/api";
 import { ShelterReviewList } from "@/components/superadmin/ShelterReviewList";
+import { SpinnerOverlay } from "@/components/Spinner";
 import type { Shelter } from "@/types/shelter";
 
 export default function SuperAdminPendingSheltersPage() {
@@ -32,9 +33,7 @@ export default function SuperAdminPendingSheltersPage() {
       )}
 
       {loading ? (
-        <p className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 text-sm text-slate-custom-700">
-          Cargando solicitudes...
-        </p>
+        <SpinnerOverlay label="Cargando solicitudes..." />
       ) : (
         <ShelterReviewList
           initialShelters={shelters}

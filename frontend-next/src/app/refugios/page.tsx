@@ -7,10 +7,15 @@ import { PublicShell } from "@/lib/SimpleViews";
 import { friendlyErrorMessage, API_BASE_URL as API } from "@/lib/api";
 import { DonarModal } from "@/components/DonarModal";
 import { HelpToggle } from "@/components/HelpToggle";
+import { Spinner } from "@/components/Spinner";
 
 const ShelterMap = dynamic(() => import("@/components/ShelterMap").then((m) => m.ShelterMap), {
   ssr: false,
-  loading: () => <div className="h-full w-full animate-pulse bg-slate-custom-50/40" />,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center bg-slate-custom-50/40">
+      <Spinner />
+    </div>
+  ),
 });
 
 type Shelter = {

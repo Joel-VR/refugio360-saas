@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { API_BASE_URL as API } from "@/lib/api";
 import { DonarModal } from "@/components/DonarModal";
+import { SpinnerOverlay } from "@/components/Spinner";
 
 type Shelter = { id: number; name: string; slug: string; description: string | null; accepts_donations: boolean };
 
@@ -28,7 +29,7 @@ export default function TransparenciaPage() {
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-custom-700">Consulta ingresos aprobados, gastos registrados y balance de cada refugio.</p>
         </div>
 
-        {loading && <p className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 text-sm text-slate-500">Cargando...</p>}
+        {loading && <SpinnerOverlay />}
 
         <div className="grid gap-4 md:grid-cols-2">
           {shelters.map((shelter) => (

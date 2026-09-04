@@ -6,6 +6,7 @@ import Image from "next/image";
 import { API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 import { DonarModal } from "@/components/DonarModal";
+import { SpinnerOverlay } from "@/components/Spinner";
 
 type PublicShelter = {
   id: number;
@@ -55,7 +56,7 @@ export default function DonarSelector() {
           </div>
         </div>
 
-        {loading && <p className="rounded-xl border border-slate-custom-50 bg-cream-50 px-5 py-4 text-sm text-slate-500">Cargando albergues...</p>}
+        {loading && <SpinnerOverlay label="Cargando albergues..." />}
         {error && <p className="rounded-xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">{error}</p>}
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

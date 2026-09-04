@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getStoredToken, API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { Spinner } from "@/components/Spinner";
 
 type PaymentMethod = { enabled: boolean; phone: string | null; owner: string | null; qr_path: string | null };
 
@@ -82,7 +83,7 @@ export function DonarModal({ slug, onClose }: { slug: string; onClose: () => voi
           </button>
         </div>
 
-        {loading && <p className="mt-4 text-sm text-slate-500">Cargando datos de donación...</p>}
+        {loading && <div className="mt-4 flex justify-center"><Spinner size="sm" /></div>}
         {!loading && error && <p className="mt-4 text-sm text-rose-600">{error}</p>}
 
         {!loading && !error && shelter && (

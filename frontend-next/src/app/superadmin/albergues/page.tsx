@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSuperAdminShelters } from "@/lib/api";
 import { ShelterReviewList } from "@/components/superadmin/ShelterReviewList";
+import { SpinnerOverlay } from "@/components/Spinner";
 import type { Shelter } from "@/types/shelter";
 
 const FILTERS = [
@@ -58,9 +59,7 @@ export default function SuperAdminSheltersPage() {
       )}
 
       {loading ? (
-        <p className="rounded-lg border border-slate-custom-50 bg-cream-50 p-5 text-sm text-slate-custom-700">
-          Cargando albergues...
-        </p>
+        <SpinnerOverlay label="Cargando albergues..." />
       ) : (
         <ShelterReviewList initialShelters={shelters} emptyText="No hay albergues para este filtro." />
       )}

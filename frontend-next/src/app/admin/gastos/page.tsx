@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { authHeaders, pageInfoFrom, type PageInfo, API_BASE_URL as API } from '@/lib/api';
 import { mediaUrl } from '@/lib/media';
 import { Pagination } from '@/components/Pagination';
+import { Spinner } from '@/components/Spinner';
 
 const CATEGORIES = [
   { value: 'alimentacion',    label: 'Alimentación' },
@@ -365,7 +366,7 @@ export default function AdminGastosPage() {
         <div className="rounded-xl border border-slate-custom-50 bg-cream-50 p-5 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold text-slate-custom-900">Gastos registrados</h2>
           {loading ? (
-            <p className="text-sm text-slate-custom-700">Cargando...</p>
+            <div className="flex justify-center py-6"><Spinner size="sm" /></div>
           ) : expenses.length === 0 ? (
             <p className="text-sm text-slate-custom-700">No hay gastos registrados aún</p>
           ) : (
