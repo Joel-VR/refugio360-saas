@@ -87,25 +87,31 @@ class CloudinaryMedia
             return $file;
         }
 
-        $image = ImageManager::gd()->read($file->getRealPath());
-        $image->scaleDown(width: self::MAX_DIMENSION, height: self::MAX_DIMENSION);
+        try {
+            $image = ImageManager::gd()->read($file->getRealPath());
+            $image->scaleDown(width: self::MAX_DIMENSION, height: self::MAX_DIMENSION);
 
-        $quality = 80;
-        do {
-            $encoded = match ($file->getMimeType()) {
-                'image/webp' => $image->toWebp(quality: $quality),
-                'image/png' => $image->toPng(),
-                default => $image->toJpeg(quality: $quality),
-            };
-            $quality -= 15;
-        } while (strlen((string) $encoded) > self::MAX_BYTES && $quality >= 35 && $file->getMimeType() !== 'image/png');
+            $quality = 80;
+            do {
+                $encoded = match ($file->getMimeType()) {
+                    'image/webp' => $image->toWebp(quality: $quality),
+                    'image/png' => $image->toPng(),
+                    default => $image->toJpeg(quality: $quality),
+                };
+                $quality -= 15;
+            } while (strlen((string) $encoded) > self::MAX_BYTES && $quality >= 35 && $file->getMimeType() !== 'image/png');
 
-        $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION) ?: 'jpg';
-        $tmpPath = tempnam(sys_get_temp_dir(), 'img_') . '.' . $extension;
-        $encoded->save($tmpPath);
-        register_shutdown_function(static fn () => @unlink($tmpPath));
+            $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION) ?: 'jpg';
+            $tmpPath = tempnam(sys_get_temp_dir(), 'img_') . '.' . $extension;
+            $encoded->save($tmpPath);
+            register_shutdown_function(static fn () => @unlink($tmpPath));
 
-        return new UploadedFile($tmpPath, $file->getClientOriginalName(), $file->getMimeType(), null, true);
+            return new UploadedFile($tmpPath, $file->getClientOriginalName(), $file->getMimeType(), null, true);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return $file;
+        }
     }
 
     private function isConfigured(): bool

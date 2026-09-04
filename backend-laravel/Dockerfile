@@ -8,7 +8,12 @@ RUN apt-get update && apt-get install -y \
     zip \
     libpq-dev \
     libzip-dev \
-    && docker-php-ext-install pdo pdo_pgsql pgsql zip bcmath \
+    libjpeg-dev \
+    libpng-dev \
+    libwebp-dev \
+    libfreetype6-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-webp --with-freetype \
+    && docker-php-ext-install pdo pdo_pgsql pgsql zip bcmath gd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
