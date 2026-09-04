@@ -151,7 +151,7 @@ class AuthController extends Controller
         $user = $request->user();
 
         $validated = $request->validate([
-            'photo' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'photo' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048', 'dimensions:max_width=8000,max_height=8000'],
         ]);
 
         if ($user->profile_photo_path) {

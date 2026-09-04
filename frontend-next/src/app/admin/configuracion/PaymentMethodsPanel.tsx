@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { authHeaders, sanitizeErrorMessage, API_BASE_URL as API } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { compressImage } from "@/lib/imageCompression";
 import type { Shelter } from "@/types/shelter";
 
 export function PaymentMethodsPanel({ shelter: initialShelter }: { shelter: Shelter }) {
@@ -172,7 +173,15 @@ function PaymentSection({
         )}
         <label className="cursor-pointer rounded-full border border-slate-custom-50 px-4 py-2 text-sm font-medium text-slate-custom-700 hover:bg-slate-custom-50">
           Subir QR
-          <input type="file" accept="image/jpeg,image/png,image/gif" className="hidden" onChange={(e) => onFile(e.target.files?.[0] ?? null)} />
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/gif"
+            className="hidden"
+            onChange={async (e) => {
+              const file = e.target.files?.[0] ?? null;
+              onFile(file ? await compressImage(file) : null);
+            }}
+          />
         </label>
         {qrPath && (
           <button

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { createLostFoundPost, friendlyErrorMessage } from "@/lib/api";
+import { compressImage } from "@/lib/imageCompression";
 import type { LostFoundPostType } from "@/types/lostFoundPost";
 
 const MAX_SIZE = 2 * 1024 * 1024;
@@ -30,7 +31,7 @@ export function LostFoundForm({ type, backHref }: { type: LostFoundPostType; bac
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  function pickFile(nextFile: File) {
+  async function pickFile(nextFile: File) {
     if (!ALLOWED_TYPES.includes(nextFile.type)) {
       setPhotoError("Solo se aceptan JPG, PNG o WEBP.");
       return;
@@ -39,9 +40,10 @@ export function LostFoundForm({ type, backHref }: { type: LostFoundPostType; bac
       setPhotoError(`El archivo supera 2MB (${bytes(nextFile.size)}).`);
       return;
     }
+    const compressed = await compressImage(nextFile);
     if (preview) URL.revokeObjectURL(preview);
-    setPhoto(nextFile);
-    setPreview(URL.createObjectURL(nextFile));
+    setPhoto(compressed);
+    setPreview(URL.createObjectURL(compressed));
     setPhotoError("");
   }
 

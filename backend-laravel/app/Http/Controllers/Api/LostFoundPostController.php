@@ -60,7 +60,7 @@ class LostFoundPostController extends Controller
             'zone' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:2000'],
             'contact_phone' => ['required', 'digits:9'],
-            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048', 'dimensions:max_width=8000,max_height=8000'],
         ]);
 
         $photoPath = null;

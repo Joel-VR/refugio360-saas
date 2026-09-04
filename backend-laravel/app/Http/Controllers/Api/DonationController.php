@@ -31,7 +31,7 @@ class DonationController extends Controller
             'is_recurring'        => 'sometimes|boolean',
             'is_anonymous'        => 'sometimes|boolean',
             'notes'               => 'nullable|string|max:500',
-            'voucher'             => 'required|file|mimes:jpg,jpeg,png,gif|max:5120',
+            'voucher'             => 'required|file|mimes:jpg,jpeg,png,gif|max:5120|dimensions:max_width=8000,max_height=8000',
         ]);
 
         $shelter = Shelter::findOrFail($data['shelter_id']);

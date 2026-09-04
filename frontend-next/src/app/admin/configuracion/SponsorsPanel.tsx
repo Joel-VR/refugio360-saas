@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { addShelterSponsor, deleteShelterSponsor } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { compressImage } from "@/lib/imageCompression";
 import type { Shelter } from "@/types/shelter";
 
 export function SponsorsPanel({ shelter: initialShelter }: { shelter: Shelter }) {
@@ -116,7 +117,10 @@ export function SponsorsPanel({ shelter: initialShelter }: { shelter: Shelter })
               type="file"
               accept="image/jpeg,image/png,image/gif,image/webp,image/svg+xml"
               className="hidden"
-              onChange={(e) => setLogo(e.target.files?.[0] ?? null)}
+              onChange={async (e) => {
+                const file = e.target.files?.[0] ?? null;
+                setLogo(file ? await compressImage(file) : null);
+              }}
             />
           </label>
           {logo && <span className="text-sm text-slate-custom-700">{logo.name}</span>}

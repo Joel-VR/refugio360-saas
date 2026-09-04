@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { authHeaders, friendlyErrorMessage, API_BASE_URL } from "@/lib/api";
+import { compressImage } from "@/lib/imageCompression";
 
 export default function NewAnimalPage() {
   const router = useRouter();
@@ -30,7 +31,9 @@ export default function NewAnimalPage() {
 
     const files = (form.elements.namedItem("photos") as HTMLInputElement).files;
     if (files) {
-      Array.from(files).slice(0, 3).forEach((file) => data.append("photos[]", file));
+      const selected = Array.from(files).slice(0, 3);
+      const compressed = await Promise.all(selected.map(compressImage));
+      compressed.forEach((file) => data.append("photos[]", file));
     }
 
     try {

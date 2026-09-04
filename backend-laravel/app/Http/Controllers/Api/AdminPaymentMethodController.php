@@ -18,10 +18,10 @@ class AdminPaymentMethodController extends Controller
         $data = $request->validate([
             'yape_phone' => ['nullable', 'regex:/^[0-9]{9}$/'],
             'yape_owner' => ['nullable', 'string', 'max:255'],
-            'yape_qr' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:5120'],
+            'yape_qr' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:5120', 'dimensions:max_width=8000,max_height=8000'],
             'plin_phone' => ['nullable', 'regex:/^[0-9]{9}$/'],
             'plin_owner' => ['nullable', 'string', 'max:255'],
-            'plin_qr' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:5120'],
+            'plin_qr' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif', 'max:5120', 'dimensions:max_width=8000,max_height=8000'],
         ], [
             '*.regex' => 'El nÃºmero debe tener 9 dÃ­gitos.',
         ]);

@@ -60,7 +60,7 @@ class AnimalController extends Controller
             'is_sterilized' => ['sometimes', 'boolean'],
             'lifecycle_status' => ['required', 'in:cuarentena,tratamiento,apto,apto_adopcion,adoptado'],
             'photos' => ['nullable', 'array', 'max:3'],
-            'photos.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'photos.*' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048', 'dimensions:max_width=8000,max_height=8000'],
         ]);
 
         if (!$isSuperAdmin) {

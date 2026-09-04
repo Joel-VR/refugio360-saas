@@ -160,7 +160,7 @@ class ShelterController extends Controller
         $this->authorizeShelter($request, $shelter);
 
         $request->validate([
-            'logo' => ['required', 'image', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
+            'logo' => ['required', 'image', 'mimes:jpg,jpeg,png,gif', 'max:2048', 'dimensions:max_width=8000,max_height=8000'],
         ]);
 
         if ($request->hasFile('logo')) {

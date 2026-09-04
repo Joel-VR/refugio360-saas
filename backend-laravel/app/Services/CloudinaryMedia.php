@@ -6,11 +6,18 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\ImageManager;
 
 class CloudinaryMedia
 {
+    private const MAX_DIMENSION = 1600;
+    private const MAX_BYTES = 500 * 1024;
+    private const OPTIMIZABLE_MIMES = ['image/jpeg', 'image/png', 'image/webp'];
+
     public function upload(UploadedFile $file, string $folder): string
     {
+        $file = $this->optimizeImage($file);
+
         if (! $this->isConfigured()) {
             return $file->store($folder, 'public');
         }
@@ -67,6 +74,38 @@ class CloudinaryMedia
             'api_key' => config('services.cloudinary.api_key'),
             'signature' => $this->signature($params),
         ]);
+    }
+
+    /**
+     * Redimensiona y comprime imágenes rasterizadas antes de guardarlas.
+     * El cliente ya comprime en el navegador; esto garantiza el límite
+     * también cuando la subida no pasa por el frontend (o el JS falla).
+     */
+    private function optimizeImage(UploadedFile $file): UploadedFile
+    {
+        if (! in_array($file->getMimeType(), self::OPTIMIZABLE_MIMES, true)) {
+            return $file;
+        }
+
+        $image = ImageManager::gd()->read($file->getRealPath());
+        $image->scaleDown(width: self::MAX_DIMENSION, height: self::MAX_DIMENSION);
+
+        $quality = 80;
+        do {
+            $encoded = match ($file->getMimeType()) {
+                'image/webp' => $image->toWebp(quality: $quality),
+                'image/png' => $image->toPng(),
+                default => $image->toJpeg(quality: $quality),
+            };
+            $quality -= 15;
+        } while (strlen((string) $encoded) > self::MAX_BYTES && $quality >= 35 && $file->getMimeType() !== 'image/png');
+
+        $extension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION) ?: 'jpg';
+        $tmpPath = tempnam(sys_get_temp_dir(), 'img_') . '.' . $extension;
+        $encoded->save($tmpPath);
+        register_shutdown_function(static fn () => @unlink($tmpPath));
+
+        return new UploadedFile($tmpPath, $file->getClientOriginalName(), $file->getMimeType(), null, true);
     }
 
     private function isConfigured(): bool

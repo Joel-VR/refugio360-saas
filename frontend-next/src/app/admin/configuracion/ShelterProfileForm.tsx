@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { updateShelterProfile, updateShelterLogo } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { compressImage } from "@/lib/imageCompression";
 import type { Shelter } from "@/types/shelter";
 
 export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelter }) {
@@ -25,11 +26,12 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
-      setLogoFile(file);
-      setLogoPreview(URL.createObjectURL(file));
+      const compressed = await compressImage(file);
+      setLogoFile(compressed);
+      setLogoPreview(URL.createObjectURL(compressed));
     }
   }
 

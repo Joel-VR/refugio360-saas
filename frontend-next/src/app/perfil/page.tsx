@@ -13,6 +13,7 @@ import {
   type AuthUser,
 } from "@/lib/api";
 import { PublicShell } from "@/lib/SimpleViews";
+import { compressImage } from "@/lib/imageCompression";
 import { PaymentMethodsPanel } from "../admin/configuracion/PaymentMethodsPanel";
 import { ShelterProfileForm } from "../admin/configuracion/ShelterProfileForm";
 
@@ -133,7 +134,8 @@ export default function ProfilePage() {
     setError("");
     setLoadingPhoto(true);
     try {
-      const response = await updateProfilePhoto(file);
+      const compressed = await compressImage(file);
+      const response = await updateProfilePhoto(compressed);
       syncUser(response.user);
       setMessage(response.message);
     } catch (err) {

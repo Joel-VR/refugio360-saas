@@ -7,6 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { authHeaders, friendlyErrorMessage, API_BASE_URL } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
+import { compressImage } from "@/lib/imageCompression";
 
 type Animal = {
   id: number;
@@ -49,7 +50,9 @@ export default function EditAnimalForm({ animal }: { animal: Animal }) {
     // Fotografías: si se seleccionan nuevas, se envían y la API debería reemplazar todas las anteriores
     const files = (form.elements.namedItem("photos") as HTMLInputElement).files;
     if (files && files.length > 0) {
-      Array.from(files).slice(0, 3).forEach((file) => data.append("photos[]", file));
+      const selected = Array.from(files).slice(0, 3);
+      const compressed = await Promise.all(selected.map(compressImage));
+      compressed.forEach((file) => data.append("photos[]", file));
     }
 
     try {
