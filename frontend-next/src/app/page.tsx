@@ -167,28 +167,6 @@ export default function HomePage() {
           </article>
         </div>
 
-        {/* COLABORADORES / DESARROLLADORES */}
-        <div className="rounded-2xl border border-slate-custom-50 bg-white p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">Equipo</p>
-          <h2 className="mt-2 text-2xl font-semibold">Desarrolladores del sistema</h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-custom-700">
-            Refugio360 fue diseñado y desarrollado por:
-          </p>
-          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
-            {DEVELOPERS.map((name) => (
-              <li
-                key={name}
-                className="flex items-center gap-3 rounded-lg border border-slate-custom-50 bg-cream-50 px-4 py-3 text-sm font-medium text-slate-custom-900 transition hover:border-brand-600/30"
-              >
-                <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
-                  {name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
-                </span>
-                {name}
-              </li>
-            ))}
-          </ul>
-        </div>
-
         {/* CONTACTO / ORGANIZACIONES */}
         <section className="rounded-lg border border-slate-custom-50 bg-white p-5">
           <h2 className="text-xl font-semibold">Contacto y organizaciones</h2>
@@ -238,6 +216,28 @@ export default function HomePage() {
             .
           </p>
         </section>
+
+        {/* COLABORADORES / DESARROLLADORES */}
+        <div className="rounded-2xl border border-slate-custom-50 bg-white p-8">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">Equipo</p>
+          <h2 className="mt-2 text-2xl font-semibold">Desarrolladores del sistema</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-custom-700">
+            Refugio360 fue diseñado y desarrollado por:
+          </p>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            {DEVELOPERS.map((name) => (
+              <li
+                key={name}
+                className="flex items-center gap-3 rounded-lg border border-slate-custom-50 bg-cream-50 px-4 py-3 text-sm font-medium text-slate-custom-900 transition hover:border-brand-600/30"
+              >
+                <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
+                  {name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                </span>
+                {name}
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
     </PublicShell>
   );
