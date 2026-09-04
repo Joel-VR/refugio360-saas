@@ -10,9 +10,17 @@ import { mediaUrl } from "@/lib/media";
 import { DonarModal } from "@/components/DonarModal";
 import { ShelterAnimals } from "@/components/ShelterAnimals";
 import { HelpToggle } from "@/components/HelpToggle";
+import { SocialLinksRow, type SocialLinks } from "@/components/SocialIcons";
 
 type Sponsor = { id: number; name: string; logo_path: string; url: string | null };
-type Shelter = { id: number; name: string; slug: string; description: string | null; sponsors?: Sponsor[] };
+type Shelter = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string | null;
+  sponsors?: Sponsor[];
+  social_links?: SocialLinks;
+};
 
 function Icon({ path, className = "h-5 w-5" }: { path: string; className?: string }) {
   return (
@@ -104,6 +112,13 @@ export default function RefugioProfilePage() {
               title="Transparencia"
               description="Revisa el historial de ingresos y gastos registrados de este refugio."
             />
+
+            {shelter.social_links && Object.values(shelter.social_links).some(Boolean) && (
+              <div className="rounded-2xl border border-slate-custom-50 bg-white p-4">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-slate-custom-500">Síguenos</p>
+                <SocialLinksRow links={shelter.social_links} />
+              </div>
+            )}
           </div>
 
           {/* Animales */}

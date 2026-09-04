@@ -326,6 +326,10 @@ export async function updateShelterProfile(
     address?: string;
     latitude?: number | null;
     longitude?: number | null;
+    facebook_url?: string | null;
+    instagram_url?: string | null;
+    tiktok_url?: string | null;
+    whatsapp_url?: string | null;
   }
 ): Promise<Shelter> {
   return apiFetch(`/admin/shelters/${id}/profile`, {

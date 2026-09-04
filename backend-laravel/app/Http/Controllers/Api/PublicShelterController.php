@@ -148,6 +148,12 @@ class PublicShelterController extends Controller
             'latitude' => $shelter->latitude !== null ? (float) $shelter->latitude : null,
             'longitude' => $shelter->longitude !== null ? (float) $shelter->longitude : null,
             'is_active' => $shelter->is_active,
+            'social_links' => [
+                'facebook' => $shelter->facebook_url,
+                'instagram' => $shelter->instagram_url,
+                'tiktok' => $shelter->tiktok_url,
+                'whatsapp' => $shelter->whatsapp_url,
+            ],
             'accepts_donations' => $hasYape || $hasPlin,
             'payment_methods' => [
                 'yape' => [

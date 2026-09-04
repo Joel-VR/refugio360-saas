@@ -144,6 +144,10 @@ class ShelterController extends Controller
             'address'     => ['nullable', 'string', 'max:500'],
             'latitude'    => ['nullable', 'numeric', 'between:-90,90'],
             'longitude'   => ['nullable', 'numeric', 'between:-180,180'],
+            'facebook_url'  => ['nullable', 'url', 'max:255'],
+            'instagram_url' => ['nullable', 'url', 'max:255'],
+            'tiktok_url'    => ['nullable', 'url', 'max:255'],
+            'whatsapp_url'  => ['nullable', 'url', 'max:255'],
         ]);
 
         $shelter->update($validated);

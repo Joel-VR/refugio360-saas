@@ -15,6 +15,10 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
     email: initialShelter.email ?? "",
     phone: initialShelter.phone ?? "",
     address: initialShelter.address ?? "",
+    facebook_url: initialShelter.facebook_url ?? "",
+    instagram_url: initialShelter.instagram_url ?? "",
+    tiktok_url: initialShelter.tiktok_url ?? "",
+    whatsapp_url: initialShelter.whatsapp_url ?? "",
   });
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
@@ -42,7 +46,13 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
     setMessage("");
 
     try {
-      const updated = await updateShelterProfile(shelter.id, form);
+      const updated = await updateShelterProfile(shelter.id, {
+        ...form,
+        facebook_url: form.facebook_url || null,
+        instagram_url: form.instagram_url || null,
+        tiktok_url: form.tiktok_url || null,
+        whatsapp_url: form.whatsapp_url || null,
+      });
       setShelter(updated);
       setMessage("Perfil del albergue actualizado.");
     } catch (err) {
@@ -185,6 +195,57 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
               onChange={handleChange}
               className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
             />
+          </div>
+
+          <div>
+            <p className="mb-2 text-sm font-medium text-slate-custom-900">Redes sociales</p>
+            <p className="mb-3 text-xs text-slate-custom-700">Opcional. Deja en blanco las que no tengas.</p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label className="block text-xs font-medium text-slate-custom-700 mb-1">Facebook</label>
+                <input
+                  type="url"
+                  name="facebook_url"
+                  value={form.facebook_url}
+                  onChange={handleChange}
+                  placeholder="https://facebook.com/tu-albergue"
+                  className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-custom-700 mb-1">Instagram</label>
+                <input
+                  type="url"
+                  name="instagram_url"
+                  value={form.instagram_url}
+                  onChange={handleChange}
+                  placeholder="https://instagram.com/tu-albergue"
+                  className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-custom-700 mb-1">TikTok</label>
+                <input
+                  type="url"
+                  name="tiktok_url"
+                  value={form.tiktok_url}
+                  onChange={handleChange}
+                  placeholder="https://tiktok.com/@tu-albergue"
+                  className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-custom-700 mb-1">WhatsApp</label>
+                <input
+                  type="url"
+                  name="whatsapp_url"
+                  value={form.whatsapp_url}
+                  onChange={handleChange}
+                  placeholder="https://wa.me/51987654321"
+                  className="w-full rounded-xl border border-slate-custom-50 bg-cream-100 px-4 py-3 text-slate-custom-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600"
+                />
+              </div>
+            </div>
           </div>
         </div>
 

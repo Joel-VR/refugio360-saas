@@ -32,6 +32,16 @@ export type Shelter = {
   plin_phone?: string | null;
   plin_owner?: string | null;
   plin_qr_path?: string | null;
+  facebook_url?: string | null;
+  instagram_url?: string | null;
+  tiktok_url?: string | null;
+  whatsapp_url?: string | null;
+  social_links?: {
+    facebook: string | null;
+    instagram: string | null;
+    tiktok: string | null;
+    whatsapp: string | null;
+  };
   accepts_donations?: boolean;
   payment_methods?: {
     yape: { enabled: boolean; phone: string | null; owner: string | null; qr_path: string | null };
