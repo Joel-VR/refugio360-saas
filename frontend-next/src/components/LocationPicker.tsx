@@ -47,7 +47,7 @@ export function LocationPicker({
   const hasPosition = latitude !== null && longitude !== null;
 
   return (
-    <div className="h-96 w-full overflow-hidden rounded-xl border border-slate-custom-50">
+    <div className="isolate h-96 w-full overflow-hidden rounded-xl border border-slate-custom-50">
       <MapContainer center={position} zoom={hasPosition ? 17 : 5} scrollWheelZoom className="h-full w-full">
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

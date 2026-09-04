@@ -94,7 +94,7 @@ export default function RefugiosPage() {
         {/* Mapa (izquierda, 2/3) + lista (derecha, 1/3), sin scroll de página en lg+: solo la lista scrollea */}
         {!loading && !error && shelters.length > 0 && (
           <div className="flex flex-col gap-4 lg:min-h-0 lg:flex-1 lg:flex-row">
-            <div className="h-[420px] overflow-hidden rounded-2xl border border-slate-custom-50 lg:h-full lg:flex-[2]">
+            <div className="isolate h-[420px] overflow-hidden rounded-2xl border border-slate-custom-50 lg:h-full lg:flex-[2]">
               <ShelterMap shelters={mappedShelters} />
             </div>
 
