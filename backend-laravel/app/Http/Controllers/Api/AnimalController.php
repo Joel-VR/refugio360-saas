@@ -94,7 +94,7 @@ class AnimalController extends Controller
 
     public function show(Animal $animal): JsonResponse
     {
-        return response()->json($animal->load('photos'));
+        return response()->json($animal->load('photos', 'shelter:id,name,slug'));
     }
 
     public function update(Request $request, Animal $animal): JsonResponse

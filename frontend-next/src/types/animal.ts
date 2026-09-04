@@ -19,4 +19,5 @@ export type Animal = {
   created_at?: string;
   updated_at?: string;
   photos?: AnimalPhoto[];
+  shelter?: { id: number; name: string; slug: string };
 };
