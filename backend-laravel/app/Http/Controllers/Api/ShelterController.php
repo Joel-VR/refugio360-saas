@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Shelter;
 use App\Models\Animal;
 use App\Models\Adoption;
+use App\Services\CloudinaryMedia;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -159,7 +160,7 @@ class ShelterController extends Controller
      * Actualizar logo del albergue.
      * Acceso: el dueÃ±o del albergue (shelter_admin) o super_admin.
      */
-    public function updateLogo(Request $request, Shelter $shelter): JsonResponse
+    public function updateLogo(Request $request, Shelter $shelter, CloudinaryMedia $media): JsonResponse
     {
         $this->authorizeShelter($request, $shelter);
 

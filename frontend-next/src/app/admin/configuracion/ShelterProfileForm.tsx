@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { updateShelterProfile, updateShelterLogo } from "@/lib/api";
+import { updateShelterProfile, updateShelterLogo, sanitizeErrorMessage } from "@/lib/api";
 import { mediaUrl } from "@/lib/media";
 import { compressImage } from "@/lib/imageCompression";
 import type { Shelter } from "@/types/shelter";
@@ -22,6 +22,9 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
   });
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [logoMessage, setLogoMessage] = useState("");
+  const [logoError, setLogoError] = useState("");
+  const [logoLoading, setLogoLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,6 +36,8 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
   async function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (file) {
+      setLogoError("");
+      setLogoMessage("");
       const compressed = await compressImage(file);
       setLogoFile(compressed);
       setLogoPreview(URL.createObjectURL(compressed));
@@ -56,7 +61,7 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
       setShelter(updated);
       setMessage("Perfil del albergue actualizado.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo guardar.");
+      setError(sanitizeErrorMessage(err instanceof Error ? err.message : "No se pudo guardar.", "No se pudo guardar. Inténtalo de nuevo más tarde."));
     } finally {
       setLoading(false);
     }
@@ -65,20 +70,20 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
   async function submitLogo() {
     if (!logoFile) return;
 
-    setLoading(true);
-    setError("");
-    setMessage("");
+    setLogoLoading(true);
+    setLogoError("");
+    setLogoMessage("");
 
     try {
       const updated = await updateShelterLogo(shelter.id, logoFile);
       setShelter(updated);
       setLogoFile(null);
       setLogoPreview(null);
-      setMessage("Logo del albergue actualizado.");
+      setLogoMessage("Logo del albergue actualizado.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo actualizar el logo.");
+      setLogoError(sanitizeErrorMessage(err instanceof Error ? err.message : "No se pudo actualizar el logo.", "No se pudo actualizar el logo. Inténtalo de nuevo más tarde."));
     } finally {
-      setLoading(false);
+      setLogoLoading(false);
     }
   }
 
@@ -123,14 +128,17 @@ export function ShelterProfileForm({ shelter: initialShelter }: { shelter: Shelt
               <button
                 type="button"
                 onClick={submitLogo}
-                disabled={loading}
+                disabled={logoLoading}
                 className="rounded-full bg-brand-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-brand-700 disabled:opacity-50"
               >
-                {loading ? "Guardando..." : "Guardar logo"}
+                {logoLoading ? "Guardando..." : "Guardar logo"}
               </button>
             </div>
           )}
         </div>
+
+        {logoMessage && <p className="mt-4 rounded-xl border border-emerald-300/30 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{logoMessage}</p>}
+        {logoError && <p className="mt-4 rounded-xl border border-rose-300/30 bg-rose-50 px-4 py-3 text-sm text-rose-700">{logoError}</p>}
       </div>
 
       {/* Profile form */}

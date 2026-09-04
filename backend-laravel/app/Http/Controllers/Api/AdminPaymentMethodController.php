@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shelter;
+use App\Services\CloudinaryMedia;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +12,7 @@ use Illuminate\Validation\ValidationException;
 
 class AdminPaymentMethodController extends Controller
 {
-    public function update(Request $request, Shelter $shelter): JsonResponse
+    public function update(Request $request, Shelter $shelter, CloudinaryMedia $media): JsonResponse
     {
         $this->authorizeShelter($request, $shelter);
 
@@ -56,7 +57,7 @@ class AdminPaymentMethodController extends Controller
         return response()->json($shelter->fresh());
     }
 
-    public function destroyQr(Request $request, Shelter $shelter, string $method): JsonResponse
+    public function destroyQr(Request $request, Shelter $shelter, string $method, CloudinaryMedia $media): JsonResponse
     {
         $this->authorizeShelter($request, $shelter);
 
