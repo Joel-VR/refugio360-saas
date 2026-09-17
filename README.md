@@ -1,153 +1,249 @@
 # Refugio360 SaaS
 
-Plataforma web SaaS multi-albergue para la gestión de animales rescatados, adopciones, donaciones y transparencia económica.
+Refugio360 es una plataforma web SaaS multi-albergue para gestionar refugios de animales, adopciones, donaciones, gastos, transparencia economica y publicaciones de mascotas perdidas o encontradas.
 
-## Tecnologías
+El proyecto esta dividido en dos aplicaciones:
 
-- Frontend: Next.js + Tailwind CSS
-- Backend: Laravel API REST
+- `backend-laravel`: API REST en Laravel.
+- `frontend-next`: aplicacion web publica y paneles administrativos en Next.js.
+
+## Stack principal
+
+- Backend: Laravel 13, Laravel Sanctum, PHP 8.3+
+- Frontend: Next.js 16, React 19, TypeScript, Tailwind CSS 4
 - Base de datos: PostgreSQL
-- Arquitectura: SaaS multi-albergue mediante shelter_id
+- Mapas: Leaflet y React Leaflet
+- Documentos: jsPDF para reportes/formularios en frontend
+- Arquitectura: multi-albergue mediante `shelter_id`
 
-## Estructura
+## Modulos
 
-- backend-laravel: API del sistema
-- frontend-next: interfaz web pública y panel administrativo
-- database: scripts y documentación de base de datos
-- docs: documentación del proyecto
+- Autenticacion y perfiles de usuario.
+- Registro de personas naturales y albergues.
+- Revision de albergues por super administrador.
+- Gestion de animales por albergue.
+- Solicitudes de adopcion y cambio de estados.
+- Donaciones con metodos de pago, vouchers y exportacion CSV.
+- Gastos y documentos de sustento.
+- Paginas publicas de refugios, animales y transparencia.
+- Publicaciones de mascotas perdidas y encontradas con revision administrativa.
+- Panel de super administrador para albergues, usuarios y publicaciones.
+- Panel de administrador de albergue para dashboard, animales, adopciones, donaciones, gastos y configuracion.
 
-## Módulos principales
+## Roles
 
-- Autenticación
-- Gestión de albergues
-- Gestión de animales
-- Solicitudes de adopción
-- Donaciones con voucher
-- Dashboard de transparencia
+- `super_admin`: revisa albergues, usuarios y publicaciones globales.
+- `shelter_admin`: administra la informacion de su albergue, animales, adopciones, donaciones, gastos y configuracion.
+- `natural_person`: adopta, dona y publica mascotas perdidas o encontradas.
 
-## Requisitos y versiones recomendadas
+## Estructura del repositorio
 
-Para evitar errores de compatibilidad, se recomienda usar:
+```text
+.
+├── backend-laravel/     # API REST, modelos, migraciones, seeders y tests
+├── frontend-next/       # Aplicacion Next.js
+└── README.md            # Guia general del proyecto
+```
 
-- PHP: 8.5.7 o superior (este proyecto se probó con PHP 8.5.7)
-- Laravel: 13.x
-- Node.js: 20.x o superior
-- Composer: 2.x
-- npm: 10.x o superior
+## Requisitos
 
-Si tu entorno usa una versión anterior de PHP, Laravel puede fallar al iniciar porque requiere una versión compatible con las dependencias del proyecto.
+- PHP 8.3 o superior
+- Composer 2.x
+- Node.js 20 o superior
+- npm 10 o superior
+- PostgreSQL 14 o superior
 
-## Ejecutar el proyecto
+## Configuracion del backend
 
-Si ya ejecutaste `composer install` en la carpeta incorrecta, ten en cuenta que ese comando corresponde al backend, no al frontend.
-
-### 1) Backend (Laravel)
-
-Abre una terminal y ejecuta:
+Desde la raiz del repositorio:
 
 ```bash
 cd backend-laravel
 composer install
 copy .env.example .env
 php artisan key:generate
+```
+
+Edita `.env` con los datos de PostgreSQL:
+
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=refugio360_saas
+DB_USERNAME=postgres
+DB_PASSWORD=
+
+APP_URL=http://127.0.0.1:8000
+FRONTEND_URL=http://localhost:3000
+```
+
+Ejecuta migraciones:
+
+```bash
 php artisan migrate
+```
+
+Opcionalmente carga datos de prueba:
+
+```bash
+php artisan db:seed
+```
+
+El `DatabaseSeeder` ejecuta `StressTestSeeder`. Tambien existen seeders especificos que puedes correr manualmente:
+
+```bash
+php artisan db:seed --class=SuperAdminSeeder
+php artisan db:seed --class=TestDataSeeder
+```
+
+Credenciales de prueba incluidas en los seeders:
+
+| Rol | Email | Password |
+| --- | --- | --- |
+| Super admin | `admin@tuapp.com` | `ClaveSegura123!` |
+| Admin albergue | `admin@huellitasfelices.com` | `ClaveSegura123!` |
+| Admin albergue | `admin@patitasalrescate.com` | `ClaveSegura123!` |
+| Persona natural | `usuario.prueba@test.com` | `ClaveSegura123!` |
+
+Inicia el backend:
+
+```bash
 php artisan serve
 ```
 
-El backend quedará disponible en `http://127.0.0.1:8000`.
+La API quedara disponible en `http://127.0.0.1:8000/api/v1`.
 
-### 2) Frontend (Next.js)
+## Configuracion del frontend
 
-Abre otra terminal y ejecuta:
+En otra terminal:
 
 ```bash
 cd frontend-next
-copy .env.local.example .env.local
 npm install
+copy .env.local.example .env.local
 npm run dev
 ```
 
-El frontend quedará disponible en `http://localhost:3000`.
+El archivo `.env.local` debe apuntar al backend local:
 
-El archivo `.env.local` configura la URL del backend para que el frontend pueda consumir la API en `http://127.0.0.1:8000/api/v1`.
-
-## Rutas para ver las vistas
-
-El frontend está construido con Next.js y las vistas se acceden desde `http://localhost:3000`.
-
-### Vistas públicas
-
-- `/` - página inicial del frontend
-- `/adoptar` - catálogo público de animales disponibles y en proceso
-- `/adoptar/:id` - detalle de un animal y formulario de postulación a adopción
-
-### Vistas administrativas
-
-- `/admin/dashboard` - panel principal con métricas y actividad reciente
-- `/admin/animales` - listado de animales registrados
-- `/admin/animales?status=apto_adopcion` - filtro del listado de animales por estado
-- `/admin/animales/nuevo` - formulario para registrar un animal
-- `/admin/animales/:id` - edición de un animal existente
-- `/admin/albergues` - listado de albergues
-- `/admin/albergues/nuevo` - formulario para crear un albergue
-- `/admin/albergues/:id/editar` - edición de un albergue existente
-- `/admin/adopciones` - listado de solicitudes de adopción
-- `/admin/adopciones?status=pendiente` - filtro de solicitudes por estado
-
-### Ejemplos rápidos
-
-- Ver catálogo público: `http://localhost:3000/adoptar`
-- Ver dashboard: `http://localhost:3000/admin/dashboard`
-- Ver solicitudes: `http://localhost:3000/admin/adopciones`
-- Ver formulario de nuevo animal: `http://localhost:3000/admin/animales/nuevo`
-
-# Funcionamiento del Sistema
-
-**Refugio360** es una plataforma web para la gestión de albergues de animales y procesos de adopción. El sistema está compuesto por un **backend en Laravel** que expone una API REST y un **frontend en Next.js** que consume dicha API para administrar la información.
-
-## Módulos principales
-
-### Gestión de Albergues
-
-Permite registrar, consultar, editar, activar/desactivar y eliminar albergues. Cada albergue puede tener múltiples animales y solicitudes de adopción asociadas.
-
-### Gestión de Adopciones
-
-Permite visualizar y administrar las solicitudes de adopción. Las solicitudes pasan por distintos estados (Pendiente, Evaluación, Aprobado, Rechazado y Adoptado). Cuando una adopción es marcada como **Adoptada**, el estado del animal se actualiza automáticamente.
-
-### Dashboard Administrativo
-
-Proporciona estadísticas generales del sistema, incluyendo cantidad de animales por estado, solicitudes de adopción, albergues registrados y adopciones recientes, facilitando el monitoreo de la operación.
-
-## Flujo general
-
-```text
-Albergue
-    ↓
-Registro de animales
-    ↓
-Solicitud de adopción
-    ↓
-Evaluación
-    ↓
-Aprobado / Rechazado
-    ↓
-Adoptado
+```env
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api/v1
+NEXT_PUBLIC_STORAGE_URL=http://127.0.0.1:8000/storage
 ```
 
-## Arquitectura
+El frontend quedara disponible en `http://localhost:3000`.
 
-```text
-Frontend (Next.js)
-        ↓
-    API REST
-     (Laravel)
-        ↓
- Base de Datos
+## Rutas web principales
+
+### Publicas
+
+- `/`: pagina inicial.
+- `/adoptar`: catalogo publico de animales.
+- `/adoptar/[id]`: detalle de animal y postulacion.
+- `/refugios`: listado publico de refugios.
+- `/refugios/[slug]`: perfil publico de un refugio.
+- `/refugios/[slug]/animales`: animales de un refugio.
+- `/refugios/[slug]/animales/[animalId]`: detalle de animal dentro de un refugio.
+- `/refugios/[slug]/transparencia`: donaciones, gastos y transparencia del refugio.
+- `/donar`: flujo publico de donacion.
+- `/transparencia`: vista general de transparencia.
+- `/mascotas/perdidas`: publicaciones de mascotas perdidas.
+- `/mascotas/encontradas`: publicaciones de mascotas encontradas.
+- `/login`: inicio de sesion.
+- `/registro`: seleccion de tipo de registro.
+- `/registro/persona`: registro de persona natural.
+- `/registro/albergue`: registro de albergue.
+- `/terminos-condiciones`: terminos y condiciones.
+- `/espera-aprobacion`: estado para albergues pendientes.
+
+### Cuenta de usuario
+
+- `/cuenta`: resumen de cuenta.
+- `/cuenta/adopciones`: solicitudes de adopcion del usuario.
+- `/cuenta/donaciones`: donaciones del usuario.
+- `/cuenta/mascotas-perdidas`: publicaciones propias de mascotas perdidas.
+- `/cuenta/mascotas-perdidas/nueva`: nueva publicacion de mascota perdida.
+- `/cuenta/mascotas-encontradas`: publicaciones propias de mascotas encontradas.
+- `/cuenta/mascotas-encontradas/nueva`: nueva publicacion de mascota encontrada.
+- `/perfil`: perfil personal.
+
+### Administracion de albergue
+
+- `/admin/dashboard`: metricas y actividad del albergue.
+- `/admin/animales`: gestion de animales.
+- `/admin/animales/nuevo`: registro de animal.
+- `/admin/animales/[id]`: edicion de animal.
+- `/admin/adopciones`: solicitudes de adopcion.
+- `/admin/donaciones`: donaciones recibidas.
+- `/admin/gastos`: gastos registrados.
+- `/admin/configuracion`: perfil, ubicacion, sponsors y metodos de pago.
+- `/admin/documentacion`: documentacion administrativa.
+
+### Super administrador
+
+- `/superadmin`: panel base.
+- `/superadmin/dashboard`: metricas globales.
+- `/superadmin/albergues`: gestion de albergues.
+- `/superadmin/albergues/pendientes`: revision de solicitudes de albergue.
+- `/superadmin/usuarios`: gestion de usuarios.
+- `/superadmin/publicaciones`: revision de publicaciones.
+- `/superadmin/publicaciones/perdidas`: publicaciones de mascotas perdidas.
+- `/superadmin/publicaciones/encontradas`: publicaciones de mascotas encontradas.
+
+## Endpoints principales de la API
+
+La API usa el prefijo `/api/v1`.
+
+- `POST /auth/register/persona`
+- `POST /auth/register/albergue`
+- `POST /auth/login`
+- `GET /auth/me`
+- `POST /auth/logout`
+- `GET /animals`
+- `POST /animals`
+- `GET /adoptions/mine`
+- `POST /adoptions`
+- `GET /donations/mine`
+- `POST /donations`
+- `GET /lost-found-posts`
+- `POST /lost-found-posts`
+- `GET /public/shelters`
+- `GET /public/shelters/{slug}`
+- `GET /public/shelters/{slug}/animals`
+- `GET /public/shelters/{slug}/transparency`
+- `GET /admin/dashboard/stats`
+- `GET /admin/donations/export.csv`
+- `GET /superadmin/dashboard`
+- `GET /superadmin/shelters`
+- `GET /superadmin/users`
+
+Las rutas privadas usan Laravel Sanctum y validan roles con middleware.
+
+## Comandos utiles
+
+Backend:
+
+```bash
+cd backend-laravel
+php artisan test
+php artisan migrate:fresh --seed
+php artisan route:list
 ```
 
-## Consideraciones
+Frontend:
 
-- Los albergues y adopciones utilizan **Soft Deletes**, por lo que los registros eliminados pueden recuperarse desde la base de datos.
-- Los albergues poseen un **slug único** para identificación y acceso.
-- Actualmente el proyecto no cuenta con autenticación habilitada; para producción se recomienda proteger las rutas mediante Laravel Sanctum.
+```bash
+cd frontend-next
+npm run lint
+npm run build
+```
+
+## Notas operativas
+
+- Los datos estan segmentados por albergue mediante `shelter_id`.
+- Algunos modelos usan soft deletes para permitir recuperacion desde base de datos.
+- Los albergues tienen `slug` unico para sus paginas publicas.
+- Los albergues registrados por la web quedan pendientes hasta aprobacion del `super_admin`.
+- Las publicaciones de mascotas perdidas/encontradas pueden requerir revision antes de mostrarse publicamente.
+- Para servir archivos subidos desde Laravel, puede ser necesario ejecutar `php artisan storage:link`.
